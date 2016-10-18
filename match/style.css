@@ -1,0 +1,155 @@
+.absolute{
+	position: absolute;
+}
+.relative{
+	position: relative;
+}
+.center{
+	text-align: center;
+}
+.backimg{
+	background-position:center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+.top{
+	top: 50%;
+	transform: translate(0%, -50%);
+	-ms-transform: translate(0%, -50%);
+	-moz-transform: translate(0%, -50%);
+	-webkit-transform: translate(0%,-50%);
+	-o-transform: translate(0%, -50%);
+}
+.left{
+	left: 50%;
+	transform: translate(-50%,0%);
+	-ms-transform: translate(-50%,0%);
+	-moz-transform: translate(-50%,0%);
+	-webkit-transform: translate(-50%,0%);
+	-o-transform: translate(-50%,0%);
+}
+input{
+	outline: none;
+	border: none;
+	padding: 0px;
+	font-size: 14px;
+}
+.p1{
+	padding: 20px;
+}
+.f1{
+	font-size: 24px;
+	color: #666;
+}
+.f2{
+	font-size: 14px;
+	color: #666;
+}
+.f3{
+	font-size: 20px;
+	color: #fff;
+}
+.f4{
+	font-size: 26px;
+	color: #fff;
+}
+.f5{
+	font-size: 20px;
+	color: #000;
+}
+.f6{
+	font-size: 16px;
+	color: #666;
+}
+.f7{
+	font-size: 16px;
+	color: #fff;
+}
+i:before{
+	margin-left: 0px !important;
+}
+.ne-table{
+	width: 100%;
+	table-layout: fixed;
+	border-collapse: collapse;
+	text-align: left;
+}
+.ne-table>thead>th{
+	height: 50px;
+	background-color: #fff;
+	font-size: 20px;
+	padding-left: 100px;
+}
+.ne-table>tbody>tr{
+	border-bottom: 1px solid #000;
+}
+.ne-table>tbody>tr>td{
+	height: 50px;
+	background-color: transparent;
+	font-size: 18px;
+	padding-left: 100px;
+}
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  /*-webkit-tap-highlight-color: transparent;*/
+}
+body {
+  background-color: #fff;
+  color: #000;
+  font-family: "Microsoft Yahei UI", "Microsoft Yahei", "微软雅黑", SimSun, "宋体", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: normal;
+  -webkit-text-size-adjust: none;
+}
+input[type="text"],
+textarea {
+  border-width: 1px;
+  box-shadow: none;
+  /*-webkit-appearance: none ;*/
+  resize: none;
+}
+input,
+textarea {
+  /*outline: none;*/
+}
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  /*-webkit-appearance: none;*/
+}
+img {
+  border: 0;
+}
+
+table {
+  width: 100%;
+}
+a {
+  text-decoration: none;
+  outline: none;
+  color: inherit;
+}
+a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+a:visited {
+  color: inherit;
+}
+.clear {
+  clear: both;
+}
+input:-webkit-autofill {
+  /*background-color: none;*/
+  /*background-image: none;*/
+  /*-webkit-box-shadow: 0 0 0px 1000px white inset;*/
+  /*color: #000;*/
+}
+button {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
