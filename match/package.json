@@ -35,7 +35,8 @@
     "server": "webpack-dev-server --hot --content-base --inline",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "watch": "webpack --watch",
-    "dev": "webpack"
+    "dev": "webpack",
+    "dev-server": "webpack-dev-server --config webpack.dev.config.js"
   },
   "author": "zlj",
   "license": "ISC"
