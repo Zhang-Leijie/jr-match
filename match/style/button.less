@@ -1,0 +1,27 @@
+.btn {
+	display: inline-block;
+	border-radius:4px;
+	min-width: 110px;
+	padding: 9px 10px;
+
+	font-size: 16px;
+	line-height: 1;
+
+	&.blue {
+		background-color: @blue;
+		color: @white;
+
+		&:hover {
+			background-color: lighten(@blue, 5%);
+		}
+	}
+
+	&.white {
+		background-color: @white;
+		color: @black;
+
+		&:hover {
+			background-color: darken(@white, 5%);
+		}
+	}
+}
