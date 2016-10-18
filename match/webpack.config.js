@@ -5,6 +5,7 @@ module.exports = {
     entry: './main.js',
     //入口文件输出配置
     output: {
+        path: path.resolve(__dirname, 'dist'),
         publicPath: "./",
         filename: 'build.js'
     },
@@ -24,7 +25,8 @@ module.exports = {
         //加载器配置
         loaders: [
             { test: /\.vue$/,loader: 'vue'},
-            {test: /\.js$/,loader: 'babel',exclude: /node_modules/}
+            {test: /\.js$/,loader: 'babel',exclude: /node_modules/},
+            {test: /\.less$/, loader: 'style!css!less' }
         ]
     }
 };

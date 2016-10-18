@@ -1,3 +1,5 @@
+import style from '~/style/main.less'
+
 // import Vue from 'vue'
 import Vue from 'vue/dist/vue.js'
 import VueRouter from 'vue-router'
