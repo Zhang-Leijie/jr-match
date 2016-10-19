@@ -1,0 +1,62 @@
+@select-icon-size: 10px;
+@select-normal-width: 200px;
+@select-normal-height: 26px;
+@select-border: 1px solid #d8d8d8;
+@select-horizontal-padding:10px;
+
+@input-text-border: @select-border;
+@input-text-width: @select-normal-width;
+@input-text-height: @select-normal-height;
+@input-text-horizontal-padding: @select-horizontal-padding;
+
+@textarea-width: 620px;
+@textarea-height: 78px;
+@textarea-padding: 5px 8px;
+@textarea-border: @select-border;
+
+@input-text-size: 14px;
+@input-text-color: #666;
+
+.input-select {
+	font-size: @input-text-size;
+	color: @input-text-color;
+
+	-webkit-appearance: none;
+	-ms-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	border: @select-border;
+	width: @select-normal-width;
+	height: @select-normal-height;
+	padding: 0 @select-horizontal-padding;
+	
+	/*
+	* http://www.flaticon.com/free-icon/down-arrow_118738
+	*/
+	background-image: url("data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxMjkgMTI5IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxMjkgMTI5IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4Ij4KICA8Zz4KICAgIDxwYXRoIGQ9Im0xMjEuMywzNC42Yy0xLjYtMS42LTQuMi0xLjYtNS44LDBsLTUxLDUxLjEtNTEuMS01MS4xYy0xLjYtMS42LTQuMi0xLjYtNS44LDAtMS42LDEuNi0xLjYsNC4yIDAsNS44bDUzLjksNTMuOWMwLjgsMC44IDEuOCwxLjIgMi45LDEuMiAxLDAgMi4xLTAuNCAyLjktMS4ybDUzLjktNTMuOWMxLjctMS42IDEuNy00LjIgMC4xLTUuOHoiIGZpbGw9IiMwMDAwMDAiLz4KICA8L2c+Cjwvc3ZnPgo=");
+
+	background-position: right 10px top 50%;
+	background-repeat: no-repeat;
+	background-size: @select-icon-size @select-icon-size;
+	background-origin: padding-box;
+}
+
+.input-text {
+	font-size: @input-text-size;
+	color: @input-text-color;
+
+	border: @input-text-border;
+	height: @input-text-height;
+	padding: 0 @input-text-horizontal-padding;
+	width: @input-text-width;
+}
+
+.input-textarea {
+	font-size: @input-text-size;
+	color: @input-text-color;
+	
+	width: @textarea-width;
+	height: @textarea-height;
+	padding: @textarea-padding;
+	border: @textarea-border;
+}
