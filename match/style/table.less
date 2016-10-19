@@ -55,3 +55,36 @@
 		}
 	}
 }
+
+@high-table-head-bg-color: #f8f9fe;
+
+.high-table {
+	.table-init();
+
+	> thead {
+		background-color: @high-table-head-bg-color;
+		font-size: @table-header-font-size;
+		color: #666;
+		
+		> tr {
+			height: @table-header-row-height;
+
+			> th {
+				padding-left: @table-header-horizontal-padding;
+				padding-right: @table-header-horizontal-padding;
+			}
+		}
+	}
+
+	> tbody {
+		font-size: 16px;
+		color: #333;
+		background-color: @white;
+
+		> tr {
+			height: 140px;
+
+			border-bottom: 1px solid #eee;
+		}
+	}
+}

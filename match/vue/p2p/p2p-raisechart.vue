@@ -11,7 +11,7 @@
 			<div>
 				<div class="form-title">
 					<h1>类型选择</h1>
-					<a class="btn blue">查看资料</a>
+					<router-link class="btn blue" :to="{name:'m-p2praisedetail'}">查看资料</router-link>
 				</div>
 				<div class="form-input">
 					<span class="name">类型：</span>
@@ -165,9 +165,7 @@
 			</div>
 			<div>
 				<div class="button-group">
-					<router-link :to="{name:'m-p2praisedetail'}">
-						<a class="btn white" v-link="">返回</a>
-					</router-link>
+					<router-link class="btn white" :to="{name:'m-p2praisedetail'}">返回</router-link>
 					<a class="btn blue">提交</a>
 				</div>
 			</div>
