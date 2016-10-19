@@ -1,0 +1,46 @@
+@title-height: 30px;
+@title-font-size: 16px;
+
+.white-board {
+	background-color: rgba(255,255,255,0.6);
+	padding-top: 20px;
+
+	margin: 20px 40px;
+	> .paragraph {
+		margin-bottom: 20px;
+
+		> .title-with-border {
+			margin-left: 40px;
+			margin-right: 40px;
+			margin-bottom: 20px;
+		}
+
+		.content {
+			font-size: 14px;
+			padding-left: 100px;
+			padding-right: 90px;
+			min-height: 150px; 
+		}
+	}
+
+	> .button-group {
+		text-align: center;
+		padding-bottom: 40px;
+
+		> .btn {
+			& + .btn {
+				margin-left: 40px;
+			}
+		}
+	}
+}
+
+.title-with-border {
+	font-size: @title-font-size;
+	padding-top: (@title-height - @title-font-size)/2;
+	padding-bottom: (@title-height - @title-font-size)/2;
+
+	padding-left: 10px;
+
+	border-left: 7px solid @dark-blue;
+}

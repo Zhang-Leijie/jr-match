@@ -31,3 +31,17 @@
 		height: auto;
 	}
 }
+
+.background-image > * {
+	position: relative;
+}
+.background-image:before {
+	content: "";
+	position:fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-image: url('/image/beijing.png');
+	background-size: 100% 100%;
+}

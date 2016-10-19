@@ -107,6 +107,13 @@ const routes = [
     component(resolve) {
       resolve(require('./vue/funding/crowdfunding-detail.vue'))
     }
+  },
+  {
+    path: '/cf-item/raise',
+    name: 'm-cfitem-raise',
+    component(resolve) {
+      resolve(require('./vue/funding/crowdfunding-raise.vue'))
+    }
   }
 ]
 
