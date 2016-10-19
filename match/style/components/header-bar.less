@@ -1,0 +1,22 @@
+@header-bg-color: @light-gray;
+
+.header-bar {
+	padding-top: (@header-bar-height - @breadcrumb-height)/2;
+	padding-bottom: (@header-bar-height - @breadcrumb-height)/2; 
+
+	background-color: @header-bg-color;
+	padding-left: 30px;
+	padding-right: 40px;
+
+	.breadcrumb {
+		float: left;
+	}
+	
+	.remain-time {
+		float: right;
+		font-size: @breadcrumb-height;
+		line-height: 1;
+	}
+
+	.clearfix()
+}
