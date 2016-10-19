@@ -65,6 +65,10 @@ input{
 	font-size: 16px;
 	color: #fff;
 }
+.f8{
+	font-size: 18px;
+	color: #333;
+}
 i:before{
 	margin-left: 0px !important;
 }

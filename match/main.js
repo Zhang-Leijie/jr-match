@@ -39,6 +39,13 @@ const routes = [
     }
   },
   {
+    path: '/objective/point',
+    name: 'm-objpoint',
+    component(resolve) {
+      resolve(require('./vue/objectivepoint.vue'))
+    }
+  },
+  {
     path: '/p2p-raise',
     name: 'm-p2praise',
     component(resolve) {
