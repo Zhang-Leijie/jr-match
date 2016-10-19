@@ -6,11 +6,16 @@
 		</div>
 		<div class="login-box backimg absolute" style="background-image:url('image/denglubeijing.png')">
 			<div class="log absolute top p1" >
-				<div class="warn f2">请注意周围环境安全</div>
-				<div class="login-input">
+				<div class="warn f2 relative">
+					<i class="flaticon-technology absolute" style="top:1px;left:8px;color:#ffcf5c"></i>
+					请注意周围环境安全
+				</div>
+				<div class="login-input relative">
+					<i class="flaticon-user absolute" style="top:4px;left:15px;color:#999"></i>
 					<input style="width:100%;height:100%;" placeholder="学号">
 				</div>
-				<div class="login-input">
+				<div class="login-input relative">
+					<i class="flaticon-unlocked absolute" style="top:4px;left:15px;color:#999"></i>
 					<input style="width:100%;height:100%;" placeholder="密码">
 				</div>
 				<router-link :to="{name: 'm-index'}">
@@ -46,6 +51,7 @@
 			height: 236px;
 			background-color: #fff;
 			.warn{
+				padding-left: 34px;
 				width: 100%;
 				height: 28px;
 				background:#fff8dc;
