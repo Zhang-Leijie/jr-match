@@ -1,0 +1,33 @@
+@img-normal-width: 200px;
+@img-normal-height: 150px;
+
+.image-container {
+	display: inline-block;
+	text-align: center;
+
+	width: @img-normal-width;
+	height: @img-normal-height;
+
+	position: relative;
+	
+	background-color: #f9f9f9;
+
+	&:before {
+		content: '\200B';
+		height: 100%;
+		vertical-align: middle;
+		display: inline-block;
+	}
+
+	> * {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	> img {
+		max-width: @img-normal-width;
+		max-height: @img-normal-height;
+		width: auto;
+		height: auto;
+	}
+}
