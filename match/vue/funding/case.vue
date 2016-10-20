@@ -1,7 +1,13 @@
 <template>
 	<div class="raise backimg absolute" style="background-image:url('image/beijing.png');">
-		
-		<div style="width:100%;padding:0px 40px">
+		<div class="header-bar">
+			<ol class="breadcrumb">
+				<li class="item">众筹</li>
+				<li class="item">案例分析</li>
+			</ol>
+			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
+		</div>
+		<div style="width:1200px;margin:20px auto 0px">
 			<div class="point f7">
 				总分：88
 			</div>
@@ -12,7 +18,9 @@
 					的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容...
 				</div>
 				<div class="btn-box">
-					<btn-back></btn-back>
+					<router-link class="btn blue" :to="{name:'m-index'}">
+						返回
+					</router-link>
 				</div>
 			</div>
 		</div>
@@ -25,7 +33,6 @@
 		left: 0px;
 		right: 0px;
 		min-width: 1200px;
-		padding: 70px 0px;
 		width: 100%;
 		.point{
 			margin: 0px auto;

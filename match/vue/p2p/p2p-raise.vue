@@ -1,13 +1,19 @@
 <template>
 	<div class="raise backimg absolute" style="background-image:url('image/beijing.png');">
-		<div class="header absolute f5">
-			P2P <i class="flaticon-right-arrow"></i> 项目发标
-			<div class="time absolute">
-				剩余时间：30分00秒
-			</div>
+		<div class="header-bar">
+			<ol class="breadcrumb">
+				<li class="item">P2P</li>
+				<li class="item">项目发标</li>
+			</ol>
+			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
-		<back-link></back-link>
-		<div style="width:100%;padding:0px 40px">
+		
+		<div style="width:1200px;margin:20px auto 0px;">
+			<router-link  :to="{name:'m-index'}">
+				<div class="back relative">
+					<i class="flaticon-left-arrow"></i><span class="absolute" style="top:0px;left:25px">返回</span>
+				</div>
+			</router-link>
 			<div class="table-box">
 				<table class="ne-table">
 					<thead>
@@ -61,25 +67,12 @@
 	}
 </script>
 <style lang="less">
-	.header{
-		padding: 0px 40px;
-		width: 100%;
-		height: 50px;
-		top: 0px;
-		background:rgba(255, 255, 255, 0.6);
-		line-height: 50px;
-		.time{
-			top: 0px;
-			right: 40px;
-		}
-	}
 	.raise{
 		top: 0px;
 		bottom: 0px;
 		left: 0px;
 		right: 0px;
 		min-width: 1200px;
-		padding: 70px 0px;
 		width: 100%;
 	}
 	.back{

@@ -1,0 +1,44 @@
+<template>
+	<div style="min-width:1200px;">
+		<div class="header-bar">
+			<ol class="breadcrumb">
+				<li class="item">客观考察</li>
+			</ol>
+			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
+		</div>
+		<div class="objpoint f8" style="color:#999">
+				<div class="point-box">
+					总正确率：0/33
+				</div>
+				<div class="point-box">
+					单选题正确率：0/11
+				</div>
+				<div class="point-box">
+					多选题正确率：0/11
+				</div>
+				<div class="point-box">
+					判断题正确率：0/11
+				</div>
+				<div class="point-box">
+					得分：0
+				</div>
+		</div>
+		<div style="text-align:center;margin-top:70px;">
+			<router-link class="btn blue" :to="{name:'m-index'}">确定</router-link>
+		</div>
+	</div>
+</template>
+<style lang="less">
+	.objpoint{
+		width: 1200px;
+		margin: 30px auto;
+		border:1px solid #cccccc;
+		height:60px;
+			.point-box{
+				display: inline-block;
+				text-align: center;
+				width: 19.6%;
+				line-height: 60px;
+			}	
+	}
+</style>

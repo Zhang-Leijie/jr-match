@@ -38,7 +38,7 @@
 				<div style="margin-top:20px;" v-if="!begin">
 					<a class="btn blue">下一题</a>
 					<a class="btn blue" style="margin-left:20px;">上一题</a>
-					<router-link>
+					<router-link :to="{name: 'm-objpoint'}">
 						<a class="btn blue" style="margin-left:20px;background-color:#37bc22">提交试卷</a>
 					</router-link>
 				</div>
