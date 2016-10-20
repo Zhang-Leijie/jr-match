@@ -132,7 +132,7 @@
 			</div>
 			<div>
 				<div class="form-title">
-					<h1>发起者信息</h1>
+					<h1>项目信息</h1>
 				</div>
 				<div class="form-input">
 					<span class="name">目标额度：</span>
@@ -148,6 +148,51 @@
 					<span class="name">融资计划书：</span>
 					<a class="btn blue">点击上传</a>
 				</div>
+			</div>
+			<div>
+				<div class="form-title">
+					<h1>发起者信息</h1>
+				</div>
+				<div class="form-input">
+					<span class="name">
+						<div class="avatar-image">
+							<img :src="'./image/tipian@2x.png'" alt="">
+						</div>
+					</span>
+				</div>
+				<div class="form-input">
+					<span class="name">团队名称：</span>
+					<input type="text" class="input input-text">
+				</div>
+				<div class="form-input">
+					<span class="name">团队简介：</span>
+					<textarea class="input input-textarea"></textarea>
+				</div>
+				<div class="form-input">
+					<span class="name">团队成员：</span>
+				</div>
+				<div>
+					<div class="form-input">
+						<span class="name">
+							<div class="avatar-image small">
+								<img :src="'./image/tipian@2x.png'" alt="">
+							</div>
+						</span>
+					</div>
+					<div class="form-input indent0">
+						<span class="name">姓名：</span>
+						<input type="text" class="input input-text">
+					</div>
+					<div class="form-input indent0">
+						<span class="name">团队职务：</span>
+						<input type="text" class="input input-text">
+					</div>
+					<div class="form-input indent0">
+						<span class="name">个人简介：</span>
+						<textarea class="input input-textarea"></textarea>
+					</div>
+				</div>
+
 			</div>
 			<div>
 				<div class="form-title">
@@ -175,42 +220,20 @@
 				</div>
 			</div>
 			<div>
-				<div class="form-title">
-					<h1>还款计划</h1>
-				</div>
-				<div class="form-table">
-					<table class="table">
-						<thead>
-							<tr>
-								<th>时间</th>
-								<th>总额</th>
-								<th>本金</th>
-								<th>利息</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr v-for="i in 10">
-								<td>{{i}}</td>
-								<td>10</td>
-								<td>XXX</td>
-								<td>0.5%</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div>
 				<div class="button-group">
 					<router-link class="btn white" :to="{name:'m-cfitem-detail'}">返回</router-link>
 					<a class="btn blue" @click="showModal = true">提交</a>
 				</div>
 			</div>
 		</div>
-		<modal v-if="showModal" @close="showModal = false"></modal>
+		<modal v-if="showModal" @close="complete">
+			<p slot="body" style="text-align:center;">发标成功</p>
+		</modal>
 	</div>
 </template>
 <script>
 	import Modal from '~/components/modal.vue'
+	import router from '~/router.js'
 
 	export default {
 		data(){
@@ -221,10 +244,19 @@
 		components: {
 			'modal': Modal
 		},
-		events: {
-			close(){
-				this.showModal = false
+		methods: {
+			complete(){
+				console.log('heheh')
+				router.push({name: 'm-cfitem-detail'})
 			}
 		}
 	}
 </script>
+<style>
+	.modal-body p {
+		padding-top: 10px;
+		font-size:18px;
+		color:#666;
+		text-align:center;
+	}
+</style>
