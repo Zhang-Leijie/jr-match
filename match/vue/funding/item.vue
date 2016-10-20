@@ -29,6 +29,9 @@
 					</tr>
 				</tbody>
 			</table>
+			<div class="button-group">
+				<router-link :to="{name: 'm-index'}" class="btn blue">返回</router-link>
+			</div>
 		</div>
 	</div>
 </template>
@@ -42,6 +45,10 @@
 			td:not(:first-child) {
 				text-align: center;
 			}
+		}
+
+		.button-group {
+			margin-top: 20px;
 		}
 	}
 	
