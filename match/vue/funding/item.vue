@@ -12,8 +12,8 @@
 				<thead>
 					<tr>
 						<th>项目信息</th>
-						<th style="width:20%;">微信得票</th>
-						<th style="width:100px;">得分</th>
+						<th style="width:20%;">得分</th>
+						<th style="width:100px;">操作</th>
 					</tr>
 				</thead>
 				<tbody>

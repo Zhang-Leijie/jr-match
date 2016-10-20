@@ -60,3 +60,41 @@
 	padding: @textarea-padding;
 	border: @textarea-border;
 }
+
+.input-tag {
+	display: inline-block;
+	vertical-align: middle;
+
+	> input:checked {
+		& + label {
+			border: 1px solid @blue;
+		}
+	}
+
+	> label {
+		display: inline-block;
+		cursor: pointer;
+		border: 1px solid #d8d8d8;
+		padding: 2px 4px;
+		margin-left: 2px;
+	}
+
+	+ .input-tag {
+		margin-left: 20px;
+	}
+}
+
+.input-radio {
+	display: inline-block;
+	vertical-align: middle;
+
+	> label {
+		cursor: pointer;
+		padding: 0px 2px;
+		margin-left: 2px;
+	}
+
+	+ .input-radio {
+		margin-left: 20px;
+	}
+}
