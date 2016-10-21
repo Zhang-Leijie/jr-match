@@ -1,0 +1,24 @@
+.progress-bar {
+	display: inline-block;
+	height: 8px;
+	width: 100px;
+	background-color: #eee;
+	position: relative;
+	
+	> .inline {
+		position: absolute;
+		background-color: @blue;
+		left: 0px;
+		width: 0%;
+		height: 100%;
+	}
+
+	> .inline[style*="100%"] {
+		background-color: @green;
+	}
+}
+
+.progress-text {
+	font-size: 12px;
+	color: #999;
+}
