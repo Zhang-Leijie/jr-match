@@ -1,0 +1,29 @@
+@active-color: #c81b1d;
+
+.tabs {
+	> .tabs-head {
+
+		border-bottom: 1px solid #eee;
+
+		> .tab-name {
+			display: inline-block;
+			vertical-align: middle;
+
+			padding: 10px 25px;
+			font-size:18px;
+			color: #333;
+			
+			&.active {
+				padding-bottom:9px;
+				border-bottom: 1px solid @active-color; 
+				color: @active-color;
+			}
+		}
+	}
+
+	> .tabs-content {
+		> .tab-content {
+
+		}
+	}
+}
