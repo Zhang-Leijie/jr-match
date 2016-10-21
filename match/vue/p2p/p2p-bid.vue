@@ -91,7 +91,7 @@
 					</div>
 					<div class="p2p-item">
 						<div class="p2p-inline-item">
-							<a class="btn blue">我要投资</a>
+							<router-link class="btn blue" :to="{name: 'm-p2pbid-detail'}">我要投资</router-link>
 						</div>
 					</div>
 				</div>

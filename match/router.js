@@ -73,6 +73,13 @@ const routes = [
     }
   },
   {
+    path: '/p2p-bid/detail',
+    name: 'm-p2pbid-detail',
+    component(resolve) {
+      resolve(require('./vue/p2p/p2p-bid-detail.vue'))
+    }
+  },
+  {
     path: '/cf-case',
     name: 'm-cfcase',
     component(resolve) {
