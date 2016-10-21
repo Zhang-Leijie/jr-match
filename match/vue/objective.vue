@@ -33,7 +33,7 @@
 					</div>
 				</div>
 			</div>
-			<div style="text-align:center">
+			<div class="button-group">
 				<router-link class="btn blue" :to="{name: 'm-index'}" style="margin-top:20px;" v-if="begin">返回</router-link>
 				<div style="margin-top:20px;" v-if="!begin">
 					<a class="btn blue">下一题</a>
@@ -44,16 +44,32 @@
 				</div>
 			</div>
 		</div>
+		<modal v-if="showModal">
+			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">确认退出答题?</p>
+			<p slot="body" class='f6' style="text-align:center;">退出答题后可以再次重新答题</p>
+			<p slot="footer" style="text-align:center;">
+				<a class="btn white" @click="close">返回</a>
+				<a class="btn blue" @click="sure" style="margin-left:30px;">确认</a>
+			</p>
+		</modal>
 	</div>
 </template>
 <script type="text/javascript">
+
+	import Modal from '~/components/modal.vue'
+	import router from '~/router.js'
+
 	export default {
 		data(){
 			return {
+				showModal:false,
 				begin:true,
 				type: 1,
 				name:"单项选择"
 			}
+		},
+		components: {
+			'modal': Modal
 		},
 		methods: {
 			ques(num,name){
@@ -63,11 +79,21 @@
 			},
 			end(){
 				var self = this
-				self.begin = true
+				// self.begin = true
+				self.showModal = true
 			},
 			ifbegin(){
 				var self = this
 				self.begin = false
+			},
+			close(){
+				var self = this
+				self.showModal = false
+			},
+			sure(){
+				var self = this
+				self.begin = true
+				self.showModal = false
 			}
 		}
 	}

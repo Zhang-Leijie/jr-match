@@ -8,11 +8,9 @@
 			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
 		
-		<div style="width:1200px;margin:20px auto 0px;">
-			<router-link  :to="{name:'m-index'}">
-				<div class="back relative">
-					<i class="flaticon-left-arrow"></i><span class="absolute" style="top:0px;left:25px">返回</span>
-				</div>
+		<div style="width:1200px;margin:0px auto">
+			<router-link  :to="{name:'m-index'}" class="btn-back">
+				返回
 			</router-link>
 			<div class="table-box">
 				<table class="ne-table">
@@ -53,19 +51,6 @@
 		</div>
 	</div>
 </template>
-<script>
-	export default {
-		methods: {
-			back(){
-				if (this.route) {
-					this.route()
-				} else {
-					window.history.go(-1)
-				}
-			}
-		}
-	}
-</script>
 <style lang="less">
 	.raise{
 		top: 0px;
@@ -83,7 +68,7 @@
 	}
 	.table-box{
 		width: 100%;
-		margin: 10px auto 0px;
+		margin: 0px auto;
 		min-height: 560px;
 		background:rgba(255, 255, 255, 0.6);
 	}

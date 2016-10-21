@@ -12,21 +12,47 @@
 				</div>
 				<div class="login-input relative">
 					<i class="flaticon-user absolute" style="top:4px;left:15px;color:#999"></i>
-					<input style="width:100%;height:100%;" placeholder="学号">
+					<input style="width:100%;height:100%;" placeholder="学号" v-model="cardnum">
 				</div>
 				<div class="login-input relative">
 					<i class="flaticon-unlocked absolute" style="top:4px;left:15px;color:#999"></i>
-					<input style="width:100%;height:100%;" placeholder="密码">
+					<input style="width:100%;height:100%;" placeholder="密码" v-model="password" type="password">
 				</div>
-				<router-link :to="{name: 'm-index'}">
-					<div class="login-btn center f3">
+				<!-- <router-link :to="{name: 'm-index'}"> -->
+					<div class="login-btn center f3" @click="login">
 						登 录
 					</div>
-				</router-link>
+				<!-- </router-link> -->
 			</div>
 		</div>
 	</div>
 </template>
+<script>
+	import {login} from '~/ajax/post.js'
+	import router from '~/router.js'
+
+	export default {
+		data(){
+			return {
+				cardnum:'',
+				password:''
+			}
+		},
+		methods:{
+			login(){
+				var self = this
+				login({
+					account: self.cardnum,
+					password: self.password
+				}).then(()=>{
+					router.push({name:'m-index'})
+				}, (e) => {
+					console.dir(e)
+				})
+			}
+		}
+	}
+</script>
 <style lang="less">
 	.login{
 		position: absolute;

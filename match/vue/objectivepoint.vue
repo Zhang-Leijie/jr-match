@@ -6,7 +6,7 @@
 			</ol>
 			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
-		<div class="objpoint f8" style="color:#999">
+		<div class="objpoint f8">
 				<div class="point-box">
 					总正确率：0/33
 				</div>
@@ -23,7 +23,7 @@
 					得分：0
 				</div>
 		</div>
-		<div style="text-align:center;margin-top:70px;">
+		<div class="button-group">
 			<router-link class="btn blue" :to="{name:'m-index'}">确定</router-link>
 		</div>
 	</div>
@@ -34,6 +34,8 @@
 		margin: 30px auto;
 		border:1px solid #cccccc;
 		height:60px;
+		color: #999;
+		margin-bottom: 100px;
 			.point-box{
 				display: inline-block;
 				text-align: center;

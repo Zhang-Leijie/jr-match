@@ -17,7 +17,7 @@
 					显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示
 					的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容...
 				</div>
-				<div class="btn-box">
+				<div class="button-group">
 					<router-link class="btn blue" :to="{name:'m-index'}">
 						返回
 					</router-link>
