@@ -2,7 +2,8 @@ var webpack = require('webpack');
 var path = require('path');
 module.exports = {
     //页面入口文件配置
-    entry: './main.js',
+    // entry: './main.js',
+    entry: ['whatwg-fetch','./main.js'],
     //入口文件输出配置
     output: {
         path: path.resolve(__dirname, 'dist'),

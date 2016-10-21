@@ -21,11 +21,19 @@ var retCodes = {
 }
 
 const factory = (url) => (params) => {
-    return Promise.resolve($.ajax({
-        url: server_url + url,
-        type:"GET",
-        data: params
-    })).then(function(res){
+    return Promise.resolve(fetch(server_url+url, {
+        credentials: 'same-origin',
+        method: 'POST',
+        headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            params
+        })
+    })).then(function(response){
+        return response.json()
+    }).then(function(res){
         console.log(`in ${url}, params: ${JSON.stringify(params)}, return: ${JSON.stringify(res)}`)
         if (res.state == retCodes.success) {
             return Promise.resolve(res.order)

@@ -21,20 +21,28 @@ var retCodes = {
 }
 
 const factory = (url) => (params) => {
-	console.dir(params)
-	return Promise.resolve($.ajax({
-		url: server_url + url,
-		type:"POST",
-		data: params
-	})).then(function(res){
-		if (res.state == retCodes.success) {
-			return Promise.resolve(res.order)
-		} else {
-			return Promise.reject(new Error(res.detail))
-		}
-	}).catch(function(e){
-		return Promise.reject(e)
-	})
+    console.dir(params)
+    return Promise.resolve(fetch(server_url+url, {
+        credentials: 'same-origin',
+        method: 'POST',
+        headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            params
+        })
+    })).then(function(response){
+        return response.json()
+    }).then(function(res){
+        if (res.state == retCodes.success) {
+            return Promise.resolve(res.order)
+        } else {
+            return Promise.reject(new Error(res.detail))
+        }
+    }).catch(function(e){
+        return Promise.reject(e)
+    })
 }
 //登录
 export const login = factory('/log/Login')

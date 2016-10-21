@@ -1,6 +1,7 @@
 var path = require('path')
 module.exports = {
-  entry: './main.js',
+  // entry: './main.js',
+  entry: ['whatwg-fetch','./main.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'build.js'

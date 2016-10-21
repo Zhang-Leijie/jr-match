@@ -30,6 +30,7 @@
 <script>
 	import {login} from '~/ajax/post.js'
 	import router from '~/router.js'
+	import 'whatwg-fetch'
 
 	export default {
 		data(){
@@ -49,6 +50,22 @@
 				}, (e) => {
 					console.dir(e)
 				})
+				// fetch('http://jr.xiyoukeji.com/index.php/match/log/Login', {
+				// 	method: 'POST',
+				// 	headers: {
+				// 	   'Accept': 'application/json',
+				// 	   'Content-Type': 'application/json'
+				// 	},
+				// 	body: JSON.stringify({
+				// 	    account: self.cardnum,
+				// 	    password:self.password
+				// 	})
+				// }).then(function(response){
+				// 	return response.json()
+				// }).then((res)=>{
+				// 	console.log(res)
+				// 	router.push({name:'m-index'})
+				// })
 			}
 		}
 	}
