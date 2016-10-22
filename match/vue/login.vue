@@ -16,7 +16,7 @@
 				</div>
 				<div class="login-input relative">
 					<i class="flaticon-unlocked absolute" style="top:4px;left:15px;color:#999"></i>
-					<input style="width:100%;height:100%;" placeholder="密码" v-model="password" type="password">
+					<input style="width:100%;height:100%;" placeholder="密码" v-model="password" type="password" @key.enter="login">
 				</div>
 				<!-- <router-link :to="{name: 'm-index'}"> -->
 					<div class="login-btn center f3" @click="login">
@@ -28,7 +28,7 @@
 	</div>
 </template>
 <script>
-	import {login} from '~/ajax/post.js'
+	import {login, logout} from '~/ajax/post.js'
 	import router from '~/router.js'
 	import 'whatwg-fetch'
 
@@ -46,7 +46,7 @@
 					account: self.cardnum,
 					password: self.password
 				}).then(()=>{
-					router.push({name:'m-index'})
+					router.back()
 				}, (e) => {
 					console.dir(e)
 				})
@@ -64,6 +64,13 @@
 				// 	router.push({name:'m-index'})
 				// })
 			}
+		},
+		beforeRouteEnter(to, from, next){
+			logout().then(()=>{
+				return Promise.reject(new Error())
+			}).catch((e)=>{
+				next()
+			})
 		}
 	}
 </script>

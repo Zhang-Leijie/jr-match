@@ -5,14 +5,14 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     name: 'm-login',
     component(resolve) {
       resolve(require('./vue/login.vue'))
     }
   },
   {
-    path: '/index',
+    path: '/',
     name: 'm-index',
     component: require('./vue/index.vue')
   },

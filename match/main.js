@@ -17,6 +17,7 @@ Vue.component('btn-go', function(resolve) {
   resolve(require('./components/btn-go.vue'))
 })
 
+window.router = router
 
 
 
