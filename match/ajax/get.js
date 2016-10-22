@@ -1,4 +1,5 @@
 const server_url = 'http://jr.xiyoukeji.com/index.php/match'
+import $ from 'jquery'
 
 var retCodes = {
     'success' : "0",
