@@ -22,7 +22,7 @@
 					</thead>
 					<tbody>
 						<tr v-for="(list,index) in lists">
-							<td>{{index}}</td>
+							<td>{{index+1}}</td>
 							<td>{{list.name}}</td>
 							<td v-if="list.score==null">未评分</td>
 							<td v-if="list.score!=null">{{score}}</td>
