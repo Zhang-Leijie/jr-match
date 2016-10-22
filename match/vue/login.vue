@@ -52,10 +52,7 @@
 				})
 				// fetch('http://jr.xiyoukeji.com/index.php/match/log/Login', {
 				// 	method: 'POST',
-				// 	headers: {
-				// 	   'Accept': 'application/json',
-				// 	   'Content-Type': 'application/json'
-				// 	},
+		
 				// 	body: JSON.stringify({
 				// 	    account: self.cardnum,
 				// 	    password:self.password

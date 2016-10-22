@@ -1,4 +1,5 @@
 const server_url = 'http://jr.xiyoukeji.com/index.php/match'
+import $ from 'jquery'
 
 var retCodes = {
     'success' : "0",
@@ -22,19 +23,11 @@ var retCodes = {
 
 const factory = (url) => (params) => {
     console.dir(params)
-    return Promise.resolve(fetch(server_url+url, {
-        credentials: 'same-origin',
-        method: 'POST',
-        headers: {
-           'Accept': 'application/json',
-           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            params
-        })
-    })).then(function(response){
-        return response.json()
-    }).then(function(res){
+    return Promise.resolve($.ajax({
+        url: server_url + url,
+        type:"POST",
+        data: params
+    })).then(function(res){
         if (res.state == retCodes.success) {
             return Promise.resolve(res.order)
         } else {

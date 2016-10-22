@@ -21,29 +21,17 @@
 						<th>操作</th>
 					</thead>
 					<tbody>
-						<tr>
-							<td>1</td>
-							<td>名称内容</td>
-							<td>未评分</td>
-							<td><router-link :to="{name: 'm-p2praisedetail'}">去完成</router-link></td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>名称内容</td>
-							<td>80</td>
-							<td>查看</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>名称内容</td>
-							<td>未评分</td>
-							<td>去完成</td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>名称内容</td>
-							<td>未评分</td>
-							<td>去完成</td>
+						<tr v-for="(list,index) in lists">
+							<td>{{index}}</td>
+							<td>{{list.name}}</td>
+							<td v-if="list.score==null">未评分</td>
+							<td v-if="list.score!=null">{{score}}</td>
+							<td v-if="list.isfinished == 1">
+								<router-link :to="{name: 'm-p2praisedetail'}">去完成</router-link>
+							</td>
+							<td v-if="list.isfinished == 2">
+								<router-link :to="{name: 'm-p2praisedetail'}">查看</router-link>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -51,6 +39,25 @@
 		</div>
 	</div>
 </template>
+<script>
+	import {VerifyLists} from '~/ajax/get.js'
+	import router from '~/router.js'
+
+	export default{
+		data(){
+			return{
+				lists:[]
+			}
+		},
+		mounted:function(){
+			var self = this	
+			VerifyLists().then((res) => {
+				console.dir(res)
+				self.lists = res
+			})
+		}
+	}
+</script>
 <style lang="less">
 	.raise{
 		top: 0px;
