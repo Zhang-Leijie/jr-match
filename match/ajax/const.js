@@ -7,16 +7,17 @@ var retCodes = {
 
 import $ from 'jquery'
 import router from '~/router.js'
+import {routerState} from '~/router.js'
 
 export const server_url = 'http://jr.xiyoukeji.com/index.php/match'
 
 const LOGIN_ERROR = "LOGIN_ERROR_0"
 
-export const postFactory = (url) => (params) => {
+export const Factory_ = (method) => (url) => (params) => {
     console.dir(params)
     return Promise.resolve($.ajax({
         url: server_url + url,
-        type:"POST",
+        type:method,
         data: params
     })).then((res) => {
         if (res.state == retCodes.success) {
@@ -30,31 +31,12 @@ export const postFactory = (url) => (params) => {
         }
     }).catch((e) => {
         if (e.message == LOGIN_ERROR) {
+            alert('处于未登录状态, 请登录')
+            routerState.previous = router.currentRoute.name
             router.push({name: 'm-login'})
         }
     })
 }
 
-export const getFactory = (url) => (params) => {
-    return Promise.resolve($.ajax({
-        url: server_url + url,
-        type:"GET",
-        data: params
-    })).then(function(res){
-        if (res.state == retCodes.success) {
-            return Promise.resolve(res.order)
-        } else if (res.state == retCodes.nonLogin || 
-            retCodes.expired || 
-            retCodes.beReplaced){
-            return Promise.reject(new Error(LOGIN_ERROR))
-        } else {
-            return Promise.reject(new Error(res.detail))
-        }
-    }).catch(function(e){
-        if (e.message == LOGIN_ERROR) {
-            router.push({name: 'm-login'})
-        }
-
-        return Promise.reject(e)
-    })
-}
+export const postFactory = Factory_('POST')
+export const getFactory = Factory_('GET')

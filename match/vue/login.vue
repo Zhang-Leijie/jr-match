@@ -30,6 +30,7 @@
 <script>
 	import {login, logout} from '~/ajax/post.js'
 	import router from '~/router.js'
+	import {routerState} from '~/router.js'
 	import 'whatwg-fetch'
 
 	export default {
@@ -46,7 +47,11 @@
 					account: self.cardnum,
 					password: self.password
 				}).then(()=>{
-					router.back()
+					if (routerState.previous == null || routerState.previous == router.currentRoute.name) {
+						router.push({name: 'm-index'})
+					} else {
+						router.back()
+					}
 				}, (e) => {
 					console.dir(e)
 				})

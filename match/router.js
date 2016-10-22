@@ -126,3 +126,7 @@ const routes = [
 export default new VueRouter({
   routes
 })
+
+export const routerState = {
+  previous: null
+}
