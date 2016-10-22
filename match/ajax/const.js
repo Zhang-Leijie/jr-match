@@ -2,6 +2,8 @@ var retCodes = {
     'success' : "0"
 }
 
+import $ from 'jquery'
+
 export const server_url = 'http://jr.xiyoukeji.com/index.php/match'
 
 export const postFactory = (url) => (params) => {

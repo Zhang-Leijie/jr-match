@@ -40,7 +40,7 @@
 	</div>
 </template>
 <script>
-	import {VerifyLists} from '~/ajax/get.js'
+	import {Lists} from '~/ajax/get.js'
 	import router from '~/router.js'
 
 	export default{
@@ -51,7 +51,7 @@
 		},
 		mounted:function(){
 			var self = this	
-			VerifyLists().then((res) => {
+			Lists().then((res) => {
 				console.dir(res)
 				self.lists = res
 			})
