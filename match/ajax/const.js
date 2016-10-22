@@ -23,8 +23,8 @@ export const Factory_ = (method) => (url) => (params) => {
         if (res.state == retCodes.success) {
             return Promise.resolve(res.order)
         } else if (res.state == retCodes.nonLogin || 
-            retCodes.expired || 
-            retCodes.beReplaced){
+            res.state == retCodes.expired || 
+            res.state == retCodes.beReplaced){
             return Promise.reject(new Error(LOGIN_ERROR))
         } else {
             return Promise.reject(new Error(res.detail))
@@ -35,6 +35,7 @@ export const Factory_ = (method) => (url) => (params) => {
             routerState.previous = router.currentRoute.name
             router.push({name: 'm-login'})
         }
+        return Promise.reject(e)
     })
 }
 
