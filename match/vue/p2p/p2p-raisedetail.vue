@@ -7,22 +7,22 @@
 			</ol>
 			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
-		<div class="white-board">
+		<div class="white-board" v-if="listInfo.id !== undefined">
 			<div class="paragraph">
 				<h1 class="title-with-border">背景描述</h1>
 				<div class="content">
-					{{listInfo.background || ""}}
+					{{listInfo.background}}
 				</div>
 			</div>
 			<div class="paragraph">
 				<h1 class="title-with-border">详细信息</h1>
 				<div class="content">
-					{{listInfo.detail || ""}}
+					{{listInfo.detail}}
 				</div>
 			</div>
 			<div class="button-group">
 				<router-link :to="{name: 'm-p2praise'}" class="btn white" >返回</router-link>
-				<router-link :to="{name: 'm-p2praisechart'}" class="btn blue">设计</router-link>
+				<router-link :to="{name: 'm-p2praisechart', params: {id: listInfo.id}}" class="btn blue">设计</router-link>
 			</div>
 		</div>
 	</div>
@@ -36,7 +36,8 @@
 			listInfo(){
 				var listInfos = store.state.p2pRaise.listInfos
 				var id = store.state.route.params.id 
-				return listInfos[id] || {}
+				var ret = listInfos.get(id)
+				return ret && ret.toObject() || {}
 			}
 		},
 		mounted() {

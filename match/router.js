@@ -45,7 +45,7 @@ const routes = [
     }
   },
   {
-    path: '/p2p-raise/chart',
+    path: '/p2p-raise/chart/:id',
     name: 'm-p2praisechart',
     component(resolve) {
       resolve(require('./vue/p2p/p2p-raisechart.vue'))

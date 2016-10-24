@@ -1,18 +1,42 @@
 import {Lists, getP2PRaiseInfo} from '~/ajax/get.js'
+import Immutable from 'immutable'
 
 const p2pRaise = {
 	state: {
 		lists: [],
-		listInfos: {}
+		listInfos: Immutable.Map()
 	},
 	mutations: {
 		getList(state, lists) {
 			state.lists = lists
 		},
 		getListInfos(state, {listInfo, id}) {
-			var newListInfo = {}
-			newListInfo[id] = listInfo
-			state.listInfos = Object.assign({}, state.listInfos, newListInfo)
+			var listInfo = Immutable.Map(listInfo)
+			listInfo = listInfo.set('params', {
+				id: "",
+				username: "",
+				gender: "",
+				job: "",
+				age:"",
+				tag_id: "",
+				phone: "",
+				block: "",
+				name: "",
+				request_id: "",
+				money: "",
+				rate: "",
+				raise_time: "",
+				loan_time: "",
+				repay_type_id: "",
+				detail: "",
+				proof:	[
+					{
+						name: "",
+						detail: ""
+					}
+				]
+			})
+			state.listInfos = state.listInfos.set(id, listInfo)
 		}
 	},
 	getters: {
@@ -26,7 +50,10 @@ const p2pRaise = {
 				commit('getList', res)
 			})
 		},
-		getP2PRaiseInfo({commit}, {id}){
+		getP2PRaiseInfo({commit, state}, {id}){
+			if (state.listInfos.get(id)) {
+				return
+			}
 			return getP2PRaiseInfo(id).then((listInfo) => {
 				commit('getListInfos', {
 					listInfo, id
