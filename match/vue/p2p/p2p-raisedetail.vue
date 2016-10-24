@@ -11,17 +11,13 @@
 			<div class="paragraph">
 				<h1 class="title-with-border">背景描述</h1>
 				<div class="content">
-					这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背
-					景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这
-					里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容...
+					{{listInfo.background || ""}}
 				</div>
 			</div>
 			<div class="paragraph">
-				<h1 class="title-with-border">背景描述</h1>
+				<h1 class="title-with-border">详细信息</h1>
 				<div class="content">
-					这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背
-					景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这
-					里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容...
+					{{listInfo.detail || ""}}
 				</div>
 			</div>
 			<div class="button-group">
@@ -31,3 +27,22 @@
 		</div>
 	</div>
 </template>
+<script>
+	import router from '~/router.js'
+	import store from '~/vuex'
+
+	export default {
+		computed: {
+			listInfo(){
+				var listInfos = store.state.p2pRaise.listInfos
+				var id = store.state.route.params.id 
+				return listInfos[id] || {}
+			}
+		},
+		mounted() {
+			store.dispatch('getP2PRaiseInfo', {
+				id: store.state.route.params.id
+			})
+		}
+	}
+</script>

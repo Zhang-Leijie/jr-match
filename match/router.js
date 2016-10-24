@@ -38,7 +38,7 @@ const routes = [
     }
   },
   {
-    path: '/p2p-raise/detail',
+    path: '/p2p-raise/detail/:id',
     name: 'm-p2praisedetail',
     component(resolve) {
       resolve(require('./vue/p2p/p2p-raisedetail.vue'))
