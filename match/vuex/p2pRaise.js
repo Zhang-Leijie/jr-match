@@ -1,19 +1,18 @@
 import {Lists, getP2PRaiseInfo} from '~/ajax/get.js'
-import Immutable from 'immutable'
+import Vue from 'vue'
 
 const p2pRaise = {
 	state: {
 		lists: [],
-		listInfos: Immutable.Map()
+		listInfos: {}
 	},
 	mutations: {
 		getList(state, lists) {
 			state.lists = lists
 		},
 		getListInfos(state, {listInfo, id}) {
-			var listInfo = Immutable.Map(listInfo)
-			listInfo = listInfo.set('params', {
-				id: "",
+			listInfo['params'] = {
+				id: id,
 				username: "",
 				gender: "",
 				job: "",
@@ -35,8 +34,8 @@ const p2pRaise = {
 						detail: ""
 					}
 				]
-			})
-			state.listInfos = state.listInfos.set(id, listInfo)
+			}
+			Vue.set(state.listInfos, id, listInfo)
 		}
 	},
 	getters: {
@@ -51,7 +50,7 @@ const p2pRaise = {
 			})
 		},
 		getP2PRaiseInfo({commit, state}, {id}){
-			if (state.listInfos.get(id)) {
+			if (state.listInfos[id]) {
 				return
 			}
 			return getP2PRaiseInfo(id).then((listInfo) => {

@@ -36,8 +36,7 @@
 			listInfo(){
 				var listInfos = store.state.p2pRaise.listInfos
 				var id = store.state.route.params.id 
-				var ret = listInfos.get(id)
-				return ret && ret.toObject() || {}
+				return listInfos[id] || {}
 			}
 		},
 		mounted() {
