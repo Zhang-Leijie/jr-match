@@ -58,6 +58,7 @@
 
 	import Modal from '~/components/modal.vue'
 	import router from '~/router.js'
+	import {ObjectInfo} from '~/ajax/get.js'
 
 	export default {
 		data(){
@@ -96,10 +97,10 @@
 				self.begin = true
 				self.showModal = false
 			}
-		}
+		},
 		mounted:function(){
 			var self = this	
-			VerifyLists().then((res) => {
+			ObjectInfo().then((res) => {
 				console.dir(res)
 				self.question = res
 			})

@@ -11,4 +11,5 @@ export const Lists = factory('/index/Lists')
 export const AnalysisLists = factory('/index/AnalysisLists')
 //比赛团队个人得分页
 export const Score = factory('/index/Score')
-//
+//客观题详情页
+export const ObjectInfo = factory('/index/ObjectInfo')
