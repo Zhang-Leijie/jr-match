@@ -1,5 +1,5 @@
 <template>
-	<div class="raise backimg absolute" style="background-image:url('image/beijing.png');">
+	<div class="raise background-image">
 		<div class="header-bar">
 			<ol class="breadcrumb">
 				<li class="item">众筹</li>
@@ -13,9 +13,7 @@
 			</div>
 			<div class="table-box" style="padding:20px 40px">
 				<div class="word f2" style="min-height:480px;">
-					这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里
-					显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容这里显示
-					的是背景描述的内容这里显示的是背景描述的内容这里显示的是背景描述的内容...
+					{{text}}
 				</div>
 				<div class="button-group">
 					<router-link class="btn blue" :to="{name:'m-index'}">
@@ -26,6 +24,25 @@
 		</div>
 	</div>
 </template>
+<script>
+	import {AnalysisLists} from '~/ajax/get.js'
+	import router from '~/router.js'
+
+	export default{
+		data(){
+			return{
+				text:''
+			}
+		},
+		mounted:function(){
+			var self = this	
+			AnalysisLists().then((res) => {
+				console.dir(res)
+				self.text = res[0].text
+			})
+		},
+	}
+</script>
 <style lang="less">
 	.raise{
 		top: 0px;

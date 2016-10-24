@@ -7,6 +7,8 @@ export const UserInfo = factory('/index/UserInfo')
 export const VerifyLists = factory('/index/VerifyLists')
 //p2p设计题目列表
 export const Lists = factory('/index/Lists')
-
-
-
+//案例分析页
+export const AnalysisLists = factory('/index/AnalysisLists')
+//比赛团队个人得分页
+export const Score = factory('/index/Score')
+//

@@ -1,5 +1,5 @@
 <template>
-	<div class="raise backimg absolute" style="background-image:url('image/beijing.png');">
+	<div class="raise background-image">
 		<div class="header-bar">
 			<ol class="breadcrumb">
 				<li class="item">P2P</li>
@@ -7,8 +7,8 @@
 			</ol>
 			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
-		<div style="width:1200px;margin:0px auto;">
-			<router-link  :to="{name:'m-index'}" class="btn-back">
+		<div style="width:1200px;margin:0px auto 20px;">
+			<router-link  :to="{name:'m-index'}" class="btn-back" style="color:#fff">
 				返回
 			</router-link>
 			<div style="width:100%;">

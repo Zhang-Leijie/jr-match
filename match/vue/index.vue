@@ -13,7 +13,7 @@
 				 	<div class="main-box" style="width:100%">
 				 		<div class="main-word">
 				 			<span class="f3">客观考察</span><br>
-				 			<span style="line-height:30px;">得分:未评分</span>
+				 			<span style="line-height:30px;">评分:{{filterScore(score.ObjectsScore)}}</span>
 				 		</div>
 				 	</div>
 				 </div>
@@ -26,7 +26,7 @@
 				 	<div class="main-box" style="width:120px;float:left">
 				 		<div class="main-word">
 				 			<span class="f3">项目发标</span><br>
-				 			<span style="line-height:30px;">得分:未评分</span>
+				 			<span style="line-height:30px;">评分:{{filterScore(score.AnalysisScore)}}</span>
 				 		</div>
 				 	</div>
 			 	</router-link>
@@ -34,7 +34,7 @@
 				 	<div class="main-box" style="width:120px;float:left;margin-left:20px;">
 				 		<div class="main-word">
 				 			<span class="f3">审标操作</span><br>
-				 			<span style="line-height:30px;">得分:未评分</span>
+				 			<span style="line-height:30px;">评分:{{filterScore()}}</span>
 				 		</div>
 				 	</div>
 			 	</router-link>
@@ -42,7 +42,7 @@
 				 	<div class="main-box" style="width:120px;float:left;margin-left:20px;">
 				 		<div class="main-word">
 				 			<span class="f3">投标操作</span><br>
-				 			<span style="line-height:30px;">得分:未评分</span>
+				 			<span style="line-height:30px;">评分:{{filterScore()}}</span>
 				 		</div>
 				 	</div>
 			 	</router-link>
@@ -56,7 +56,7 @@
 				 	<div class="main-box" style="width:120px;float:left">
 				 		<div class="main-word">
 				 			<span class="f3">案例分析</span><br>
-				 			<span style="line-height:30px;">得分:未评分</span>
+				 			<span style="line-height:30px;">评分:{{filterScore()}}</span>
 				 		</div>
 				 	</div>
 			 	</router-link>
@@ -64,7 +64,7 @@
 				 	<div class="main-box" style="width:120px;float:left;margin-left:20px;">
 				 		<div class="main-word">
 				 			<span class="f3">公益设计</span><br>
-				 			<span style="line-height:30px;">得分:未评分</span>
+				 			<span style="line-height:30px;">评分:{{filterScore()}}</span>
 				 		</div>
 				 	</div>
 			 	</router-link>
@@ -72,7 +72,7 @@
 				 	<div class="main-box" style="width:120px;float:left;margin-left:20px;">
 				 		<div class="main-word">
 				 			<span class="f3">项目设计</span><br>
-				 			<span style="line-height:30px;">得分:未评分</span>
+				 			<span style="line-height:30px;">评分:{{filterScore()}}</span>
 				 		</div>
 				 	</div>
 			 	</router-link>
@@ -86,7 +86,7 @@
 </template>
 <script>
 	import {logout} from '~/ajax/post.js'
-	import {UserInfo} from '~/ajax/get.js'
+	import {UserInfo,Score} from '~/ajax/get.js'
 	import router from '~/router.js'
 
 	export default{
@@ -94,7 +94,10 @@
 			return{
 				account:'',
 				school_name:'',
-				totalscore:''
+				totalscore:'',
+				score:{
+
+				}
 			}
 		},
 		methods:{
@@ -106,6 +109,9 @@
 				},(e)=>{
 					console.dir(e)
 				})
+			},
+			filterScore(score){
+				return score ? score : '未评分'
 			}
 		},
 		mounted:function(){
@@ -115,6 +121,10 @@
 				self.account = res.account
 				self.school_name = res.school_name
 				self.totalscore = res.totalscore
+			}),
+			Score().then((res)=>{
+				console.dir(res)
+				self.score = res
 			})
 		}
 	}

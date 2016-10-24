@@ -16,7 +16,7 @@
 				</div>
 				<div class="login-input relative">
 					<i class="flaticon-unlocked absolute" style="top:4px;left:15px;color:#999"></i>
-					<input style="width:100%;height:100%;" placeholder="密码" v-model="password" type="password" @key.enter="login">
+					<input style="width:100%;height:100%;" placeholder="密码" v-model="password" type="password" @keyup.enter="login">
 				</div>
 				<!-- <router-link :to="{name: 'm-index'}"> -->
 					<div class="login-btn center f3" @click="login">

@@ -1,5 +1,5 @@
 <template>
-	<div class="raise backimg absolute" style="background-image:url('image/beijing.png');">
+	<div class="background-image" >
 		<div class="header-bar">
 			<ol class="breadcrumb">
 				<li class="item">P2P</li>
@@ -8,8 +8,8 @@
 			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
 		
-		<div style="width:1200px;margin:0px auto">
-			<router-link  :to="{name:'m-index'}" class="btn-back">
+		<div style="width:1200px;margin:0px auto 20px">
+			<router-link  :to="{name:'m-index'}" class="btn-back" style="color:white">
 				返回
 			</router-link>
 			<div class="table-box">
@@ -51,7 +51,9 @@
 		},
 		mounted:function(){
 			var self = this	
-			Lists().then((res) => {
+			Lists({
+				type:3
+			}).then((res) => {
 				console.dir(res)
 				self.lists = res
 			})
@@ -60,10 +62,7 @@
 </script>
 <style lang="less">
 	.raise{
-		top: 0px;
-		bottom: 0px;
-		left: 0px;
-		right: 0px;
+		
 		min-width: 1200px;
 		width: 100%;
 	}

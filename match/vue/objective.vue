@@ -65,7 +65,8 @@
 				showModal:false,
 				begin:true,
 				type: 1,
-				name:"单项选择"
+				name:"单项选择",
+				question:[]
 			}
 		},
 		components: {
@@ -96,6 +97,13 @@
 				self.showModal = false
 			}
 		}
+		mounted:function(){
+			var self = this	
+			VerifyLists().then((res) => {
+				console.dir(res)
+				self.question = res
+			})
+		},
 	}
 </script>
 <style lang="less">
