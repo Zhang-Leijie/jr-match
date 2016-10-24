@@ -9,14 +9,14 @@ import $ from 'jquery'
 import router from '~/router.js'
 import {routerState} from '~/router.js'
 
-export const server_url = 'http://jr.xiyoukeji.com/index.php/match'
+export const server_match_url = 'http://jr.xiyoukeji.com/index.php/match'
 
 const LOGIN_ERROR = "LOGIN_ERROR_0"
 
 export const Factory_ = (method) => (url) => (params) => {
     console.dir(params)
     return Promise.resolve($.ajax({
-        url: server_url + url,
+        url: server_match_url + url,
         type:method,
         data: params
     })).then((res) => {

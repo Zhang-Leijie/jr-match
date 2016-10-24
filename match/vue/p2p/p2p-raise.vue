@@ -40,29 +40,25 @@
 	</div>
 </template>
 <script>
-	import {Lists} from '~/ajax/get.js'
 	import router from '~/router.js'
+	import store from '~/vuex'
 
 	export default{
-		data(){
-			return{
-				lists:[]
+		computed: {
+			count(){
+				return store.state.count
+			},
+			lists(){
+				return store.state.p2pRaise.lists
 			}
 		},
 		mounted:function(){
-			var self = this	
-			Lists({
-				type:3
-			}).then((res) => {
-				console.dir(res)
-				self.lists = res
-			})
+			store.dispatch('getP2PRaiseList')
 		}
 	}
 </script>
 <style lang="less">
 	.raise{
-		
 		min-width: 1200px;
 		width: 100%;
 	}

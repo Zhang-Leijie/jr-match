@@ -15,10 +15,7 @@
 				</div>
 				<div class="form-input">
 					<span class="name">类型：</span>
-					<select class="input-select input">
-						<option value="">1</option>
-						<option value="">2</option>
-					</select>
+					<input-select :getOptions="getP2PTag" @select-result-change="getTagId"></input-select>
 				</div>
 			</div>
 			<div>
@@ -27,14 +24,11 @@
 				</div>
 				<div class="form-input">
 					<span class="name">姓名：</span>
-					<input type="text" class="input input-text">
+					<input type="text" placeholder="5个字以内" class="input input-text" v-model="params.name">
 				</div>
 				<div class="form-input">
 					<span class="name">姓别：</span>
-					<select class="input-select input">
-						<option value="">男</option>
-						<option value="">女</option>
-					</select>
+					<input-select :getOptions="getGenderOptions" @select-result-change="getGender"></input-select>
 				</div>
 				<div class="form-input">
 					<span class="name">职业：</span>
@@ -173,7 +167,36 @@
 	</div>
 </template>
 <script>
+	import inputSelect from '~/components/inputs/input-select.vue'
+	import {getP2PTag} from '~/ajax/get_y.js'
+
 	export default {
-		
+		data(){
+			return {
+				params: {
+					tag_id: "",
+					gender: "",
+					name: ""
+				}
+			}
+		},
+		methods: {
+			getP2PTag,
+			getTagId(option){
+				return this.params.tag_id = option && option.id
+			},
+			getGenderOptions(){
+				return Promise.resolve([
+					{name: '男'},
+					{name: '女'}
+				])
+			},
+			getGender(option){
+				return this.params.gender = gender && gender.name
+			}
+		},
+		components: {
+			'input-select': inputSelect
+		}
 	}
 </script>
