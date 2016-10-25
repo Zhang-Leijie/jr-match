@@ -6,6 +6,10 @@ import Vue from 'vue/dist/vue.js'
 import router from './router.js'
 import store from './vuex'
 
+import VueAlert from '~/plugins/alert.js'
+
+Vue.use(VueAlert)
+
 import { sync } from 'vuex-router-sync'
 sync(store, router)
 
@@ -17,3 +21,5 @@ const app = new Vue({
 	store,
   	router
 }).$mount('#app')
+
+window.app = app

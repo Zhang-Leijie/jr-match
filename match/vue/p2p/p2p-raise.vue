@@ -27,10 +27,10 @@
 							<td v-if="list.score==null">未评分</td>
 							<td v-if="list.score!=null">{{score}}</td>
 							<td v-if="list.isfinished == 1">
-								<router-link :to="{name: 'm-p2praisedetail', params: {id: list.id}}">去完成</router-link>
+								<router-link :to="{name: 'm-p2praisedetail', query: {id: list.id}}">去完成</router-link>
 							</td>
 							<td v-if="list.isfinished == 2">
-								<router-link :to="{name: 'm-p2praisedetail', params: {id: list.id}}">查看</router-link>
+								<router-link :to="{name: 'm-p2praisedetail', query: {id: list.id}}">查看</router-link>
 							</td>
 						</tr>
 					</tbody>

@@ -7,15 +7,15 @@
 			</ol>
 			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
-		<div class="form-page">
+		<div class="form-page" v-if="showPage">
 			<div>
 				<div class="form-title">
 					<h1>类型选择</h1>
-					<router-link class="btn blue" :to="{name:'m-p2praisedetail'}">查看资料</router-link>
+					<router-link class="btn blue" :to="{name:'m-p2praisedetail', query: {id: $route.query.id}}">查看资料</router-link>
 				</div>
 				<div class="form-input">
 					<span class="name">类型：</span>
-					<input-select :getOptions="getP2PTag" @select-result-change="getTagId"></input-select>
+					<input-select prop="tag_id" :init="params.tag_id" :getOptions="getP2PTag" @select-result-change="changeSelectProp"></input-select>
 				</div>
 			</div>
 			<div>
@@ -24,30 +24,24 @@
 				</div>
 				<div class="form-input">
 					<span class="name">姓名：</span>
-					<input type="text" placeholder="5个字以内" class="input input-text" v-model="params.name">
+					<input-text prop="username" :init="params.username" placeholder="5个字以内" @text-result-change="changeStringProp"></input-text>
 				</div>
 				<div class="form-input">
 					<span class="name">姓别：</span>
-					<input-select :getOptions="getGenderOptions" @select-result-change="getGender"></input-select>
+					<input-select prop="gender" :init="params.gender" :getOptions="getGenderOptions" @select-result-change="changeSelectProp"></input-select>
 				</div>
 				<div class="form-input">
 					<span class="name">职业：</span>
-					<input type="text" class="input input-text">
+					<input-text prop="job" :init="params.job" placeholder="10个字以内" @text-result-change="changeStringProp"></input-text>
 				</div>
 				<div class="form-input">
 					<span class="name">手机号码：</span>
-					<input type="text" class="input input-text">
+					<input-text prop="phone" :init="params.phone" placeholder="请输入手机号码" @text-result-change="changeStringProp"></input-text>
 				</div>
 				<div class="form-input">
 					<span class="name">地区：</span>
-					<select class="input-select input">
-						<option value="">1</option>
-						<option value="">2</option>
-					</select>
-					<select class="input-select input">
-						<option value="">a</option>
-						<option value="">b</option>
-					</select>
+					<input-select ref="province" prop="province" :init="params.province" :getOptions="getProvinceList" @select-result-change="provinceChange"></input-select>
+					<input-select ref="city" prop="city" :init="params.city" :getOptions="getCityList" @select-result-change="cityChange" @deps-change="changeGetCityList"></input-select>
 				</div>
 			</div>
 			<div>
@@ -56,47 +50,31 @@
 				</div>
 				<div class="form-input">
 					<span class="name">项目名称：</span>
-					<input type="text" class="input input-text">
+					<input-text prop="name" :init="params.name" placeholder="15字以内" @text-result-change="changeStringProp"></input-text>
 				</div>
 				<div class="form-input">
 					<span class="name">风险要求：</span>
-					<select class="input-select input">
-						<option value="">1</option>
-						<option value="">2</option>
-					</select>
+					<input-select prop="request_id" :init="params.request_id" :getOptions="getRequestList" @select-result-change="changeSelectProp"></input-select>
 				</div>
 				<div class="form-input">
 					<span class="name">还款方式：</span>
-					<select class="input-select input">
-						<option value="">1</option>
-						<option value="">2</option>
-					</select>
+					<input-select prop="repay_type_id" :init="params.repay_type_id" :getOptions="getRepaymentList" @select-result-change="changeSelectProp"></input-select>
 				</div>
 				<div class="form-input">
 					<span class="name">利息偿付：</span>
-					<select class="input-select input">
-						<option value="">1</option>
-						<option value="">2</option>
-					</select>
+					<input-text prop="rate" :init="params.rate" placeholder="年利率" @text-result-change="changeStringProp"></input-text>
 				</div>
 				<div class="form-input">
 					<span class="name">借款金额：</span>
-					<input type="text" class="input input-text">
+					<input-text prop="money" :init="params.money" placeholder="20万以内" @text-result-change="changeStringProp"></input-text>
 					<span>万元</span>
 				</div>
 				<div class="form-input">
 					<span class="name">大写：</span>
-					<input type="text" class="input input-text">
+					<span class="input">{{params.money}}</span>
 				</div>
 				<div class="form-input">
 					<span class="name">借款期限：</span>
-					<select class="input-select input">
-						<option value="">1</option>
-						<option value="">2</option>
-					</select>
-				</div>
-				<div class="form-input">
-					<span class="name">发布期限：</span>
 					<select class="input-select input">
 						<option value="">1</option>
 						<option value="">2</option>
@@ -159,7 +137,7 @@
 			</div>
 			<div>
 				<div class="button-group">
-					<router-link class="btn white" :to="{name:'m-p2praisedetail'}">返回</router-link>
+					<router-link class="btn white" :to="{name:'m-p2praisedetail', query: {id: $route.query.id}}">返回</router-link>
 					<a class="btn blue">提交</a>
 				</div>
 			</div>
@@ -168,35 +146,93 @@
 </template>
 <script>
 	import inputSelect from '~/components/inputs/input-select.vue'
-	import {getP2PTag} from '~/ajax/get_y.js'
+	import inputText from '~/components/inputs/input-text.vue'
+	import {transferMoney} from '~/utils.js'
+	import {P2PRaisePlaceholder} from '~/vuex/p2pRaise.js'
+
+	import {
+		getP2PTag, 
+		getProvinceList, 
+		getCityList,
+		getRequestList,
+		getRepaymentList
+	} from '~/ajax/get_y.js'
+
+	import router from '~/router.js'
+	import store from '~/vuex'		
+
 
 	export default {
-		data(){
-			return {
-				params: {
-					tag_id: "",
-					gender: "",
-					name: ""
-				}
+		computed: {
+			params(){
+				return store.getters.p2pParam || P2PRaisePlaceholder()
+			},
+			showPage(){
+				return this.params.id !== undefined && this.params.id !== ""
 			}
 		},
 		methods: {
-			getP2PTag,
-			getTagId(option){
-				return this.params.tag_id = option && option.id
+			provinceChange(val){
+				this.changeSelectProp(val)
+				this.$refs.city.$emit('deps-change', val)
 			},
+			cityChange(val){
+				this.changeSelectProp(val)
+			},
+			changeGetCityList(item){ // {prop: .., value: {value: .., name: ..}}
+				var cityId = item.value.value
+				var self = this
+				getCityList(cityId).then(function(res){
+					self.$refs.city.options = res
+				})
+			},
+			getRepaymentList,
+			getRequestList,
+			getProvinceList,
+			getCityList: function(){
+				if (this.params.province) {
+					return getCityList(this.params.province)
+				} else {
+					return Promise.resolve([])
+				}
+			},
+			getP2PTag,
 			getGenderOptions(){
 				return Promise.resolve([
-					{name: '男'},
-					{name: '女'}
+					{name: '男', value: '男'},
+					{name: '女', value: '女'}
 				])
 			},
-			getGender(option){
-				return this.params.gender = gender && gender.name
+			changeSelectProp(item){
+				var item = {
+					prop: item.prop,
+					value: item.value.value
+				}
+				store.commit('changeStringProp', {
+					id: this.id,
+					item: item
+				})
+			},
+			changeStringProp(item){
+				store.commit('changeStringProp', {
+					id: this.id,
+					item: item
+				})
 			}
 		},
 		components: {
-			'input-select': inputSelect
+			'input-select': inputSelect,
+			'input-text': inputText
+		},
+		mounted(){
+			var id = store.state.route.query.id
+			this.id = id
+			store.commit('makeParamsPlaceholder', {
+				id: id
+			})
+		},
+		filters: {
+			transferMoney
 		}
 	}
 </script>

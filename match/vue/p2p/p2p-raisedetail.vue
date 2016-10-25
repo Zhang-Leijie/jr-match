@@ -22,7 +22,7 @@
 			</div>
 			<div class="button-group">
 				<router-link :to="{name: 'm-p2praise'}" class="btn white" >返回</router-link>
-				<router-link :to="{name: 'm-p2praisechart', params: {id: listInfo.id}}" class="btn blue">设计</router-link>
+				<router-link :to="{name: 'm-p2praisechart', query: {id: listInfo.id}}" class="btn blue">设计</router-link>
 			</div>
 		</div>
 	</div>
@@ -35,13 +35,13 @@
 		computed: {
 			listInfo(){
 				var listInfos = store.state.p2pRaise.listInfos
-				var id = store.state.route.params.id 
+				var id = store.state.route.query.id 
 				return listInfos[id] || {}
 			}
 		},
 		mounted() {
 			store.dispatch('getP2PRaiseInfo', {
-				id: store.state.route.params.id
+				id: store.state.route.query.id
 			})
 		}
 	}

@@ -38,14 +38,14 @@ const routes = [
     }
   },
   {
-    path: '/p2p-raise/detail/:id',
+    path: '/p2p-raise/detail',
     name: 'm-p2praisedetail',
     component(resolve) {
       resolve(require('./vue/p2p/p2p-raisedetail.vue'))
     }
   },
   {
-    path: '/p2p-raise/chart/:id',
+    path: '/p2p-raise/chart',
     name: 'm-p2praisechart',
     component(resolve) {
       resolve(require('./vue/p2p/p2p-raisechart.vue'))

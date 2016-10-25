@@ -11,12 +11,14 @@ import {routerState} from '~/router.js'
 
 export const server_match_url = 'http://jr.xiyoukeji.com/index.php/match'
 
+export const server_url = 'http://jr.xiyoukeji.com/home'
+
 const LOGIN_ERROR = "LOGIN_ERROR_0"
 
-export const Factory_ = (method) => (url) => (params) => {
+export const Factory_ = (server_url) => (method) => (url) => (params) => {
     console.dir(params)
     return Promise.resolve($.ajax({
-        url: server_match_url + url,
+        url: server_url + url,
         type:method,
         data: params
     })).then((res) => {
@@ -39,5 +41,12 @@ export const Factory_ = (method) => (url) => (params) => {
     })
 }
 
-export const postFactory = Factory_('POST')
-export const getFactory = Factory_('GET')
+const matchFactory = Factory_(server_match_url)
+const serverFactory = Factory_(server_url)
+
+
+export const postFactory = matchFactory('POST')
+export const getFactory = matchFactory('GET')
+
+export const serverGet = serverFactory('GET')
+export const serverPOST = serverFactory('POST')
