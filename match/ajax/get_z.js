@@ -18,3 +18,5 @@ export const AnalysisLists = factory('/index/AnalysisLists')
 export const Score = factory('/index/Score')
 //客观题详情页
 export const ObjectInfo = factory('/index/ObjectInfo')
+//客观题结果
+export const ObjectScore = factory('/index/ObjectScore')

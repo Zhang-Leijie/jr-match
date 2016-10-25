@@ -8,19 +8,19 @@
 		</div>
 		<div class="objpoint f8">
 				<div class="point-box">
-					总正确率：0/33
+					总正确率：0/{{result.sum}}
 				</div>
 				<div class="point-box">
-					单选题正确率：0/11
+					单选题正确率：{{result.judge_count}}/{{result.single_sum}}
 				</div>
 				<div class="point-box">
-					多选题正确率：0/11
+					多选题正确率：{{result.multi_count}}/{{result.multi_sum}}
 				</div>
 				<div class="point-box">
-					判断题正确率：0/11
+					判断题正确率：{{result.judge_count}}/{{result.judge_sum}}
 				</div>
 				<div class="point-box">
-					得分：0
+					得分：{{result.totalscore}}
 				</div>
 		</div>
 		<div class="button-group">
@@ -28,6 +28,24 @@
 		</div>
 	</div>
 </template>
+<script>
+	import {ObjectScore} from '~/ajax/get.js'
+
+	export default {
+		data(){
+			return{
+				result:''
+			}
+		},
+		mounted:function(){
+			var self = this
+			ObjectScore().then((res)=>{
+				console.dir(res)
+				self.result = res
+			})
+		}
+	}
+</script>
 <style lang="less">
 	.objpoint{
 		width: 1200px;
