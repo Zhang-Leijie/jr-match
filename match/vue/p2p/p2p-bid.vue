@@ -12,33 +12,33 @@
 			<div class="filter-box">
 				<div class="filter-row">
 					<span class="name">项目类型：</span>
-					<a class="tag-item blue">全部</a>
-					<a class="tag-item square red">车</a>
-					<a class="tag-item square purple">房</a>
-					<a class="tag-item square blue">薪</a>
-					<a class="tag-item square orange">企</a>
+					<a class="tag-item blue" @click="typeFilter=1">全部</a>
+					<a class="tag-item square red" @click="typeFilter=5">车</a>
+					<a class="tag-item square purple" @click="typeFilter=2">房</a>
+					<a class="tag-item square blue" @click="typeFilter=3">薪</a>
+					<a class="tag-item square orange" @click="typeFilter=4">企</a>
 				</div>
 				<div class="filter-row">
 					<span class="name">还款方式：</span>
-					<a class="tag-item blue">全部</a>
-					<a class="tag-item">按月付息一次性还本</a>
-					<a class="tag-item">一次性还本付息</a>
-					<a class="tag-item">每月等额本息</a>
+					<a class="tag-item blue" @click="payFilter=4">全部</a>
+					<a class="tag-item" @click="payFilter=1">按月付息一次性还本</a>
+					<a class="tag-item" @click="payFilter=2">一次性还本付息</a>
+					<a class="tag-item" @click="payFilter=3">每月等额本息</a>
 				</div>
 				<div class="filter-row">
 					<span class="name">投资期限：</span>
-					<a class="tag-item blue">全部</a>
-					<a class="tag-item">1个月</a>
-					<a class="tag-item">3个月</a>
-					<a class="tag-item">6个月</a>
-					<a class="tag-item">9个月</a>
-					<a class="tag-item">12个月</a>
-					<a class="tag-item">24个月</a>
+					<a class="tag-item blue" @click="monthFilter=0">全部</a>
+					<a class="tag-item" @click="monthFilter=1">1个月</a>
+					<a class="tag-item" @click="monthFilter=3">3个月</a>
+					<a class="tag-item" @click="monthFilter=6">6个月</a>
+					<a class="tag-item" @click="monthFilter=9">9个月</a>
+					<a class="tag-item" @click="monthFilter=12">12个月</a>
+					<a class="tag-item" @click="monthFilter=24">24个月</a>
 				</div>
 			</div>
-			<h1 class="p2p-panel-title">剩余资金：<span>100万</span></h1>
+			<h1 class="p2p-panel-title">剩余资金：<span>{{amount}}</span></h1>
 			<div class="p2p-table">
-				<div class="p2p-row" v-for="i in 10">
+				<div class="p2p-row" v-for="investLint in result">
 					<div class="p2p-item">
 						<div class="p2p-inline-item">
 							<div class="img-container">
@@ -50,7 +50,7 @@
 						<div class="p2p-inline-item">
 							<h3 class="p2p-item-title">项目名称/类型</h3>
 							<div class="p2p-item-content">
-								<span>财富汇</span><span class="tag-item square red">车</span>
+								<span>{{investLint.name}}</span><span class="tag-item square" v-bind:class="{red:investLint.tag_id==5,purple:investLint.tag_id==2,blue:investLint.tag_id==3,orange:investLint.tag_id==4}">{{investLint.tag}}</span>
 							</div>
 						</div>
 					</div>
@@ -58,7 +58,7 @@
 						<div class="p2p-inline-item">
 							<h3 class="p2p-item-title">借款金额</h3>
 							<div class="p2p-item-content">
-								<span class="red-text">￥5,000.00</span>
+								<span class="red-text">￥{{investLint.money}}</span>
 							</div>
 						</div>	
 					</div>
@@ -66,7 +66,7 @@
 						<div class="p2p-inline-item">
 							<h3 class="p2p-item-title">年化利率</h3>
 							<div class="p2p-item-content">
-								<span class="red-text">6.10%</span>/年
+								<span class="red-text">{{investLint.rate}}</span>/年
 							</div>
 						</div>
 					</div>
@@ -74,7 +74,7 @@
 						<div class="p2p-inline-item">
 							<h3 class="p2p-item-title">借款期限/收益方式</h3>
 							<div class="p2p-item-content">
-								<span>3个月/按天计息到期</span>
+								<span>{{investLint.loan_time}}个月/{{investLint.repay_type}}</span>
 							</div>
 						</div>
 					</div>
@@ -83,15 +83,15 @@
 							<h3 class="p2p-item-title">项目进度</h3>
 							<div class="p2p-item-content">
 								<div class="progress-bar">
-									<div class="inline" :style="{width:i*10+'%'}"></div>
+									<div class="inline" :style="{width:investLint.schedule}"></div>
 								</div>
-								<span class="progress-text">{{i*10}}%</span>
+								<span class="progress-text">{{investLint.schedule}}</span>
 							</div>
 						</div>
 					</div>
 					<div class="p2p-item">
 						<div class="p2p-inline-item">
-							<router-link class="btn blue" :to="{name: 'm-p2pbid-detail'}">我要投资</router-link>
+							<router-link class="btn blue" :to="{name: 'm-p2pbid-detail',params:{id:investLint.id}}">我要投资</router-link>
 						</div>
 					</div>
 				</div>
@@ -100,8 +100,53 @@
 	</div>
 </template>
 <script>
+	import router from '~/router.js'
+	import {InvestLists} from '~/ajax/get.js'
+
 	export default {
-		
+		data(){
+			return{
+				amount:'',
+				investLints:[],
+				typeFilter: "1",
+				payFilter:'4',
+				monthFilter:'0'
+			}
+		},
+		computed: {
+			result(){
+				var self = this
+				return this.investLints.filter(function(item){
+					if (self.typeFilter == "1") {
+						return true
+					} else {
+						return item.tag_id == self.typeFilter
+					}
+				}).filter(function(item){
+					if (self.payFilter == "4") {
+						return true
+					} else {
+						return item.repay_type_id == self.payFilter
+					}
+				}).filter(function(item){
+					if (self.monthFilter == "0") {
+						return true
+					} else {
+						return item.loan_time == self.monthFilter
+					}
+				})
+			}
+		},
+		mounted:function(){
+			var self = this
+			InvestLists({
+
+			}).then((res) => {
+				self.investLints = res.list
+				self.amount = res.rest_money
+
+			})
+		}
 	}
 </script>
 <style lang="less">

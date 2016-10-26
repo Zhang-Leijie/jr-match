@@ -20,3 +20,8 @@ export const Score = factory('/index/Score')
 export const ObjectInfo = factory('/index/ObjectInfo')
 //客观题结果
 export const ObjectScore = factory('/index/ObjectScore')
+//P2P投标列表页
+export const InvestLists = factory('/index/InvestLists')
+//P2P投标项目详情
+export const InvestInfo = factory('/index/InvestInfo')
+

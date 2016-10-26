@@ -16,27 +16,27 @@
 					</div>
 					<div class="line">
 						<div class="title">项目标签</div>
-						<div class="content"><span class="tag-item purple square">房</span></div>
+						<div class="content"><span class="tag-item square" v-bind:class="{red:baseinfo.tag_id==5,purple:baseinfo.tag_id==2,blue:baseinfo.tag_id==3,orange:baseinfo.tag_id==4}">{{baseinfo.tag}}</span></div>
 					</div>
 					<div class="line">
 						<div class="title">投资期限</div>
-						<div class="content">3个月</div>
+						<div class="content">{{baseinfo.loan_time}}个月</div>
 					</div>
 					<div class="line">
 						<div class="title">年化收益</div>
-						<div class="content">8.8%/年（0.74%/月）</div>
+						<div class="content">{{baseinfo.rate}}/年（{{baseinfo.mrate}}/月）</div>
 					</div>
 					<div class="line">
 						<div class="title">资金进度</div>
 						<div class="content">
 							<div class="progress-bar">
-								<span class="inline" style="width:20%"></span>
+								<span class="inline" :style="{width:baseinfo.schedule}"></span>
 							</div>
-							<span class="progress-text">20%</span>
+							<span class="progress-text">{{baseinfo.schedule}}</span>
 						</div>
 					</div>
-					<div class="line">
-						<router-link class="btn blue" :to="{name: 'm-p2pbid-invest'}">我要投资</router-link>
+					<div class="line" v-if="baseinfo.id!==undefined">
+						<router-link class="btn blue" :to="{name:'m-p2pbid-invest',params:{id:baseinfo.id}}">我要投资</router-link>
 					</div>
 				</div>
 				<div class="panel-right">
@@ -49,15 +49,15 @@
 							<div class="tab-content" v-if="tab_index==0">
 								<div class="line">
 									<span class="title">项目名</span>
-									<span class="content">理财宝</span>
+									<span class="content">{{baseinfo.name}}</span>
 								</div>
 								<div class="line">
 									<span class="title">投资条件</span>
-									<span class="content">“保守型”风险承受能力及以上</span>
+									<span class="content">{{baseinfo.mark_name}}</span>
 								</div>
 								<div class="line">
 									<span class="title">发布时间</span>
-									<span class="content">2016.01.01</span>
+									<span class="content">{{baseinfo.publish_time | changetime}}</span>
 								</div>
 								<div class="line">
 									<span class="title">起息日</span>
@@ -65,7 +65,7 @@
 								</div>
 								<div class="line">
 									<span class="title">还款方式</span>
-									<span class="content">每月等额本息</span>
+									<span class="content">{{baseinfo.repay_type}}</span>
 								</div>
 								<div class="line wide">
 									<span class="title">借款信息</span>
@@ -97,19 +97,19 @@
 									<h3 class="title">基本信息：</h3>
 									<div class="line">
 										<span class="title">姓名</span>
-										<span class="content">朱林峰</span>
+										<span class="content">{{baseinfo.username}}</span>
 									</div>
 									<div class="line">
 										<span class="title">职业</span>
-										<span class="content">农民工</span>
+										<span class="content">{{baseinfo.job}}</span>
 									</div>
 									<div class="line">
 										<span class="title">年龄</span>
-										<span class="content">31</span>
+										<span class="content">{{baseinfo.age}}</span>
 									</div>
 									<div class="line">
 										<span class="title">地区</span>
-										<span class="content">杭州市</span>
+										<span class="content">{{baseinfo.block}}</span>
 									</div>
 								</div>
 								<div class="pack">
@@ -136,11 +136,33 @@
 	</div>
 </template>
 <script>
+	
+	import {InvestInfo} from '~/ajax/get.js'
+	import router from '~/router.js'
+
 	export default {
 		data(){
 			return {
-				tab_index: 0
+				tab_index: 0,
+				baseinfo:'',
+				back:'',
+				proof:''
 			}
+		},
+		filters:{
+			changetime(time){
+				return new Date(parseInt(time) * 1000).toLocaleString().substr(0,10)
+			}
+		},
+		mounted:function(){
+			var self = this
+			InvestInfo({
+				id:self.$route.params.id,
+			}).then((res) => {
+				self.baseinfo = res.baseinfo
+				self.back = res.back
+				self.proof = res.proof
+			})
 		}
 	}
 </script>

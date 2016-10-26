@@ -99,7 +99,7 @@
 					<a class="btn blue" @click="add">下一题</a>
 					<a class="btn blue" style="margin-left:20px;" @click="dec">上一题</a>
 					<!-- <router-link :to="{name: 'm-objpoint'}"> -->
-					<a class="btn blue" style="margin-left:20px;background-color:#37bc22" @click="poptest">提交试卷</a>
+					<a class="btn blue" style="margin-left:20px;background-color:#37bc22" @click="poptest" v-if="isfinish==1">提交试卷</a>
 					<!-- </router-link> -->
 				</div>
 			</div>
@@ -133,7 +133,8 @@
 				name:"单项选择",
 				total_answer:[],
 				totalTime:1800000,
-				remainTime: ''
+				remainTime: '',
+				isfinish:''
 			}
 		},
 		computed: {
@@ -155,6 +156,7 @@
 		},
 		methods: {
 			getAnswer(judgments){
+				
 				return judgments.map((judgment) => {
 					return {
 						answer: judgment.answer,
@@ -171,13 +173,17 @@
 						}, [])
 					}
 				})
+				
 			},
 			answer(value, type, index){
-				store.commit('changeAnswer', {
-					value,
-					type,
-					index
-				})
+				var self = this
+				if (self.isfinish==1) {
+					store.commit('changeAnswer', {
+						value,
+						type,
+						index
+					})
+				};
 			},
 			poptest(){
 				var self = this
@@ -255,6 +261,11 @@
 					return
 				}
 			}, 1000)
+			ObjectInfo({
+
+			}).then((res) => {
+				self.isfinish = res.isfinished
+			})
 			// setInterval(function(){
 			// 	var hour = parseInt(self.intime/3600)
 			// 	var min = parseInt((self.intime - hour * 3600)/60)
