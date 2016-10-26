@@ -6,6 +6,7 @@
 				class="image-container" 
 				:style="style" 
 				:for="inputId"
+				style="cursor:pointer;"
 			>
 			</label>
 		</div>
