@@ -209,7 +209,10 @@
 				})	
 			},
 			changeProofDetail(item){ // item { prop: proof编号, value: proof 图片地址}
-				console.log(`change: ${JSON.stringify(item)}`)
+				store.commit('changeProofDetail', {
+					id: this.id,
+					item: item
+				})	
 			},
 			changeSelectProp(item){
 				var item = {
