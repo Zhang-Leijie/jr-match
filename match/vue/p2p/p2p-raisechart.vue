@@ -86,15 +86,20 @@
 				<div class="form-title">
 					<h1>认证信息</h1>
 				</div>
-				<div v-for="(proof_,index) in params.proof">
+				<div v-for="(proof_, index) in params.proof" :key="proof_.id">
 					<div class="form-input">
 						<span class="name">认证名称：</span>
 						<input-text :prop="index" :init="proof_.name" placeholder="10个字以内" @text-result-change="changeProofName"></input-text>
+						<a v-if="index > 0" class="btn-cancel" @click="removeProof(index)"></a>
 					</div>
 					<div class="form-input">
-						<span class="name">&nbsp</span>
+						<span class="name">&nbsp;</span>
 						<input-image :prop="index" :init="proof_.detail" @image-result-change="changeProofDetail"></input-image>
 					</div>
+				</div>
+				<div class="form-input">
+					<span class="name">&nbsp;</span>
+					<a class="input btn-add" @click="addProof"></a>
 				</div>
 			</div>
 			<div>
@@ -103,7 +108,7 @@
 				</div>
 				<div class="form-table">
 					<table class="table">
-						<thead>
+						<thead style="text-align:left">
 							<tr>
 								<th>时间</th>
 								<th>总额</th>
@@ -112,11 +117,11 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="i in 10">
-								<td>{{i}}</td>
-								<td>10</td>
-								<td>XXX</td>
-								<td>0.5%</td>
+							<tr v-for="cal in calrets">
+								<td>{{cal.order}}</td>
+								<td>{{cal.pAndI}}</td>
+								<td>{{cal.p}}</td>
+								<td>{{cal.i}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -137,7 +142,7 @@
 	import inputTextarea from '~/components/inputs/input-textarea.vue'
 	import inputImage from '~/components/inputs/input-image.vue'
 
-	import {transferMoney} from '~/utils.js'
+	import {transferMoney, payInOnce, payEveryMonth, payInMonth} from '~/utils.js'
 	import {P2PRaisePlaceholder} from '~/vuex/p2pRaise.js'
 
 	import {
@@ -153,6 +158,11 @@
 
 
 	export default {
+		data(){
+			return {
+				calrets: []
+			}
+		},
 		computed: {
 			params(){
 				return store.getters.p2pParam || P2PRaisePlaceholder()
@@ -162,6 +172,12 @@
 			}
 		},
 		methods: {
+			addProof(){
+				store.commit('addP2PRaiseProof', {id: this.id})
+			},
+			removeProof(index){
+				store.commit('removeP2PRaiseProof', {id: this.id, index})
+			},
 			provinceChange(val){
 				this.changeSelectProp(val)
 				this.$refs.city.$emit('deps-change', val)
@@ -229,6 +245,15 @@
 					id: this.id,
 					item: item
 				})
+			},
+			calculate(rate, money, loan_time, repay_type_id){
+				//console.log(`rate: ${rate},money: ${money},loan_time: ${loan_time}, repay_type_id: ${repay_type_id}`)
+				switch(repay_type_id) {
+					case "1": this.calrets = payInMonth(money, loan_time, rate);break;
+					case "2": this.calrets = payInOnce(money, loan_time, rate);break;
+					case "3": this.calrets = payEveryMonth(money, loan_time, rate);break;
+					default: alert('不支持该还款方式')
+				}
 			}
 		},
 		components: {
@@ -243,6 +268,42 @@
 			store.commit('makeParamsPlaceholder', {
 				id: id
 			})
+
+			var self = this
+			var calTable = throttle(function([rate, money, loan_time, repay_type_id]){
+				//console.log(`--- rate: ${rate},money: ${money},loan_time: ${loan_time}, repay_type_id: ${repay_type_id} ---`)
+				var rate = parseFloat(rate).toFixed(3)
+				if (Number.isNaN(rate)) return 
+				var money = parseInt(money).toFixed()
+				if (Number.isNaN(money)) return
+				var loan_time = parseInt(loan_time)
+				if (Number.isNaN(loan_time)) return 
+
+				if (repay_type_id == "") {
+					return
+				}
+
+				self.calculate(rate, money, loan_time, repay_type_id)
+			}, 2000)
+
+			this.$nextTick(() => {
+				this.$watch(() => {
+					return [
+						this.params.rate, 
+						this.params.money, 
+						this.params.loan_time, 
+						this.params.repay_type_id
+					]
+				}, function(val){
+					calTable(val)
+				})
+				calTable([
+					this.params.rate, 
+					this.params.money, 
+					this.params.loan_time, 
+					this.params.repay_type_id
+				])	
+			})
 		},
 		filters: {
 			transferMoney(val){
@@ -252,4 +313,38 @@
 			}
 		}
 	}
+
+
+	/* http://stackoverflow.com/questions/27078285/simple-throttle-in-js */
+	function throttle(func, wait, options) {
+	  var context, args, result;
+	  var timeout = null;
+	  var previous = 0;
+	  if (!options) options = {};
+	  var later = function() {
+	    previous = options.leading === false ? 0 : Date.now();
+	    timeout = null;
+	    result = func.apply(context, args);
+	    if (!timeout) context = args = null;
+	  };
+	  return function() {
+	    var now = Date.now();
+	    if (!previous && options.leading === false) previous = now;
+	    var remaining = wait - (now - previous);
+	    context = this;
+	    args = arguments;
+	    if (remaining <= 0 || remaining > wait) {
+	      if (timeout) {
+	        clearTimeout(timeout);
+	        timeout = null;
+	      }
+	      previous = now;
+	      result = func.apply(context, args);
+	      if (!timeout) context = args = null;
+	    } else if (!timeout && options.trailing !== false) {
+	      timeout = setTimeout(later, remaining);
+	    }
+	    return result;
+	  };
+	};
 </script>

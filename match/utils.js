@@ -65,10 +65,10 @@ export const payInMonth = (p, n, r) => {
 		_rP = p - (_pAndI - _i) * _order // 本金 + 已还利息和 - 已还本息和
 		rets.push({
 			order: _order,
-			pAndI: truncatedDot(_pAndI),
-			i: truncatedDot(_i),
-			p: truncatedDot(_p),
-			rP: truncatedDot(_rP)
+			pAndI: _pAndI.toFixed(2),
+			i: _i.toFixed(2),
+			p: _p.toFixed(2),
+			rP: _pAndI.toFixed(2)
 		})
 	}
 	return rets
@@ -81,10 +81,10 @@ export const payInOnce = (p, n, r) => {
 		if (_order == n) {
 			rets.push({
 				order: _order,
-				i: truncatedDot(totalInterest),
+				i: totalInterest.toFixed(2),
 				p: 0,
-				pAndI: truncatedDot(totalInterest),
-				rP: truncatedDot(p)
+				pAndI: totalInterest.toFixed(2),
+				rP: p.toFixed(2)
 			})
 		} else {
 			rets.push({
@@ -106,10 +106,10 @@ export const payEveryMonth = function(p, n, r){
 		//_rP = p - _pAccum
 		rets.push({
 			order: _order,
-			i: truncatedDot(_i),
-			pAndI: truncatedDot(pAndI),
-			rP: truncatedDot(_rP),
-			p: truncatedDot(_p) 
+			i: _i.toFixed(2),
+			pAndI: pAndI.toFixed(2),
+			rP: _rP.toFixed(2),
+			p: _p.toFixed(2) 
 		})
 	}
 	return rets

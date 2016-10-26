@@ -1,6 +1,8 @@
 import {Lists, getP2PRaiseInfo} from '~/ajax/get.js'
 import Vue from 'vue'
 
+import {getUniqueId} from '~/utils.js'
+
 export const P2PRaisePlaceholder = (id) => {
 	return {
 		id: id,
@@ -23,7 +25,8 @@ export const P2PRaisePlaceholder = (id) => {
 		proof:	[
 			{
 				name: "",
-				detail: ""
+				detail: "",
+				id: getUniqueId()
 			}
 		]
 	}
@@ -37,6 +40,18 @@ const p2pRaise = {
 		lookup: {}
 	},
 	mutations: {
+		addP2PRaiseProof(state, {id}){
+			var index = state.lookup[id]
+			state.params[index].proof.push({
+				name: "",
+				detail: "",
+				id: getUniqueId()
+			})
+		},
+		removeP2PRaiseProof(state, {id, index}){
+			var index_ = state.lookup[id]
+			state.params[index_].proof.splice(index, 1)
+		},
 		getList(state, lists) {
 			state.lists = lists
 		},
