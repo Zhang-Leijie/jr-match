@@ -71,42 +71,29 @@
 				</div>
 				<div class="form-input">
 					<span class="name">大写：</span>
-					<span class="input">{{params.money}}</span>
+					<span class="input">{{params.money | transferMoney}}</span>
 				</div>
 				<div class="form-input">
 					<span class="name">借款期限：</span>
-					<select class="input-select input">
-						<option value="">1</option>
-						<option value="">2</option>
-					</select>
+					<input-select prop="loan_time" :init="params.loan_time" :getOptions="getLoanTimeOptions" @select-result-change="changeSelectProp"></input-select>
 				</div>
 				<div class="form-input">
 					<span class="name">借款说明：</span>
-					<textarea class="input input-textarea"></textarea>
+					<input-textarea prop="detail" :init="params.detail" placeholder="200字以内" @text-result-change="changeStringProp"></input-textarea>
 				</div>
 			</div>
 			<div>
 				<div class="form-title">
 					<h1>认证信息</h1>
 				</div>
-				<div class="form-input">
-					<span class="name">认证名称：</span>
-					<input type="text" class="input input-text">
-				</div>
-				<div class="form-input">
-					<span class="name">&nbsp</span>
-					<div class="image-container">
-						<img :src="'./image/touxiang@2x.png'" alt="">
+				<div v-for="(proof_,index) in params.proof">
+					<div class="form-input">
+						<span class="name">认证名称：</span>
+						<input-text :prop="index" :init="proof_.name" placeholder="10个字以内" @text-result-change="changeProofName"></input-text>
 					</div>
-				</div>
-				<div class="form-input">
-					<span class="name">认证名称：</span>
-					<input type="text" class="input input-text">
-				</div>
-				<div class="form-input">
-					<span class="name">&nbsp</span>
-					<div class="image-container">
-						<img :src="'./image/beijing.png'" alt="">
+					<div class="form-input">
+						<span class="name">&nbsp</span>
+						<input-image :prop="index" :init="proof_.detail" @image-result-change="changeProofDetail"></input-image>
 					</div>
 				</div>
 			</div>
@@ -147,6 +134,9 @@
 <script>
 	import inputSelect from '~/components/inputs/input-select.vue'
 	import inputText from '~/components/inputs/input-text.vue'
+	import inputTextarea from '~/components/inputs/input-textarea.vue'
+	import inputImage from '~/components/inputs/input-image.vue'
+
 	import {transferMoney} from '~/utils.js'
 	import {P2PRaisePlaceholder} from '~/vuex/p2pRaise.js'
 
@@ -203,6 +193,24 @@
 					{name: '女', value: '女'}
 				])
 			},
+			getLoanTimeOptions(){
+				return Promise.resolve([
+					{name: '3个月', value: '3个月'},
+					{name: '6个月', value: '6个月'},
+					{name: '9个月', value: '9个月'},
+					{name: '12个月', value: '12个月'},
+					{name: '24个月', value: '24个月'}
+				])
+			},
+			changeProofName(item){ // item { prop: proof编号, value: proof 名称}
+				store.commit('changeProofName', {
+					id: this.id,
+					item: item
+				})	
+			},
+			changeProofDetail(item){ // item { prop: proof编号, value: proof 图片地址}
+				console.log(`change: ${JSON.stringify(item)}`)
+			},
 			changeSelectProp(item){
 				var item = {
 					prop: item.prop,
@@ -222,7 +230,9 @@
 		},
 		components: {
 			'input-select': inputSelect,
-			'input-text': inputText
+			'input-text': inputText,
+			'input-textarea': inputTextarea,
+			'input-image': inputImage
 		},
 		mounted(){
 			var id = store.state.route.query.id
@@ -232,7 +242,11 @@
 			})
 		},
 		filters: {
-			transferMoney
+			transferMoney(val){
+				if (!val) 
+					return ""
+				return transferMoney(val)
+			}
 		}
 	}
 </script>

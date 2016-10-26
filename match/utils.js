@@ -24,3 +24,24 @@ export const transferMoney = function (money) {
 	}  
 	return head + s.replace(/(零.)*零元/, '元').replace(/(零.)+/g, '零').replace(/^整$/, '零元整')  
 }
+
+var uniqueId = 0
+
+export const getUniqueId = () =>{
+	return uniqueId++ 
+}
+
+export const NO = () => {}
+
+export const isEmptyArray = (arr) => {
+	if (!arr || (arr.length && arr.length === 0)) {
+	    return true
+	}
+	return false
+}
+
+// 验证图片后缀名
+const _ImgReg = /\.(jpg|png|gif|bmp|jpeg)/
+export const validImgExt = (filename) => {
+	return filename.match(_ImgReg) !== null
+}

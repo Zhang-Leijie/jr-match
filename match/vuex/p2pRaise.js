@@ -55,6 +55,18 @@ const p2pRaise = {
 		changeStringProp(state, {id, item}) {
 			var index = state.lookup[id]
 			state.params[index][item.prop] = item.value
+		},
+		changeProofName(state, {id, item}) {
+			var index = state.lookup[id]
+			var proof_index = item.prop 
+			var proof_name = item.value
+			state.params[index].proof[proof_index].name = proof_name	
+		},
+		changeProofDetail(state, {id, item}) {
+			var index = state.lookup[id]
+			var proof_index = item.prop 
+			var proof_name = item.value
+			state.params[index].proof[proof_index].detail = proof_name	
 		}
 	},
 	getters: {
