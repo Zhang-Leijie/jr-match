@@ -52,6 +52,13 @@ const routes = [
     }
   },
   {
+    path: '/p2p-raise/check',
+    name: 'm-p2praisecheck',
+    component(resolve){
+     resolve(require('./vue/p2p/p2p-raisecheck.vue')) 
+    }
+  },
+  {
     path: '/p2p-invest',
     name: 'm-p2pinvest',
     component(resolve) {

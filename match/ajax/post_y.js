@@ -4,6 +4,8 @@ import {serverPost} from './const.js'
 import {getUniqueId, NO, isEmptyArray} from '~/utils.js'
 import $ from 'jquery'
 
+export const postP2P = factory('/P2P/P2PPublish')
+
 export const uploadFile = ({
 	file, // 文件, 来自input
 	validFile, // 验证后缀名

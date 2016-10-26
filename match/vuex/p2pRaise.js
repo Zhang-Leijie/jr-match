@@ -5,7 +5,7 @@ import {getUniqueId} from '~/utils.js'
 
 export const P2PRaisePlaceholder = (id) => {
 	return {
-		id: id,
+		relation_id: id,
 		username: "",
 		gender: "",
 		job: "",
@@ -18,7 +18,6 @@ export const P2PRaisePlaceholder = (id) => {
 		request_id: "",
 		money: "",
 		rate: "",
-		raise_time: "",
 		loan_time: "",
 		repay_type_id: "",
 		detail: "",

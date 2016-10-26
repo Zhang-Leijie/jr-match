@@ -31,6 +31,10 @@
 					<input-select prop="gender" :init="params.gender" :getOptions="getGenderOptions" @select-result-change="changeSelectProp"></input-select>
 				</div>
 				<div class="form-input">
+					<span class="name">年龄：</span>
+					<input-text prop="age" :init="params.age" @text-result-change="changeStringProp"></input-text>
+				</div>
+				<div class="form-input">
 					<span class="name">职业：</span>
 					<input-text prop="job" :init="params.job" placeholder="10个字以内" @text-result-change="changeStringProp"></input-text>
 				</div>
@@ -63,6 +67,7 @@
 				<div class="form-input">
 					<span class="name">利息偿付：</span>
 					<input-text prop="rate" :init="params.rate" placeholder="年利率" @text-result-change="changeStringProp"></input-text>
+					<span>%</span>
 				</div>
 				<div class="form-input">
 					<span class="name">借款金额：</span>
@@ -130,10 +135,27 @@
 			<div>
 				<div class="button-group">
 					<router-link class="btn white" :to="{name:'m-p2praisedetail', query: {id: $route.query.id}}">返回</router-link>
-					<a class="btn blue">提交</a>
+					<a class="btn blue" @click="openModal">提交</a>
 				</div>
 			</div>
 		</div>
+		<modal v-if="showModal">
+			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">{{title}}</p>
+			<p slot="body" class='f6' style="text-align:center;">{{message}}</p>
+
+			<p slot="footer" style="text-align:center;" v-if="!uploading&&state==''">
+				<a class="btn white" @click="showModal=false">返回</a>
+				<a class="btn blue" @click="confirm" style="margin-left:30px;">确认</a>
+			</p>
+			<p slot="footer" style="text-align:center;" v-if="uploading">
+			</p>
+			<p slot="footer" style="text-align:center;" v-if="!uploading&&state=='成功'">
+				<router-link class="btn blue" :to="{name:'m-p2praise'}">完成</router-link>
+			</p>
+			<p slot="footer" style="text-align:center;" v-if="!uploading&&state=='失败'">
+				<a class="btn white" @click="showModal=false">返回</a>
+			</p>
+		</modal>
 	</div>
 </template>
 <script>
@@ -141,6 +163,7 @@
 	import inputText from '~/components/inputs/input-text.vue'
 	import inputTextarea from '~/components/inputs/input-textarea.vue'
 	import inputImage from '~/components/inputs/input-image.vue'
+	import Modal from '~/components/modal.vue'
 
 	import {transferMoney, payInOnce, payEveryMonth, payInMonth} from '~/utils.js'
 	import {P2PRaisePlaceholder} from '~/vuex/p2pRaise.js'
@@ -156,11 +179,18 @@
 	import router from '~/router.js'
 	import store from '~/vuex'		
 
+	import {postP2P} from '~/ajax/post.js'
+
 
 	export default {
 		data(){
 			return {
-				calrets: []
+				calrets: [],
+				showModal: false,
+				uploading: false,
+				isSuccess: false,
+				state: "",
+				error: ""
 			}
 		},
 		computed: {
@@ -168,10 +198,62 @@
 				return store.getters.p2pParam || P2PRaisePlaceholder()
 			},
 			showPage(){
-				return this.params.id !== undefined && this.params.id !== ""
+				return this.params.relation_id !== undefined && this.params.relation_id !== ""
+			},
+			title(){
+				var up = this.uploading 
+				var state = this.state
+				if (up) {
+					return '正在提交P2P项目'
+				} else if (state == "") {
+					return '确认提交P2P项目?'
+				} else if (state == "失败") {
+					return '提交失败'
+				} else {
+					return '提交成功'
+				}
+			},
+			message(){
+				var up = this.uploading 
+				var state = this.state
+				if (up) {
+					return '请耐心等待'
+				} else if (state == "") {
+					return '提交后不能再进行更改'
+				} else if (state == "失败") {
+					return this.error
+				} else {
+					return '点击完成回到审标列表页'
+				}	
 			}
 		},
 		methods: {
+			openModal(){
+				this.state = ""
+				this.uploading = false
+				this.showModal = true
+			},
+			confirm(){
+				var params = normalizeParams(this.params)
+				var error = checkP2PParams(params)
+				if (error!==true) {
+					this.state = "失败"
+					this.error = error
+					return
+				}
+
+				this.uploading = true
+				setTimeout(() => {
+					postP2P(params).then((res) => {
+						this.state = '成功'
+						this.uploading = false
+					}).catch((e) => {
+						this.state = '失败'
+						this.error = e.message
+						this.uploading = false 
+					})
+				}, 2000)
+			},
 			addProof(){
 				store.commit('addP2PRaiseProof', {id: this.id})
 			},
@@ -211,6 +293,8 @@
 			},
 			getLoanTimeOptions(){
 				return Promise.resolve([
+					{name: '1个月', value: '1个月'},
+					{name: '2个月', value: '2个月'},
 					{name: '3个月', value: '3个月'},
 					{name: '6个月', value: '6个月'},
 					{name: '9个月', value: '9个月'},
@@ -260,7 +344,8 @@
 			'input-select': inputSelect,
 			'input-text': inputText,
 			'input-textarea': inputTextarea,
-			'input-image': inputImage
+			'input-image': inputImage,
+			'modal': Modal
 		},
 		mounted(){
 			var id = store.state.route.query.id
@@ -314,6 +399,67 @@
 		}
 	}
 
+	function normalizeParams(params) {
+		var ret = JSON.parse(JSON.stringify(params))
+		ret.proof.forEach((item)=>{
+			delete item.id
+		})
+		return ret
+	}
+
+	function verifyLength(name, max, min) {
+		return (str) => {
+			if (str == "") {
+				return `请填写${name}`
+			} else if (max && str.length > max) {
+				return `${name}需要少于${max}个字`
+			} else if (min && str.length < min) {
+				return `${name}需要至少有${min}个字`
+			} else {
+				return true
+			}
+		}
+	}
+
+	const checklist = {
+		username: { verify: verifyLength('姓名', 5) },
+		gender: { verify: verifyLength('性别') },
+		job: { verify: verifyLength('职业') },
+		age: { verify: verifyLength('年龄') },
+		tag_id: { verify: verifyLength('项目类型') },
+		phone: { verify: verifyLength('手机号码') },
+		city: { verify: verifyLength('城市') },
+		province: { verify: verifyLength('省份') },
+		name: { verify: verifyLength('') },
+		request_id: { verify: verifyLength('风险要求') },
+		money: { verify: verifyLength('借款金额') },
+		rate: { verify: verifyLength('利息偿付') },
+		loan_time: { verify: verifyLength('借款期限') },
+		repay_type_id: { verify: verifyLength('还款方式') },
+		detail: { verify: verifyLength('借款说明') },
+		proof: { 
+			verify: function(proof){
+				return proof.every((item) => {
+					return item.name !== "" && item.detail !== ""
+				}) ? true : '请填写将认证信息完整'
+			} 
+		}
+	}
+	function checkP2PParams(params){
+		var propVerify, verify, error
+		for (let prop in params) {
+			propVerify = checklist[prop]
+			verify = propVerify && propVerify.verify
+
+			if (verify) {
+				error = verify(params[prop])
+				if (error !== true) {
+					return error
+				}
+			}
+		}
+		return true
+	}
 
 	/* http://stackoverflow.com/questions/27078285/simple-throttle-in-js */
 	function throttle(func, wait, options) {
