@@ -114,3 +114,11 @@ export const payEveryMonth = function(p, n, r){
 	}
 	return rets
 }
+
+export const filterTime = function(time){
+	if (time == "") {return ""} 
+	var hour = parseInt(time/1000/3600)
+	var min = parseInt((time/1000 - hour * 3600)/60)
+	var sec = parseInt(time/1000 - hour * 3600 - min * 60)
+	return time = min + '分' + sec + '秒'
+}

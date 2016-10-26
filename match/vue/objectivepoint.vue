@@ -8,10 +8,10 @@
 		</div>
 		<div class="objpoint f8">
 				<div class="point-box">
-					总正确率：0/{{result.sum}}
+					总正确率：{{result.correct_sum}}/{{result.sum}}
 				</div>
 				<div class="point-box">
-					单选题正确率：{{result.judge_count}}/{{result.single_sum}}
+					单选题正确率：{{result.single_count}}/{{result.single_sum}}
 				</div>
 				<div class="point-box">
 					多选题正确率：{{result.multi_count}}/{{result.multi_sum}}

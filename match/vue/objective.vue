@@ -4,7 +4,7 @@
 			<ol class="breadcrumb">
 				<li class="item">客观考察</li>
 			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
+			<p class="remain-time">剩余时间：<span>{{remainTime | filterTime}}</span></p>
 		</div>
 		<div class='obj relative'>
 			<a class="btn blue" style="margin-right:20px;margin-bottom:20px;" @click="ques(1,'单项选择')">单项选择</a> 
@@ -120,6 +120,7 @@
 	import router from '~/router.js'
 	import {ObjectInfo} from '~/ajax/get.js'
 	import {ObjectAnswer} from '~/ajax/post.js'
+	import {filterTime} from '~/utils.js'
 	import store from '~/vuex'
 
 	export default {
@@ -131,10 +132,8 @@
 				number:1,
 				name:"单项选择",
 				total_answer:[],
-				// judgments:[],
-				// multi_choices:[],
-				// short_answers:[],
-				// single_choices:[]
+				totalTime:1800000,
+				remainTime: ''
 			}
 		},
 		computed: {
@@ -210,7 +209,7 @@
 			},
 			dec(){
 				var self = this
-				if (true) {
+				if (self.number>1) {
 					self.number -=1
 				}
 			},
@@ -243,36 +242,29 @@
 				self.number = num
 			}
 		},
+		filters:{
+			filterTime
+		},
 		mounted:function(){
-			var self = this	
-			// ObjectInfo().then((res) => {
-			// 	console.dir(res)
-			// 	if (res.questioninfo.judgment) {
-			// 		self.judgments = res.questioninfo.judgment.children.map(function(item){
-			// 			item.answer = ""
-			// 			return item
-			// 		})
-			// 	}	
-			// 	if (res.questioninfo.multi_choice) {
-			// 		self.multi_choices = res.questioninfo.multi_choice.children.map(function(item){
-			// 			item.answer = []
-			// 			return item
-			// 		})
-			// 	}
-			// 	if (res.questioninfo.short_answer) {
-			// 		self.short_answers = res.questioninfo.short_answer.children.map(function(item){
-			// 			item.answer = ""
-			// 			return item
-			// 		})
-			// 	}
-			// 	if (res.questioninfo.single_choice) {
-			// 		self.single_choices = res.questioninfo.single_choice.children.map(function(item){
-			// 			item.answer = ""
-			// 			return item
-			// 		})
-			// 	}
-			// })
+			var self = this
 			store.dispatch('getObjectiveQuestion')
+			store.commit('timeChange')
+			setInterval(()=>{
+				self.remainTime =  self.totalTime - Date.now() + store.state.objQuestion.time
+				if (self.remainTime<0) {
+					return
+				}
+			}, 1000)
+			// setInterval(function(){
+			// 	var hour = parseInt(self.intime/3600)
+			// 	var min = parseInt((self.intime - hour * 3600)/60)
+			// 	var sec = parseInt(self.intime - hour * 3600 - min * 60)
+			// 	self.time = min + '分' + sec + '秒'
+			// 	self.intime -=1
+			// 	if (self.time==0) {
+			// 		return
+			// 	}
+			// },1000)
 		},
 	}
 </script>

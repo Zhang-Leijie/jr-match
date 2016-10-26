@@ -15,6 +15,8 @@ const objQuestion = {
 	state: {
 		inited: false,
 		judgments:[],
+		time:'',
+		iftime:true,
 		multi_choices:[],
 		short_answers:[],
 		single_choices:[]
@@ -46,10 +48,16 @@ const objQuestion = {
 				}).join("")
 			}
 			state[type][index].answer = value
-		}
+		},
+		timeChange(state){
+			if (state.iftime) {
+				state.time = Date.now()
+				state.iftime = false
+			}
+
+		},
 	},
 	getters: {
-
 	},
 	actions: {
 		getObjectiveQuestion({commit, state}){

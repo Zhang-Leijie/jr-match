@@ -8,9 +8,6 @@
 			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
 		<div style="width:1200px;margin:20px auto 0px">
-			<div class="point f7">
-				总分：88
-			</div>
 			<div class="table-box" style="padding:20px 40px">
 				<div class="word f2" style="min-height:480px;">
 					{{text}}
@@ -38,7 +35,7 @@
 			var self = this	
 			AnalysisLists().then((res) => {
 				console.dir(res)
-				self.text = res[0].text
+				self.text = res.text
 			})
 		},
 	}
