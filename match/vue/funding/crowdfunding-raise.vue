@@ -7,46 +7,30 @@
 			</ol>
 			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
-		<div class="form-page">
+		<div class="form-page" v-if="params.id!==''">
 			<div>
 				<div class="form-title">
 					<h1>项目信息</h1>
-					<router-link class="btn blue" :to="{name:'m-cfitem-detail'}">查看资料</router-link>
-				</div>
-				<div class="form-input">
-					<span class="name">标签：</span>
-					<div class="input-tag" v-for="i in 4">
-						<input type="radio" :id="'tag'+i" name="tag_1">
-						<label :for="'tag'+i">标签{{i}}</label>
-					</div>
+					<router-link class="btn blue" :to="{name:'m-cfitem-detail', query: {id: params.id}}">查看资料</router-link>
 				</div>
 				<div class="form-input">
 					<span class="name">项目名称：</span>
-					<select class="input-select input">
-						<option value="">1</option>
-						<option value="">2</option>
-					</select>
+					<input-text prop="name" :init="params.name" placeholder="10个字以内" @text-result-change="changeStringProp"></input-text>
 				</div>
 				<div class="form-input">
 					<span class="name">项目简介：</span>
-					<textarea class="input input-textarea"></textarea>
+					<input-textarea prop="detail" :init="params.detail" placeholder="200字以内" @text-result-change="changeStringProp"></input-textarea>
 				</div>
 				<div class="form-input">
 					<span class="name">所在城市：</span>
-					<select class="input-select input">
-						<option value="">1</option>
-						<option value="">2</option>
-					</select>
-					<select class="input-select input">
-						<option value="">a</option>
-						<option value="">b</option>
-					</select>
+					<input-select ref="province" prop="province" :init="params.province" :getOptions="getProvinceList" @select-result-change="provinceChange"></input-select>
+					<input-select ref="city" prop="city" :init="params.city" :getOptions="getCityList" @select-result-change="cityChange" @deps-change="changeGetCityList"></input-select>
 				</div>
 				<div class="form-input">
 					<span class="name">是否领头：</span>
-					<div class="input-radio" v-for="i in 2">
-						<input type="radio" :id="'tag_'+i" name="tag_2">
-						<label :for="'tag_'+i">标签{{i}}</label>
+					<div class="input-radio" v-for="(lead,index) in leadOptions">
+						<input type="radio" :id="'tag_'+index" name="tag_lead" @change="changeStringProp({prop: 'lead', value: lead.value})">
+						<label :for="'tag_'+index">{{lead.name}}</label>
 					</div>
 				</div>
 				<div class="form-input">
@@ -232,23 +216,92 @@
 	</div>
 </template>
 <script>
-	import Modal from '~/components/modal.vue'
 	import router from '~/router.js'
+	import {CFRaisePlaceholder} from '~/vuex/crowdfunding.js' 
+	//import {getCrowdfundingTagList} from '~/get.js'
+
+	import inputSelect from '~/components/inputs/input-select.vue'
+	import inputText from '~/components/inputs/input-text.vue'
+	import inputTextarea from '~/components/inputs/input-textarea.vue'
+	import inputImage from '~/components/inputs/input-image.vue'
+	import Modal from '~/components/modal.vue'
+
+
+	import {
+		getProvinceList, 
+		getCityList
+	} from '~/ajax/get.js'
 
 	export default {
 		data(){
 			return {
+				leadOptions: [{
+					name: '是',value: '2'
+				},{
+					name: '否', value: '1'
+				}],
 				showModal: false
 			}
 		},
+		computed: {
+			params(){
+				return store.getters.CFParams || CFRaisePlaceholder()
+			}
+		},
 		components: {
+			'input-select': inputSelect,
+			'input-text': inputText,
+			'input-textarea': inputTextarea,
+			'input-image': inputImage,
 			'modal': Modal
 		},
 		methods: {
+			cityChange(val){
+				this.changeSelectProp(val)
+			},
+			changeGetCityList(item){ // {prop: .., value: {value: .., name: ..}}
+				var cityId = item.value.value
+				var self = this
+				getCityList(cityId).then(function(res){
+					self.$refs.city.options = res
+				})
+			},
+			provinceChange(val){
+				this.changeSelectProp(val)
+				this.$refs.city.$emit('deps-change', val)
+			},
+			getProvinceList, 
+			getCityList: function(){
+				if (this.params.province) {
+					return getCityList(this.params.province)
+				} else {
+					return Promise.resolve([])
+				}
+			},
+			changeSelectProp(item){
+				var item = {
+					prop: item.prop,
+					value: item.value.value
+				}
+				store.commit('changeCFStringProp', {
+					id: this.id,
+					item: item
+				})
+			},
+			changeStringProp(item){
+				store.commit('changeCFStringProp', {
+					id: this.id,
+					item: item
+				})
+			},
 			complete(){
 				console.log('heheh')
 				router.push({name: 'm-cfitem-detail'})
 			}
+		},
+		mounted(){
+			this.id = store.state.route.query.id
+			store.commit('makeCFPlaceholder', {id: this.id})
 		}
 	}
 </script>

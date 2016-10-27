@@ -17,15 +17,16 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
+					<tr v-for="cf in cfList">
 						<td class="crowdfunding-item">
 							<div class="image-container">
 								<img :src="'./image/shangpintupian@2x.png'" alt="">
 							</div>
-							<span>SOCO城市锂电跨骑车</span>
+							<span>{{cf.name}}</span>
 						</td>
-						<td>11050</td>
-						<td><router-link :to="{name: 'm-cfitem-detail'}">去完成</router-link></td>
+						<td>{{cf.score ? cf.score : '未评分'}}</td>
+						<td v-if="cf.isfinished==1"><router-link :to="{name: 'm-cfitem-detail', query: { id: cf.id }}">去完成</router-link></td>
+						<td v-if="cf.isfinished==2"><router-link :to="{name: 'm-cfitem-detail', query: { id: cf.id }}">查看</router-link></td>
 					</tr>
 				</tbody>
 			</table>
@@ -35,6 +36,24 @@
 		</div>
 	</div>
 </template>
+<script>
+	import {Lists} from '~/ajax/get.js'
+
+	export default {
+		data(){
+			return {
+				cfList: []
+			}
+		},
+		mounted(){
+			Lists({
+				type: 2
+			}).then((res) => {
+				this.cfList = res
+			})
+		}
+	}
+</script>
 <style lang="less">
 	.crowdfunding-design {
 		margin-left: 40px;

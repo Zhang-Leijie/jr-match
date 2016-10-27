@@ -18,6 +18,12 @@ export const getP2PRaiseInfo = function(id) {
 		type: 3
 	})
 }
+export const getCrowdFundingRaiseInfo = function(id) {
+	return getListInfo({
+		id: id,
+		type: 2
+	})
+}
 
 export const getP2PTag = function(){
 	return normalize(factory('/P2P/P2PTagList')())

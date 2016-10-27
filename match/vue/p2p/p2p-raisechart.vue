@@ -174,7 +174,7 @@
 		getCityList,
 		getRequestList,
 		getRepaymentList
-	} from '~/ajax/get_y.js'
+	} from '~/ajax/get.js'
 
 	import router from '~/router.js'
 	import store from '~/vuex'		
