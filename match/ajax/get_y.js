@@ -35,3 +35,6 @@ export const getRequestList = () => {
 export const getRepaymentList = () => {
 	return normalize(serverGet('/asist/RepayTypelist')())
 }
+
+/* 审标详情页*/
+export const getInvestDetail = factory('/index/VerifyInfo')

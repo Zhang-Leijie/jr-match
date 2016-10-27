@@ -6,6 +6,8 @@ import $ from 'jquery'
 
 export const postP2P = factory('/P2P/P2PPublish')
 
+export const postP2PInvest = factory('/index/VerifyAnswer')
+
 export const uploadFile = ({
 	file, // 文件, 来自input
 	validFile, // 验证后缀名

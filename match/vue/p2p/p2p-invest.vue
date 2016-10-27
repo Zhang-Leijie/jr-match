@@ -26,10 +26,10 @@
 								<td>{{list.name}}</td>
 								<td>{{filterScore(list.score)}}</td>
 								<td v-if="list.isfinished == 1">
-									<router-link :to="{name: 'm-p2pinvestdetail'}">去完成</router-link>
+									<router-link :to="{name: 'm-p2pinvestdetail', params: {id: list.id}}">去完成</router-link>
 								</td>
 								<td v-if="list.isfinished == 2">
-									<router-link :to="{name: 'm-p2pinvestdetail'}">查看</router-link>
+									<router-link :to="{name: 'm-p2pinvestdetail', params: {id: list.id}}">查看</router-link>
 								</td>
 							</tr>
 						</tbody>

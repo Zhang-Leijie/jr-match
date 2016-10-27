@@ -40,7 +40,13 @@
 	width: 100%;
 	
 	margin-top: 20px;
-
+	
+	&.col-3 {
+		width: 33%;
+		float: left;
+		font-size: 14px;
+		color: #666;
+	}
 
 	&.indent0 {
 		.name {
@@ -59,6 +65,13 @@
 		text-align: right;
 	}
 
+	> .value {
+		display: inline-block;
+		vertical-align: top;
+		font-size: @input-name-size;
+		width: 50%;
+	}
+
 	.input {
 		display: inline-block;
 		margin-right: 10px;
@@ -67,6 +80,6 @@
 
 .form-table {
 	margin-top: 20px;
-	margin-left: 175px;
-	margin-right: 175px;
+	margin-left: 5%;
+	margin-right: 5%;
 }

@@ -48,7 +48,9 @@ a:hover {
 a:visited {
   color: inherit;
 }
-.clear {
+.clear:after {
+  display: table;
+  content: "";
   clear: both;
 }
 input:-webkit-autofill {

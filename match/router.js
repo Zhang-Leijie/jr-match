@@ -66,7 +66,7 @@ const routes = [
     }
   },
   {
-    path: '/p2p-invest/chart',
+    path: '/p2p-invest/chart/:id',
     name: 'm-p2pinvestdetail',
     component(resolve) {
       resolve(require('./vue/p2p/p2p-investdetail.vue'))
