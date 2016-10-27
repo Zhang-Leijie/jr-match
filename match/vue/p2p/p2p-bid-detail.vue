@@ -73,21 +73,21 @@
 								</div>
 								<table class="table">
 									<thead>
-										<tr>
+										<tr style="text-align:left">
 											<th>期数</th>
 											<th>每期还款本息</th>
 											<th>每期还款本金</th>
-											<th>利息</th>
+											<th>每期还款利息</th>
 											<th>余额</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr v-for="i in 5">
-											<td>1</td>
-											<td>10</td>
-											<td>XXX</td>
-											<td>0.5%</td>
-											<td>10000</td>
+										<tr v-for="term in back.terms">
+											<td>{{term.qs}}</td>
+											<td>{{term.emTotal}}</td>
+											<td>{{term.em}}</td>
+											<td>{{term.lx}}</td>
+											<td>{{term.restTotal}}</td>
 										</tr>
 									</tbody>
 								</table>
