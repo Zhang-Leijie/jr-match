@@ -12,28 +12,28 @@
 			<div class="filter-box">
 				<div class="filter-row">
 					<span class="name">项目类型：</span>
-					<a class="tag-item blue" @click="typeFilter=1">全部</a>
-					<a class="tag-item square red" @click="typeFilter=5">车</a>
-					<a class="tag-item square purple" @click="typeFilter=2">房</a>
-					<a class="tag-item square blue" @click="typeFilter=3">薪</a>
-					<a class="tag-item square orange" @click="typeFilter=4">企</a>
+					<a class="tag-item" :class="{blue: typeFilter==1}" @click="typeFilter=1">全部</a>
+					<a class="tag-item square red" :class="{checked: typeFilter==5}" @click="typeFilter=5">车</a>
+					<a class="tag-item square purple" :class="{checked: typeFilter==2}" @click="typeFilter=2">房</a>
+					<a class="tag-item square blue" :class="{checked: typeFilter==3}" @click="typeFilter=3">薪</a>
+					<a class="tag-item square orange" :class="{checked: typeFilter==4}" @click="typeFilter=4">企</a>
 				</div>
 				<div class="filter-row">
 					<span class="name">还款方式：</span>
-					<a class="tag-item blue" @click="payFilter=4">全部</a>
-					<a class="tag-item" @click="payFilter=1">按月付息一次性还本</a>
-					<a class="tag-item" @click="payFilter=2">一次性还本付息</a>
-					<a class="tag-item" @click="payFilter=3">每月等额本息</a>
+					<a class="tag-item" :class="{blue: payFilter==4}" @click="payFilter=4">全部</a>
+					<a class="tag-item" :class="{blue: payFilter==1}" @click="payFilter=1">按月付息一次性还本</a>
+					<a class="tag-item" :class="{blue: payFilter==2}" @click="payFilter=2">一次性还本付息</a>
+					<a class="tag-item" :class="{blue: payFilter==3}" @click="payFilter=3">每月等额本息</a>
 				</div>
 				<div class="filter-row">
 					<span class="name">投资期限：</span>
-					<a class="tag-item blue" @click="monthFilter=0">全部</a>
-					<a class="tag-item" @click="monthFilter=1">1个月</a>
-					<a class="tag-item" @click="monthFilter=3">3个月</a>
-					<a class="tag-item" @click="monthFilter=6">6个月</a>
-					<a class="tag-item" @click="monthFilter=9">9个月</a>
-					<a class="tag-item" @click="monthFilter=12">12个月</a>
-					<a class="tag-item" @click="monthFilter=24">24个月</a>
+					<a class="tag-item" :class="{blue: monthFilter==0}" @click="monthFilter=0">全部</a>
+					<a class="tag-item" :class="{blue: monthFilter==1}" @click="monthFilter=1">1个月</a>
+					<a class="tag-item" :class="{blue: monthFilter==3}" @click="monthFilter=3">3个月</a>
+					<a class="tag-item" :class="{blue: monthFilter==6}" @click="monthFilter=6">6个月</a>
+					<a class="tag-item" :class="{blue: monthFilter==9}" @click="monthFilter=9">9个月</a>
+					<a class="tag-item" :class="{blue: monthFilter==12}" @click="monthFilter=12">12个月</a>
+					<a class="tag-item" :class="{blue: monthFilter==24}" @click="monthFilter=24">24个月</a>
 				</div>
 			</div>
 			<h1 class="p2p-panel-title">剩余资金：<span>{{amount}}</span></h1>

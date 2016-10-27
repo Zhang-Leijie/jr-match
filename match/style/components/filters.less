@@ -33,7 +33,7 @@
 
 .tag-item {
 	vertical-align: middle;
-	
+	position: relative;
 	&.blue {
 		color: @blue;
 	}
@@ -51,7 +51,19 @@
 		.purple-theme();
 		.blue-theme();
 		.orange-theme();
+
+		&.checked {
+			&:before {
+				content: "";
+				position: absolute;
+				display: block;
+				width: 100%;
+				bottom: -5px;
+				border-bottom: 1px solid @blue;
+			}
+		}
 	}
+
 }
 
 .red-theme {
