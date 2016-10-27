@@ -16,7 +16,7 @@
 					</div>
 					<div class="line">
 						<div class="title">项目标签</div>
-						<div class="content"><span class="tag-item square" v-bind:class="{red:baseinfo.tag_id==5,purple:baseinfo.tag_id==2,blue:baseinfo.tag_id==3,orange:baseinfo.tag_id==4}">{{baseinfo.tag}}</span></div>
+						<div class="content"><span class="tag-item square" style="overflow:hidden" v-bind:class="{red:baseinfo.tag_id==5,purple:baseinfo.tag_id==2,blue:baseinfo.tag_id==3,orange:baseinfo.tag_id==4}">{{baseinfo.tag}}</span></div>
 					</div>
 					<div class="line">
 						<div class="title">投资期限</div>
@@ -36,7 +36,8 @@
 						</div>
 					</div>
 					<div class="line" v-if="baseinfo.id!==undefined">
-						<router-link class="btn blue" :to="{name:'m-p2pbid-invest',params:{id:baseinfo.id}}">我要投资</router-link>
+						<!-- <router-link class="btn blue" :to="{name:'m-p2pbid-invest',params:{id:baseinfo.id}}">我要投资</router-link> -->
+						<a class="btn blue" @click="toInvest">我要投资</a>
 					</div>
 				</div>
 				<div class="panel-right">
@@ -57,7 +58,7 @@
 								</div>
 								<div class="line">
 									<span class="title">发布时间</span>
-									<span class="content">{{baseinfo.publish_time | changetime}}</span>
+									<span class="content">{{baseinfo.publish_time}}</span>
 								</div>
 								<div class="line">
 									<span class="title">起息日</span>
@@ -114,18 +115,18 @@
 								</div>
 								<div class="pack">
 									<h3 class="title">认证资料：</h3>
-									<div class="line">
-										<span class="title">身份证</span>
+									<div class="line" v-for = "pro in proof">
+										<span class="title">{{pro.proof_name}}</span>
 										<span class="content">
 											<i class="flaticon-check icon-blue"></i>
 										</span>
 									</div>
-									<div class="line">
+									<!-- <div class="line">
 										<span class="title">个人信用报告</span>
 										<span class="content">
 											<i class="flaticon-check icon-blue"></i>
 										</span>
-									</div>
+									</div> -->
 								</div>
 							</div>
 						</div>
@@ -133,25 +134,51 @@
 				</div>
 			</div>
 		</div>
+		<modal v-if="showModal">
+			<p slot="body" class='f8' style="text-align:center;margin-top:30px;">已投资该项目</p>
+			<p slot="footer" style="text-align:center;">
+				<a class="btn blue" @click="close">确认</a>
+			</p>
+		</modal>
 	</div>
 </template>
 <script>
 	
 	import {InvestInfo} from '~/ajax/get.js'
 	import router from '~/router.js'
+	import Modal from '~/components/modal.vue'
 
 	export default {
 		data(){
 			return {
+				showModal:false,
 				tab_index: 0,
 				baseinfo:'',
 				back:'',
 				proof:''
 			}
 		},
+		methods:{
+			toInvest(){
+				var self = this
+				if (self.baseinfo.isinvest==1) {
+					router.push({name: 'm-p2pbid-invest',params:{id:self.$route.params.id}})
+				}
+				else{
+					self.showModal = true
+				}
+			},
+			close(){
+				var self = this
+				self.showModal = false
+			}
+		},
+		components: {
+			'modal': Modal
+		},
 		filters:{
 			changetime(time){
-				return new Date(parseInt(time) * 1000).toLocaleString().substr(0,10)
+				return new Date(parseInt(time) * 1000).toLocaleString().substr(0,9)
 			}
 		},
 		mounted:function(){

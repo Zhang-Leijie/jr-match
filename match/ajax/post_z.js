@@ -6,3 +6,5 @@ export const login = factory('/log/Login')
 export const logout = factory('/log/Logout')
 //客观题回答页
 export const ObjectAnswer = factory('/index/ObjectAnswer')
+//P2P投标投资
+export const Invest = factory('/index/Invest')

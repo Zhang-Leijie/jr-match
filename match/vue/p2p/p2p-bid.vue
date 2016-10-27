@@ -36,7 +36,7 @@
 					<a class="tag-item" :class="{blue: monthFilter==24}" @click="monthFilter=24">24个月</a>
 				</div>
 			</div>
-			<h1 class="p2p-panel-title">剩余资金：<span>{{amount}}</span></h1>
+			<h1 class="p2p-panel-title">剩余资金：<span>{{amount | changenum}}万</span></h1>
 			<div class="p2p-table">
 				<div class="p2p-row" v-for="investLint in result">
 					<div class="p2p-item">
@@ -90,8 +90,11 @@
 						</div>
 					</div>
 					<div class="p2p-item">
-						<div class="p2p-inline-item">
-							<router-link class="btn blue" :to="{name: 'm-p2pbid-detail',params:{id:investLint.id}}">我要投资</router-link>
+						<div class="p2p-inline-item" v-if="investLint.investment==null">
+							<router-link class="btn blue" style="min-width:135px;" :to="{name: 'm-p2pbid-detail',params:{id:investLint.id}}">我要投资</router-link>
+						</div>
+						<div class="p2p-inline-item" v-if="investLint.investment!=null">
+							<router-link class="btn blue" style="min-width:135px;" :to="{name: 'm-p2pbid-detail',params:{id:investLint.id}}">投资金额：{{investLint.investment | changenum}}万</router-link>
 						</div>
 					</div>
 				</div>
@@ -135,6 +138,12 @@
 						return item.loan_time == self.monthFilter
 					}
 				})
+			}
+		},
+		filters:{
+			changenum(num){
+				console.log(num)
+				return num = parseInt(num)/10000;
 			}
 		},
 		mounted:function(){
@@ -191,7 +200,9 @@
 		&:nth-child(5) {
 			width: 18%;
 		}
-
+		&:nth-child(7) {
+			width: 20%;
+		}
 		+ .p2p-item {
 
 			> .p2p-inline-item {
@@ -229,6 +240,7 @@
 			word-break: break-all;
 			> .tag-item {
 				margin: 0 10px;
+				overflow: hidden;
 			}
 		}
 	}

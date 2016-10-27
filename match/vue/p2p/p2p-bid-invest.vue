@@ -10,36 +10,122 @@
 		<div class="p2p-invest-page">
 			<div class="invest-input">
 				<label for="">投资金额：</label>
-				<input type="text" class="input-text">
+				<input type="text" class="input-text" v-model="money">
 				<span>万元</span>
 			</div>
-			<div class="question" v-for="i in 3">
-				<p>{{i}}.这里是客观考察单项选择题第一题的题目这里是客观考察单项选择题第一题的题目这里是客观考察单项选择题第一题的题目这里是客观考察单项选择题第一题的题目这里是客观考察单项选择题第一题的题目这里是客观考察单项选择题第一题的题目。</p>
+			<div class="question" v-for="(list , indexOutter) in lists">
+				<p>{{indexOutter+1}}.{{list.branch}}</p>
 				<div class="options">
-					<div class="option">
-						<input type="radio" class="input-radio">
-						<label for="">A.这里是客观考察单项选择题第一题的第一个不知道是对还是错的答案</label>
-					</div>
-					<div class="option">
-						<input type="radio" class="input-radio">
-						<label for="">B.这里是客观考察单项选择题第一题的第一个不知道是对还是错的答案</label>
-					</div>
-					<div class="option">
-						<input type="radio" class="input-radio">
-						<label for="">C.这里是客观考察单项选择题第一题的第一个不知道是对还是错的答案</label>
-					</div>
-					<div class="option">
-						<input type="radio" class="input-radio">
-						<label for="">D.这里是客观考察单项选择题第一题的第一个不知道是对还是错的答案</label>
+					<div class="option" v-for="(option, index) in list.options">
+						<input type="radio" class="input-radio"
+								:name="'ans'+ indexOutter " 
+								:id="'ans'+ indexOutter  + index"
+								:value="option.value"
+								v-model="list.answer">
+						<label :for="'ans'+ indexOutter  + index">&nbsp;&nbsp;{{option.value}}.{{option.name}}</label>
 					</div>
 				</div>
 			</div>
 			<div class="button-group">
-				<router-link class="btn blue" :to="{name: 'm-p2pbid-detail'}">提交</router-link>
+				<!-- <router-link class="btn blue" :to="{name: 'm-p2pbid-detail',params:{id:$route.params.id}}">提交</router-link> -->
+				<a class="btn blue" @click="poptest">
+					提交
+				</a>
 			</div>
 		</div>
+		<modal v-if="showModal">
+			<p slot="body" class='f8' style="text-align:center;margin-top:30px;">{{detail}}</p>
+			<p slot="footer" style="text-align:center;">
+				<a class="btn blue" @click="close">确认</a>
+			</p>
+		</modal>
 	</div>
 </template>
+<script>
+	import Modal from '~/components/modal.vue'
+	import {InvestQuestionList} from '~/ajax/get.js'
+	import {Invest} from '~/ajax/post.js'
+	import router from '~/router.js'
+	
+
+	export default{
+		data(){
+			return{
+				pay:false,
+				showModal:false,
+				lists:[],
+				total_answer:[],
+				money:'',
+				detail:''
+			}
+		},
+		methods:{
+			close(){
+				var self = this
+				if (!self.pay) {
+					self.showModal = false
+					self.total_answer = []
+				}
+				else{
+					self.showModal = false
+					self.total_answer = []
+					router.push({name: 'm-p2pbid'})
+				}
+			},
+			poptest(){
+				var self = this
+				var numf = self.lists.length
+				for (var i = 0; i < numf; i++) {
+					self.total_answer.push(self.lists[i].answer)
+				}
+				if (self.money=='') {
+					self.showModal=true
+					self.detail = "请输入投资金额"
+				}
+				else{
+					Invest({
+						id:self.$route.params.id,
+						answer:self.total_answer,
+						money:self.money*10000
+					}).then(()=>{	
+						self.detail = "投资成功"
+						self.pay = true
+						self.showModal=true
+					}, (e) => {
+						self.showModal=true
+						self.detail = e.message
+						console.dir(e)
+					})
+				}
+			},
+		},
+		components: {
+			'modal': Modal
+		},
+		mounted:function(){
+			var self = this
+			InvestQuestionList({
+				id:self.$route.params.id,
+			}).then((res) => {
+				var a = res.map((item)=>{
+					item.answer = ""
+					var judgment = item
+					item.options = ['a', 'b','c', 'd'].reduce((ret, item) => {
+						if (judgment[item] != "") {
+							ret.push({
+								name: judgment[item],
+								value: item.toUpperCase()
+							})
+						}
+						return ret 
+					}, [])
+					return item
+				})
+				self.lists = a
+			})
+		}
+	}
+</script>
 <style lang="less">
 	.p2p-invest-page {
 		padding: 0 60px;
@@ -57,5 +143,10 @@
 	.button-group {
 		text-align: center;
 		margin-bottom: 40px;
+	}
+	.option{
+		>*{
+			vertical-align: middle;
+		}	
 	}
 </style>

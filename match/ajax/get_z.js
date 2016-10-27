@@ -24,4 +24,5 @@ export const ObjectScore = factory('/index/ObjectScore')
 export const InvestLists = factory('/index/InvestLists')
 //P2P投标项目详情
 export const InvestInfo = factory('/index/InvestInfo')
-
+//P2P投标项目的关联题目页
+export const InvestQuestionList = factory('/index/InvestQuestionList')
