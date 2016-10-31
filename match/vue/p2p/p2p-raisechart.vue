@@ -165,7 +165,7 @@
 	import inputImage from '~/components/inputs/input-image.vue'
 	import Modal from '~/components/modal.vue'
 
-	import {transferMoney, payInOnce, payEveryMonth, payInMonth} from '~/utils.js'
+	import {transferMoney, payInOnce, payEveryMonth, payInMonth, verifyLength} from '~/utils.js'
 	import {P2PRaisePlaceholder} from '~/vuex/p2pRaise.js'
 
 	import {
@@ -405,20 +405,6 @@
 			delete item.id
 		})
 		return ret
-	}
-
-	function verifyLength(name, max, min) {
-		return (str) => {
-			if (str == "") {
-				return `请填写${name}`
-			} else if (max && str.length > max) {
-				return `${name}需要少于${max}个字`
-			} else if (min && str.length < min) {
-				return `${name}需要至少有${min}个字`
-			} else {
-				return true
-			}
-		}
 	}
 
 	const checklist = {

@@ -5,6 +5,7 @@ import {getUniqueId, NO, isEmptyArray} from '~/utils.js'
 import $ from 'jquery'
 
 export const postP2P = factory('/P2P/P2PPublish')
+export const postCF = factory('/peer/CrowdfundingsPublish')
 
 export const postP2PInvest = factory('/index/VerifyAnswer')
 
@@ -17,8 +18,10 @@ export const uploadFile = ({
 	finallyCB = NO, // 结束后回调
 	queryInterval = 1000
 }) => {
-	if (validFile && !validFile(file.name)) {
-		errorCB(new Error('文件格式不支持'))
+	var error = (validFile && validFile(file))
+	if (error !== true) {
+		errorCB(new Error(error))
+		finallyCB()
 		return
 	}
 

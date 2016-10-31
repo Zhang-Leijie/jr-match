@@ -1,29 +1,20 @@
 <template>
-	<div class="input">
+	<div style="display:inline-block" :style="outterStyle" :class="outterClass">
 		<div v-show="!mounting&&!uploading"> 
 			<input type="file" style="display:none;" :id="inputId" @change="imageUpload">
 			<label 
-				class="image-container" 
-				:style="style" 
+				class="avatar-image"
 				:for="inputId"
+				:style="style"
+				:class="avatarClass"
 				style="cursor:pointer;"
 			>
 			</label>
 		</div>
-		<div v-if="!mounting&&uploading">
-			<div class="img-container">
-				<div class="input-image-progress">
-					<p>上传中</p>
-					<div class="progress-bar">
-						<div class="inline" :style="{width:progress+'%'}"></div>
-					</div>
-					<span class="progress-text">{{progress}}%</span>
-				</div>
-			</div>
-		</div>
-		<div v-if="mounting&&!uploading">
-			<div class="img-container">
-				<p class="input-image-success">上传成功</p>
+		<div v-if="uploading">
+			<div class="avatar-image avartar-progress-container">
+				<div class="avartar-progress" :style="{height: progress + '%'}"></div>
+				<span class="avartar-progress-text">{{progress}}%</span>
 			</div>
 		</div>
 	</div>
@@ -58,6 +49,18 @@
 			style: {
 				required: false,
 				default: ()=>{}
+			},
+			avatarClass: {
+				required: false,
+				default: ()=>[]	
+			},
+			outterStyle: {
+				required: false,
+				default: ()=>{}	
+			},
+			outterClass: {
+				required: false,
+				default: ()=>[]	
 			}
 		},
 		watch: {
@@ -130,21 +133,3 @@
 		}
 	}
 </script>
-<style lang="less">
-	.img-container > .input-image-progress {
-		width: 200px;
-		text-align: center;
-		padding: 10px;
-	}
-	.input-image-progress > p {
-		font-size: 14px;
-		color: $666;
-	}
-	.img-container > .input-image-success {
-		width: 200px;
-		text-align: center;
-		font-size: 14px;
-		color: #37bc22;
-		padding: 10px;
-	}
-</style>

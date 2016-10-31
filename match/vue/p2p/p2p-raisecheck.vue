@@ -2,6 +2,9 @@
 	<div>hehe</div>
 </template>
 <script>
+	export default {
+		
+	}
 	// export default {
 	// 	data(){
 	// 		params: {

@@ -25,6 +25,32 @@
 			background-color: darken(@white, 5%);
 		}
 	}
+
+	&.green {
+		background-color: @green;
+		color: @white;
+
+		&:hover {
+			background-color: darken(@green, 3%);
+		}
+	}
+}
+
+.btn-progress-container {
+	position: relative;
+	.btn-progress {
+		transition: width 0.5s ease; 
+		position: absolute;
+		left: 0;
+		top:0;
+		bottom: 0;
+		background: @blue;
+		width: 0%;
+	}
+
+	.btn-progress-text {
+		position: relative;
+	}
 }
 
 .button-group {

@@ -122,6 +122,13 @@ const routes = [
     }
   },
   {
+    path: '/cf-item/check',
+    name: 'm-cfitem-check',
+    component(resolve) {
+      resolve(require('./vue/funding/crowdfunding-check.vue'))
+    }
+  },
+  {
     path: '/cf-item/raise',
     name: 'm-cfitem-raise',
     component(resolve) {

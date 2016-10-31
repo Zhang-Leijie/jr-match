@@ -6,7 +6,6 @@ import {getUniqueId} from '~/utils.js'
 export const CFRaisePlaceholder = (id) => {
 	return {
 		id: "",
-		relation_id: "",
 		name: "",
 		summary: "",
 		money: "",
@@ -34,13 +33,15 @@ export const CFRaisePlaceholder = (id) => {
 				member_name: "",
 				member_avartar: "",
 				member_position: "",
-				member_intro: ""
+				member_intro: "",
+				id: getUniqueId()
 			}
 		],
 		proof: [
 			{
 				name: "",
-				detail: ""
+				detail: "",
+				id: getUniqueId()
 			}
 		]
 	}
@@ -65,6 +66,38 @@ const crowdfunding = {
 			params.id = id
 			state.params.push(params)
 			Vue.set(state.lookup, id, state.params.length - 1)
+		},
+		addCFRaiseProof(state, {id}){
+			var index = state.lookup[id]
+			state.params[index].proof.push({
+				name: "",
+				detail: "",
+				id: getUniqueId()
+			})
+		},
+		removeCFRaiseProof(state, {id, index}){
+			var index_ = state.lookup[id]
+			state.params[index_].proof.splice(index, 1)
+		},
+		addCFRaiseMember(state, {id}){
+			var index = state.lookup[id]
+			state.params[index].member.push({
+				name: "",
+				detail: "",
+				id: getUniqueId()
+			})
+		},
+		removeCFRaiseMember(state, {id, index}){
+			var index_ = state.lookup[id]
+			state.params[index_].member.splice(index, 1)
+		},
+		changeCFRaiseMemberProp(state, {id, item, prop}){
+			var index_ = state.lookup[id]
+			state.params[index_].member[item.prop][prop] = item.value 
+		},
+		changeCFRaiseProofProp(state, {id, item, prop}){
+			var index_ = state.lookup[id]
+			state.params[index_].proof[item.prop][prop] = item.value 
 		}
 	},
 	getters: {

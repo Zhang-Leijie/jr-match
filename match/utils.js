@@ -42,8 +42,23 @@ export const isEmptyArray = (arr) => {
 
 // 验证图片后缀名
 const _ImgReg = /\.(jpg|png|gif|bmp|jpeg)/
-export const validImgExt = (filename) => {
-	return filename.match(_ImgReg) !== null
+export const validImgExt = (file) => {
+	var filename = file.name
+	if (filename.match(_ImgReg) !== null) {
+		return true
+	} else {
+		return '不支持该图片格式'
+	}
+}
+
+const _pdfReg = /\.pdf$/
+export const validPdfExt = (file) => {
+	var filename = file.name
+	if (filename.match(_pdfReg) !== null) {
+		return true
+	} else {
+		return '请上传pdf文件'
+	}
 }
 
 // p 贷款总额 
@@ -121,4 +136,55 @@ export const filterTime = function(time){
 	var min = parseInt((time/1000 - hour * 3600)/60)
 	var sec = parseInt(time/1000 - hour * 3600 - min * 60)
 	return time = min + '分' + sec + '秒'
+}
+
+
+var _date = new Date()
+export const timestampFormat = function(timestamp){
+	var date = _date
+	date.setTime(Number.parseInt(timestamp) * 1000)
+	var year = date.getFullYear()
+	var month = "0" + (date.getMonth()+1)
+	var hours = "0" + date.getHours()
+	var minutes = "0" + date.getMinutes()
+	var date = "0" + date.getUTCDate()
+	return year + '-' + 
+		month.substr(-2) + '-' + 
+		date.substr(-2) + ' ' + 
+		hours.substr(-2) + ":" + 
+		minutes.substr(-2)
+}
+
+var toTimeReg = /(\d+)-(\d+)-(\d+) (\d+):(\d+)/
+export const toTimestampFormat = function(time){
+	if (time === "" || typeof time != 'string') {
+		return (new Date()).getTime()
+	}
+	var date_ = _date
+	var [_, year, month, date, hours, minutes] = time.match(toTimeReg)
+
+	date_.setFullYear(parseInt(year))
+	date_.setMonth(parseInt(month) - 1)
+	date_.setHours(parseInt(hours))
+	date_.setMinutes(parseInt(minutes))
+	date_.setUTCDate(parseInt(date))
+
+	console.log(`ret: ${JSON.stringify([_, year, month, date, hours, minutes])}`)
+	console.log(`time: ${date_.getTime()}`)
+
+	return date_.getTime() / 1000
+}
+
+export function verifyLength(name, max, min) {
+	return (str) => {
+		if (str == "") {
+			return `请填写${name}`
+		} else if (max && str.length > max) {
+			return `${name}需要少于${max}个字`
+		} else if (min && str.length < min) {
+			return `${name}需要至少有${min}个字`
+		} else {
+			return true
+		}
+	}
 }

@@ -44,3 +44,13 @@ export const getRepaymentList = () => {
 
 /* 审标详情页*/
 export const getInvestDetail = factory('/index/VerifyInfo')
+
+/* 众筹项目阶段 列表*/
+export const getPeriodOptions = () => {
+	return normalize(factory('/peer/CrowdfundingsPeriods')())
+}
+
+/* 众筹盈利阶段 列表*/
+export const getProfitOptions = () => {
+	return normalize(factory('/peer/CrowdfundingsProfits')())
+}
