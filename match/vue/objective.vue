@@ -43,6 +43,7 @@
 									:value="option.value"
 									@click="answer(option.value, 'single_choices', indexOutter)"
 									:checked="option.value == single_choice.answer"
+									:disabled="isfinish==2"
 								>
 								<label 
 									:for="'sin'+ indexOutter + '_an' + index">
@@ -63,6 +64,7 @@
 									:value="option.value"
 									@change="answer(option.value, 'multi_choices', indexOutter)"
 									:checked="multi_choice.answer.indexOf(option.value) > -1"
+									:disabled="isfinish==2"
 								>
 								<label 
 									:for="'mul'+ indexOutter + '_an' + index">
@@ -83,6 +85,7 @@
 									:value="judg_.value"
 									@click="answer(judg_.value, 'judgments', indexOutter)"
 									:checked="judg_.value==judgment.answer"
+									:disabled="isfinish==2"
 								>
 								<label 
 									:for="'jud'+ indexOutter + '_an' + index">
@@ -177,13 +180,13 @@
 			},
 			answer(value, type, index){
 				var self = this
-				if (self.isfinish==1) {
+				// if (self.isfinish==1) {
 					store.commit('changeAnswer', {
 						value,
 						type,
 						index
 					})
-				};
+				// };
 			},
 			poptest(){
 				var self = this

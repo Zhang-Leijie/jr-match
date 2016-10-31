@@ -143,7 +143,7 @@
 		filters:{
 			changenum(num){
 				console.log(num)
-				return num = parseInt(num)/10000;
+				return num = parseInt(num)/10000
 			}
 		},
 		mounted:function(){
@@ -153,7 +153,6 @@
 			}).then((res) => {
 				self.investLints = res.list
 				self.amount = res.rest_money
-
 			})
 		}
 	}
@@ -200,8 +199,11 @@
 		&:nth-child(5) {
 			width: 18%;
 		}
+		&:nth-child(6) {
+			width: 15%;
+		}
 		&:nth-child(7) {
-			width: 20%;
+			width: 18%;
 		}
 		+ .p2p-item {
 
