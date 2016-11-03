@@ -17,6 +17,11 @@ const routes = [
     component: require('./vue/index.vue')
   },
   {
+    path: '/setup',
+    name: 'm-setup',
+    component: require('./vue/creative/creative-setup.vue')
+  },
+  {
     path: '/objective',
     name: 'm-obj',
     component(resolve) {
@@ -97,7 +102,7 @@ const routes = [
     path: '/cf-case',
     name: 'm-cfcase',
     component(resolve) {
-      resolve(require('./vue/funding/case.vue'))
+      resolve(require('./vue/creative/case.vue'))
     }
   },
   {

@@ -2,7 +2,7 @@
 	<div class="raise background-image">
 		<div class="header-bar">
 			<ol class="breadcrumb">
-				<li class="item">众筹</li>
+				<li class="item">创新创业</li>
 				<li class="item">案例分析</li>
 			</ol>
 			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
