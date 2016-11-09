@@ -25,12 +25,12 @@
 							<td>{{index+1}}</td>
 							<td>{{list.name}}</td>
 							<td v-if="list.score==null">未评分</td>
-							<td v-if="list.score!=null">{{score}}</td>
+							<td v-if="list.score!=null">{{list.score}}</td>
 							<td v-if="list.isfinished == 1">
 								<router-link :to="{name: 'm-p2praisedetail', query: {id: list.id}}">去完成</router-link>
 							</td>
 							<td v-if="list.isfinished == 2">
-								<router-link :to="{name: 'm-p2praisecheck', query: {id: list.id}}">查看</router-link>
+								<router-link :to="{name: 'm-p2praisecheck', query: {id: list.id, relation_id: list.relation_id}}">查看</router-link>
 							</td>
 						</tr>
 					</tbody>
@@ -41,16 +41,21 @@
 </template>
 <script>
 	import router from '~/router.js'
+	import {Lists} from '~/ajax/get.js'
 	import store from '~/vuex'
 
 	export default{
-		computed: {
-			lists(){
-				return store.state.p2pRaise.lists
+		data(){
+			return {
+				lists: []
 			}
 		},
 		mounted:function(){
-			store.dispatch('getP2PRaiseList')
+			Lists({
+				type: 3
+			}).then((res) => {
+				this.lists = res
+			})
 		}
 	}
 </script>

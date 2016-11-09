@@ -57,3 +57,9 @@ export const getProfitOptions = () => {
 
 /* 创新 */
 export const getCreativeField = factory('/index/Field')
+
+/* 发标详情 */
+export const getRaiseDetail = factory('/P2P/P2PInfo')
+
+/* 众筹详情 */
+export const getCFDetail = factory('/peer/CrowdfundingsInfo')

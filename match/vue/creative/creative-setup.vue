@@ -8,19 +8,16 @@
 		</div>
 		<div class="setup-main">
 			<carousel :imgs="photo"></carousel>
-			<p class="text-content">
-				{{text}}
-			</p>
+			<p class="text-content" v-html="text"></p>
 			<div class="button-group">
-				<router-link class="btn blue" :to="{name:'m-index'}">
-					返回
-				</router-link>
+				<router-link class="btn blue" :to="{name:'m-index'}">返回</router-link>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
 	import Carousel from '~/components/carousel.vue'
+	import {unescapeHTML} from '~/utils.js'
 	import {getCreativeField} from '~/ajax/get.js'
 
 	export default {
@@ -35,8 +32,7 @@
 		},
 		mounted(){
 			getCreativeField().then((res) => {
-				console.dir(res)
-				this.text = res.text 
+				this.text = unescapeHTML(res.text) 
 				this.photo = res.photo || []
 			})
 		}

@@ -26,7 +26,7 @@
 						</td>
 						<td>{{cf.score ? cf.score : '未评分'}}</td>
 						<td v-if="cf.isfinished==1"><router-link :to="{name: 'm-cfitem-detail', query: { id: cf.id }}">去完成</router-link></td>
-						<td v-if="cf.isfinished==2"><router-link :to="{name: 'm-cfitem-check', query: { id: cf.id }}">查看</router-link></td>
+						<td v-if="cf.isfinished==2"><router-link :to="{name: 'm-cfitem-check', query: { id: cf.id, relation_id: cf.relation_id }}">查看</router-link></td>
 					</tr>
 				</tbody>
 			</table>

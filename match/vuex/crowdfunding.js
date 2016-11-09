@@ -23,7 +23,6 @@ export const CFRaisePlaceholder = (id) => {
 		mode_photo: "",
 		analysis_photo: "",
 		core_photo: "",
-		video: "",
 		detail: "",
 		team_logo: "",
 		team_name: "",

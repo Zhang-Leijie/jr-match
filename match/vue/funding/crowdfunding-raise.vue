@@ -305,14 +305,15 @@
 			confirm(){
 				var params = normalizeParams(this.params)
 				var error = checkCFParams(params)
-				console.log('hehe')
+				//console.log('hehe')
 				if (error!==true) {
-					console.log('hehe')
+					//console.log('hehe')
 					this.state = "失败"
 					this.error = error
 					return
 				}
 
+				params.id = this.$route.query.id
 				this.uploading = true
 				setTimeout(() => {
 					postCF(params).then((res) => {

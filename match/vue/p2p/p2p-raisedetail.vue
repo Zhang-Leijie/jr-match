@@ -10,14 +10,12 @@
 		<div class="white-board" v-if="listInfo.id !== undefined">
 			<div class="paragraph">
 				<h1 class="title-with-border">背景描述</h1>
-				<div class="content">
-					{{listInfo.background}}
+				<div class="content" v-html="listInfo.background">
 				</div>
 			</div>
 			<div class="paragraph">
 				<h1 class="title-with-border">详细信息</h1>
-				<div class="content">
-					{{listInfo.detail}}
+				<div class="content" v-html="listInfo.detail">
 				</div>
 			</div>
 			<div class="button-group">
@@ -29,6 +27,7 @@
 </template>
 <script>
 	import router from '~/router.js'
+	import {unescapeHTML} from '~/utils.js'
 	import store from '~/vuex'
 
 	export default {
@@ -36,7 +35,12 @@
 			listInfo(){
 				var listInfos = store.state.p2pRaise.listInfos
 				var id = store.state.route.query.id 
-				return listInfos[id] || {}
+				var info = listInfos[id]
+				return {
+					background: unescapeHTML(info.background),
+					detail: unescapeHTML(info.detail),
+					id: id
+				} || {}
 			}
 		},
 		mounted() {

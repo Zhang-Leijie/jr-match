@@ -64,6 +64,9 @@ export const validPdfExt = (file) => {
 // p 贷款总额 
 // r 期数
 // n 利率
+export const toFixed = (str) => {
+	return parseFloat(str).toFixed(2)
+}
 export const payInMonth = (p, n, r) => {
 	var i = 0
 	var totalI = p * r * (n / 12)
@@ -80,10 +83,10 @@ export const payInMonth = (p, n, r) => {
 		_rP = p - (_pAndI - _i) * _order // 本金 + 已还利息和 - 已还本息和
 		rets.push({
 			order: _order,
-			pAndI: _pAndI.toFixed(2),
-			i: _i.toFixed(2),
-			p: _p.toFixed(2),
-			rP: _pAndI.toFixed(2)
+			pAndI: toFixed(_pAndI, 2),
+			i: toFixed(_i, 2),
+			p: toFixed(_p, 2),
+			rP: toFixed(_pAndI, 2)
 		})
 	}
 	return rets
@@ -96,10 +99,10 @@ export const payInOnce = (p, n, r) => {
 		if (_order == n) {
 			rets.push({
 				order: _order,
-				i: totalInterest.toFixed(2),
+				i: toFixed(totalInterest, 2),
 				p: 0,
-				pAndI: totalInterest.toFixed(2),
-				rP: p.toFixed(2)
+				pAndI: toFixed(totalInterest, 2),
+				rP: toFixed(p, 2)
 			})
 		} else {
 			rets.push({
@@ -121,10 +124,10 @@ export const payEveryMonth = function(p, n, r){
 		//_rP = p - _pAccum
 		rets.push({
 			order: _order,
-			i: _i.toFixed(2),
-			pAndI: pAndI.toFixed(2),
-			rP: _rP.toFixed(2),
-			p: _p.toFixed(2) 
+			i: toFixed(_i, 2),
+			pAndI: toFixed(pAndI, 2),
+			rP: toFixed(_rP, 2),
+			p: toFixed(_p, 2) 
 		})
 	}
 	return rets
@@ -187,4 +190,10 @@ export function verifyLength(name, max, min) {
 			return true
 		}
 	}
+}
+
+var __$textarea = document.createElement('textarea')
+export function unescapeHTML(str){
+    __$textarea.innerHTML = str
+    return __$textarea.value
 }

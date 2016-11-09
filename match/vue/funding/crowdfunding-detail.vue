@@ -10,14 +10,12 @@
 		<div class="white-board">
 			<div class="paragraph">
 				<h1 class="title-with-border">背景描述</h1>
-				<div class="content">
-					{{info.background}}
+				<div class="content" v-html="info.background">
 				</div>
 			</div>
 			<div class="paragraph">
 				<h1 class="title-with-border">详细信息</h1>
-				<div class="content">
-					{{info.detail}}
+				<div class="content" v-html="info.detail">
 				</div>
 			</div>
 			<div class="button-group">
@@ -29,6 +27,7 @@
 </template>
 <script>
 	import {getCrowdFundingRaiseInfo} from '~/ajax/get.js'
+	import {unescapeHTML} from '~/utils.js'
 	import store from '~/vuex'
 
 	export default {
@@ -45,8 +44,8 @@
 			this.id = store.state.route.query.id 
 
 			getCrowdFundingRaiseInfo(this.id).then((res) => {
-				this.info.background = res.background
-				this.info.detail = res.detail
+				this.info.background = unescapeHTML(res.background)
+				this.info.detail = unescapeHTML(res.detail)
 				this.info.id = res.id
 			})
 		}

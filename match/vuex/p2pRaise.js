@@ -1,4 +1,4 @@
-import {Lists, getP2PRaiseInfo} from '~/ajax/get.js'
+import {getP2PRaiseInfo} from '~/ajax/get.js'
 import Vue from 'vue'
 
 import {getUniqueId} from '~/utils.js'
@@ -33,7 +33,6 @@ export const P2PRaisePlaceholder = (id) => {
 
 const p2pRaise = {
 	state: {
-		lists: [],
 		listInfos: {},
 		params: [],
 		lookup: {}
@@ -50,9 +49,6 @@ const p2pRaise = {
 		removeP2PRaiseProof(state, {id, index}){
 			var index_ = state.lookup[id]
 			state.params[index_].proof.splice(index, 1)
-		},
-		getList(state, lists) {
-			state.lists = lists
 		},
 		getListInfos(state, {listInfo, id}) {
 			Vue.set(state.listInfos, id, listInfo)
@@ -91,13 +87,6 @@ const p2pRaise = {
 		}
 	},
 	actions: {
-		getP2PRaiseList({commit}){
-			return Lists({
-				type: 3
-			}).then((res) => {
-				commit('getList', res)
-			})
-		},
 		getP2PRaiseInfo({commit, state}, {id}){
 			if (state.listInfos[id]) {
 				return

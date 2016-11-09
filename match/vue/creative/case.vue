@@ -9,8 +9,7 @@
 		</div>
 		<div style="width:1200px;margin:20px auto 0px">
 			<div class="table-box" style="padding:20px 40px">
-				<div class="word f2" style="min-height:480px;">
-					{{text}}
+				<div class="word f2" style="min-height:480px;" v-html="text">
 				</div>
 				<div class="button-group">
 					<router-link class="btn blue" :to="{name:'m-index'}">
@@ -23,6 +22,7 @@
 </template>
 <script>
 	import {AnalysisLists} from '~/ajax/get.js'
+	import {unescapeHTML} from '~/utils.js'
 	import router from '~/router.js'
 
 	export default{
@@ -34,8 +34,8 @@
 		mounted:function(){
 			var self = this	
 			AnalysisLists().then((res) => {
-				console.dir(res)
-				self.text = res.text
+				//console.dir(res)
+				self.text = unescapeHTML(res.text)
 			})
 		},
 	}
