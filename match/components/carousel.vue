@@ -38,7 +38,7 @@
 		},
 		watch: {
 			current(val){
-				this.toX = - val * 100
+				this.toX = - (val * 100)
 			}
 		},
 		methods: {
@@ -46,6 +46,9 @@
 				console.dir(e)
 			},
 			startDrag(e){
+				if (e.target.nodeName.toUpperCase() == 'LABEL') {
+					return
+				}
 				this.dragging = true
 				this.startX = parseInt(this.toX)
 				this.dragX = e.pageX
@@ -55,12 +58,12 @@
 					return
 				}
 				var gap = (e.pageX - this.dragX)/10
-				if (gap > 5 || gap < -5) {
+				if (gap > 10 || gap < -10) {
 					this.dragging = false
 					if (gap > 0) {
-						this.nextPage()
-					} else {
 						this.previousPage()
+					} else {
+						this.nextPage()
 					}
 					return
 				}
