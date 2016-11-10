@@ -23,3 +23,7 @@ const app = new Vue({
 }).$mount('#app')
 
 window.app = app
+
+var ls = require('localStorage')
+
+window.ls = ls

@@ -7,7 +7,7 @@
 			</ol>
 			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
-		<div class="white-board" v-if="listInfo.id !== undefined">
+		<div class="white-board">
 			<div class="paragraph">
 				<h1 class="title-with-border">背景描述</h1>
 				<div class="content" v-html="listInfo.background">
@@ -20,32 +20,31 @@
 			</div>
 			<div class="button-group">
 				<router-link :to="{name: 'm-p2praise'}" class="btn white" >返回</router-link>
-				<router-link :to="{name: 'm-p2praisechart', query: {id: listInfo.id}}" class="btn blue">设计</router-link>
+				<router-link :to="{name: 'm-p2praisechart', query: {id: $route.query.id, userid: listInfo.muser_id}}" class="btn blue">设计</router-link>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
+	import {getP2PRaiseInfo} from '~/ajax/get.js'
 	import router from '~/router.js'
 	import {unescapeHTML} from '~/utils.js'
-	import store from '~/vuex'
 
 	export default {
-		computed: {
-			listInfo(){
-				var listInfos = store.state.p2pRaise.listInfos
-				var id = store.state.route.query.id 
-				var info = listInfos[id]
-				return {
-					background: unescapeHTML(info.background),
-					detail: unescapeHTML(info.detail),
-					id: id
-				} || {}
+		data(){
+			return {
+				listInfo: {
+					background: "",
+					detail: "",
+					muser_id: ""
+				}
 			}
-		},
+		},	
 		mounted() {
-			store.dispatch('getP2PRaiseInfo', {
-				id: store.state.route.query.id
+			getP2PRaiseInfo(this.$route.query.id).then((listInfo) => {
+				this.listInfo.background = listInfo.background
+				this.listInfo.detail = listInfo.detail
+				this.listInfo.muser_id = listInfo.muser_id
 			})
 		}
 	}

@@ -1,7 +1,10 @@
-import {getP2PRaiseInfo} from '~/ajax/get.js'
 import Vue from 'vue'
 
 import {getUniqueId} from '~/utils.js'
+
+import router from '~/router.js'
+import {genLsId} from '~/utils.js'
+var ls = require('localStorage')
 
 export const P2PRaisePlaceholder = (id) => {
 	return {
@@ -33,7 +36,6 @@ export const P2PRaisePlaceholder = (id) => {
 
 const p2pRaise = {
 	state: {
-		listInfos: {},
 		params: [],
 		lookup: {}
 	},
@@ -49,9 +51,6 @@ const p2pRaise = {
 		removeP2PRaiseProof(state, {id, index}){
 			var index_ = state.lookup[id]
 			state.params[index_].proof.splice(index, 1)
-		},
-		getListInfos(state, {listInfo, id}) {
-			Vue.set(state.listInfos, id, listInfo)
 		},
 		makeParamsPlaceholder(state, {id}) {
 			var index = state.lookup[id]
@@ -84,20 +83,6 @@ const p2pRaise = {
 			var id = root.route.query.id
 			var index = state.lookup[id]
 			return state.params[index]
-		}
-	},
-	actions: {
-		getP2PRaiseInfo({commit, state}, {id}){
-			if (state.listInfos[id]) {
-				return
-			}
-
-			// 异步ajax获取
-			return getP2PRaiseInfo(id).then((listInfo) => {
-				commit('getListInfos', {
-					listInfo, id
-				})
-			})
 		}
 	}
 }

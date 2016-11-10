@@ -7,7 +7,7 @@
 			</ol>
 			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
-		<div class="form-page" v-if="showPage">
+		<div class="form-page">
 			<div>
 				<div class="form-title">
 					<h1>类型选择</h1>
@@ -15,7 +15,7 @@
 				</div>
 				<div class="form-input">
 					<span class="name">类型：</span>
-					<input-select prop="tag_id" :init="params.tag_id" :getOptions="getP2PTag" @select-result-change="changeSelectProp"></input-select>
+					<input-select prop="tag_id" :init="params.tag_id" :getOptions="getP2PTag" @select-result-change="changeStringProp"></input-select>
 				</div>
 			</div>
 			<div>
@@ -28,7 +28,7 @@
 				</div>
 				<div class="form-input">
 					<span class="name">姓别：</span>
-					<input-select prop="gender" :init="params.gender" :getOptions="getGenderOptions" @select-result-change="changeSelectProp"></input-select>
+					<input-select prop="gender" :init="params.gender" :getOptions="getGenderOptions" @select-result-change="changeStringProp"></input-select>
 				</div>
 				<div class="form-input">
 					<span class="name">年龄：</span>
@@ -45,7 +45,7 @@
 				<div class="form-input">
 					<span class="name">地区：</span>
 					<input-select ref="province" prop="province" :init="params.province" :getOptions="getProvinceList" @select-result-change="provinceChange"></input-select>
-					<input-select ref="city" prop="city" :init="params.city" :getOptions="getCityList" @select-result-change="cityChange" @deps-change="changeGetCityList"></input-select>
+					<input-select ref="city" prop="city" :init="params.city" :getOptions="getCityList" @select-result-change="changeStringProp" @deps-change="changeGetCityList"></input-select>
 				</div>
 			</div>
 			<div>
@@ -58,11 +58,11 @@
 				</div>
 				<div class="form-input">
 					<span class="name">风险要求：</span>
-					<input-select prop="request_id" :init="params.request_id" :getOptions="getRequestList" @select-result-change="changeSelectProp"></input-select>
+					<input-select prop="request_id" :init="params.request_id" :getOptions="getRequestList" @select-result-change="changeStringProp"></input-select>
 				</div>
 				<div class="form-input">
 					<span class="name">还款方式：</span>
-					<input-select prop="repay_type_id" :init="params.repay_type_id" :getOptions="getRepaymentList" @select-result-change="changeSelectProp"></input-select>
+					<input-select prop="repay_type_id" :init="params.repay_type_id" :getOptions="getRepaymentList" @select-result-change="changeStringProp"></input-select>
 				</div>
 				<div class="form-input">
 					<span class="name">利息偿付：</span>
@@ -80,7 +80,7 @@
 				</div>
 				<div class="form-input">
 					<span class="name">借款期限：</span>
-					<input-select prop="loan_time" :init="params.loan_time" :getOptions="getLoanTimeOptions" @select-result-change="changeSelectProp"></input-select>
+					<input-select prop="loan_time" :init="params.loan_time" :getOptions="getLoanTimeOptions" @select-result-change="changeStringProp"></input-select>
 				</div>
 				<div class="form-input">
 					<span class="name">借款说明：</span>
@@ -166,7 +166,7 @@
 	import Modal from '~/components/modal.vue'
 
 	import {transferMoney, payInOnce, payEveryMonth, payInMonth, verifyLength} from '~/utils.js'
-	import {P2PRaisePlaceholder} from '~/vuex/p2pRaise.js'
+	import {getUniqueId, genLsId} from '~/utils.js'
 
 	import {
 		getP2PTag, 
@@ -177,29 +177,38 @@
 	} from '~/ajax/get.js'
 
 	import router from '~/router.js'
-	import store from '~/vuex'		
 
 	import {postP2P} from '~/ajax/post.js'
-
+	var ls = require('localStorage')
 
 	export default {
 		data(){
+			var params = ls.getItem(genLsId(this.$route.query.userid, 'p2pRaise'))
+			if (params) {
+				params = JSON.parse(params)
+			} else {
+				params = P2PRaisePlaceholder(this.$route.query.id)
+				ls.setItem(genLsId(this.$route.query.userid, 'p2pRaise'), JSON.stringify(params))
+			}
 			return {
 				calrets: [],
 				showModal: false,
 				uploading: false,
 				isSuccess: false,
 				state: "",
-				error: ""
+				error: "",
+				params: params
+			}
+		},
+		watch: {
+			params: {
+				deep: true,
+				handler: function(val, oldVal){
+					ls.setItem(genLsId(this.userid, 'p2pRaise'), JSON.stringify(val))
+				}
 			}
 		},
 		computed: {
-			params(){
-				return store.getters.p2pParam || P2PRaisePlaceholder()
-			},
-			showPage(){
-				return this.params.relation_id !== undefined && this.params.relation_id !== ""
-			},
 			title(){
 				var up = this.uploading 
 				var state = this.state
@@ -255,17 +264,18 @@
 				}, 2000)
 			},
 			addProof(){
-				store.commit('addP2PRaiseProof', {id: this.id})
+				this.params.proof.push({
+					name: "",
+					detail: "",
+					id: getUniqueId()
+				})
 			},
 			removeProof(index){
-				store.commit('removeP2PRaiseProof', {id: this.id, index})
+				this.params.proof.splice(index, 1)
 			},
 			provinceChange(val){
-				this.changeSelectProp(val)
+				this.changeStringProp(val)
 				this.$refs.city.$emit('deps-change', val)
-			},
-			cityChange(val){
-				this.changeSelectProp(val)
 			},
 			changeGetCityList(item){ // {prop: .., value: {value: .., name: ..}}
 				var cityId = item.value.value
@@ -303,32 +313,14 @@
 				])
 			},
 			changeProofName(item){ // item { prop: proof编号, value: proof 名称}
-				store.commit('changeProofName', {
-					id: this.id,
-					item: item
-				})	
+				this.params.proof[item.prop].name = item.value
 			},
 			changeProofDetail(item){ // item { prop: proof编号, value: proof 图片地址}
-				store.commit('changeProofDetail', {
-					id: this.id,
-					item: item
-				})	
-			},
-			changeSelectProp(item){
-				var item = {
-					prop: item.prop,
-					value: item.value.value
-				}
-				store.commit('changeStringProp', {
-					id: this.id,
-					item: item
-				})
+				this.params.proof[item.prop].detail = item.value
 			},
 			changeStringProp(item){
-				store.commit('changeStringProp', {
-					id: this.id,
-					item: item
-				})
+				var val = item.value.value || item.value
+				this.params[item.prop] = val
 			},
 			calculate(rate, money, loan_time, repay_type_id){
 				//console.log(`rate: ${rate},money: ${money},loan_time: ${loan_time}, repay_type_id: ${repay_type_id}`)
@@ -348,11 +340,11 @@
 			'modal': Modal
 		},
 		mounted(){
-			var id = store.state.route.query.id
+			var id = this.$route.query.id
+			var userid = this.$route.query.userid
+
 			this.id = id
-			store.commit('makeParamsPlaceholder', {
-				id: id
-			})
+			this.userid = userid
 
 			var self = this
 			var calTable = throttle(function([rate, money, loan_time, repay_type_id]){
@@ -479,4 +471,32 @@
 	    return result;
 	  };
 	};
+
+	const P2PRaisePlaceholder = (id) => {
+		return {
+			relation_id: id,
+			username: "",
+			gender: "",
+			job: "",
+			age:"",
+			tag_id: "",
+			phone: "",
+			city: "",
+			province: "",
+			name: "",
+			request_id: "",
+			money: "",
+			rate: "",
+			loan_time: "",
+			repay_type_id: "",
+			detail: "",
+			proof:	[
+				{
+					name: "",
+					detail: "",
+					id: getUniqueId()
+				}
+			]
+		}
+	}
 </script>

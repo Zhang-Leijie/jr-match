@@ -197,3 +197,7 @@ export function unescapeHTML(str){
     __$textarea.innerHTML = str
     return __$textarea.value
 }
+
+export function genLsId(id, module) {
+	return id + '.' + module
+}

@@ -47,11 +47,11 @@
 					account: self.cardnum,
 					password: self.password
 				}).then(()=>{
-					if (routerState.previous == null || routerState.previous == router.currentRoute.name) {
+					//if (routerState.previous == null || routerState.previous == router.currentRoute.name) {
 						router.push({name: 'm-index'})
-					} else {
-						router.back()
-					}
+					//} else {
+						//router.back()
+					//}
 				}, (e) => {
 					console.dir(e)
 				})
