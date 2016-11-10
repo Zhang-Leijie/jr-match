@@ -7,11 +7,11 @@
 			</ol>
 			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
-		<div class="form-page" v-if="params.id!==''">
+		<div class="form-page">
 			<div>
 				<div class="form-title">
 					<h1>项目信息</h1>
-					<router-link class="btn blue" :to="{name:'m-cfitem-detail', query: {id: params.id}}">查看资料</router-link>
+					<router-link class="btn blue" :to="{name:'m-cfitem-detail', query: {id: $route.query.id}}">查看资料</router-link>
 				</div>
 				<div class="form-input">
 					<span class="name">项目名称：</span>
@@ -24,12 +24,12 @@
 				<div class="form-input">
 					<span class="name">所在城市：</span>
 					<input-select ref="province" prop="province" :init="params.province" :getOptions="getProvinceList" @select-result-change="provinceChange"></input-select>
-					<input-select ref="city" prop="city" :init="params.city" :getOptions="getCityList" @select-result-change="cityChange" @deps-change="changeGetCityList"></input-select>
+					<input-select ref="city" prop="city" :init="params.city" :getOptions="getCityList" @select-result-change="changeStringProp" @deps-change="changeGetCityList"></input-select>
 				</div>
 				<div class="form-input">
 					<span class="name">是否领头：</span>
 					<div class="input-radio" v-for="(lead,index) in leadOptions">
-						<input type="radio" :id="'tag_'+index" name="tag_lead" @change="changeStringProp({prop: 'lead', value: lead.value})">
+						<input type="radio" :id="'tag_'+index" name="tag_lead" @change="changeStringProp({prop: 'lead', value: lead.value})" :value="lead.value" v-model="params.lead">
 						<label :for="'tag_'+index">{{lead.name}}</label>
 					</div>
 				</div>
@@ -37,17 +37,18 @@
 					<span class="name">创立时间：</span>
 					<date-picker
 						inputname="found_time"
+						:init="params.found_time"
 						@date-change="changeStringProp({prop: 'found_time', value: $event})"
 					>
 					</date-picker>
 				</div>
 				<div class="form-input">
 					<span class="name">项目阶段：</span>
-					<input-select prop="period_id" :init="params.period_id" :getOptions="getPeriodOptions" @select-result-change="changeSelectProp"></input-select>
+					<input-select prop="period_id" :init="params.period_id" :getOptions="getPeriodOptions" @select-result-change="changeStringProp"></input-select>
 				</div>
 				<div class="form-input">
 					<span class="name">盈利状况：</span>
-					<input-select prop="profit_id" :init="params.profit_id" :getOptions="getProfitOptions" @select-result-change="changeSelectProp"></input-select>
+					<input-select prop="profit_id" :init="params.profit_id" :getOptions="getProfitOptions" @select-result-change="changeStringProp"></input-select>
 				</div>
 				<div class="form-input">
 					<span class="name">运营数据：</span>
@@ -199,7 +200,7 @@
 			</div>
 			<div>
 				<div class="button-group">
-					<router-link class="btn white" :to="{name:'m-p2praisedetail', query: {id: $route.query.id}}">返回</router-link>
+					<router-link class="btn white" :to="{name:'m-cfitem-detail', query: {id: $route.query.id}}">返回</router-link>
 					<a class="btn blue" @click="openModal">提交</a>
 				</div>
 			</div>
@@ -215,7 +216,7 @@
 			<p slot="footer" style="text-align:center;" v-if="uploading">
 			</p>
 			<p slot="footer" style="text-align:center;" v-if="!uploading&&state=='成功'">
-				<router-link class="btn blue" :to="{name:'m-p2praise'}">完成</router-link>
+				<router-link class="btn blue" :to="{name:'m-cfitem'}">完成</router-link>
 			</p>
 			<p slot="footer" style="text-align:center;" v-if="!uploading&&state=='失败'">
 				<a class="btn white" @click="showModal=false">返回</a>
@@ -225,7 +226,6 @@
 </template>
 <script>
 	import router from '~/router.js'
-	import {CFRaisePlaceholder} from '~/vuex/crowdfunding.js' 
 
 	import inputSelect from '~/components/inputs/input-select.vue'
 	import inputText from '~/components/inputs/input-text.vue'
@@ -249,9 +249,25 @@
 	} from '~/ajax/post.js'
 
 	import {validPdfExt, verifyLength} from '~/utils.js'
+	import {getUniqueId} from '~/utils.js'
+
+	var ls = require('localStorage')
+
+	const getCFLsId = ($vm) => {
+		var query = $vm.$route.query
+		return `${query.userid}.${query.id}.CFRaise`
+	}
 
 	export default {
 		data(){
+			var params = ls.getItem(getCFLsId(this))
+			if (params) {
+				params = JSON.parse(params)
+			} else {
+				params = CFRaisePlaceholder(this.$route.query.id)
+				ls.setItem(getCFLsId(this), JSON.stringify(params))
+			}
+
 			return {
 				leadOptions: [{
 					name: '是',value: '2'
@@ -262,13 +278,19 @@
 				uploading: false,
 				isSuccess: false,
 				state: "",
-				error: ""
+				error: "",
+				params: params
+			}
+		},
+		watch: {
+			params: {
+				deep: true,
+				handler: function(val, oldVal){
+					ls.setItem(getCFLsId(this), JSON.stringify(val))
+				}
 			}
 		},
 		computed: {
-			params(){
-				return store.getters.CFParams || CFRaisePlaceholder()
-			},
 			title(){
 				var up = this.uploading 
 				var state = this.state
@@ -313,7 +335,6 @@
 					return
 				}
 
-				params.id = this.$route.query.id
 				this.uploading = true
 				setTimeout(() => {
 					postCF(params).then((res) => {
@@ -327,11 +348,7 @@
 				}, 2000)
 			},
 			openDate(){
-				console.log('hehe')
 				WdatePicker({el: 'found_time'})
-			},
-			cityChange(val){
-				this.changeSelectProp(val)
 			},
 			changeGetCityList(item){ // {prop: .., value: {value: .., name: ..}}
 				var cityId = item.value.value
@@ -341,7 +358,7 @@
 				})
 			},
 			provinceChange(val){
-				this.changeSelectProp(val)
+				this.changeStringProp(val)
 				this.$refs.city.$emit('deps-change', val)
 			},
 			getPeriodOptions,
@@ -355,61 +372,39 @@
 					return Promise.resolve([])
 				}
 			},
-			changeSelectProp(item){
-				var item = {
-					prop: item.prop,
-					value: item.value.value
-				}
-				store.commit('changeCFStringProp', {
-					id: this.id,
-					item: item
-				})
-			},
 			changeMemberProp(item, member_prop){
-				// item.prop = member's index
-				store.commit('changeCFRaiseMemberProp', {
-					id: this.id,
-					item: item,
-					prop: member_prop
-				})
+				this.params.member[item.prop][member_prop] = item.value
 			},
 			addMember(){
-				store.commit('addCFRaiseMember', {
-					id: this.id
+				this.params.member.push({
+					member_avartar: "",
+					member_intro: "",
+					member_name: "",
+					member_position: "",
+					id: getUniqueId()
 				})
 			},
 			removeMember(index){
-				store.commit('removeCFRaiseMember', {
-					id: this.id,
-					index: index
-				})
+				this.params.member.splice(index, 1)
 			},
-			changeProofProp(item, proof_prop){
-				store.commit('changeCFRaiseProofProp', {
-					id: this.id,
-					item: item,
-					prop: proof_prop
-				})
+			changeProofProp(item, prop){
+				this.params.proof[item.prop][prop] = item.value 
 			},
 			addProof(){
-				store.commit('addCFRaiseProof', {
-					id: this.id
+				this.params.proof.push({
+					name: "",
+					detail: "",
+					id: getUniqueId()
 				})
 			},
 			removeProof(index){
-				store.commit('removeCFRaiseProof', {
-					id: this.id,
-					index: index
-				})
+				this.params.proof.splice(index, 1)
 			},
 			changeStringProp(item){
-				store.commit('changeCFStringProp', {
-					id: this.id,
-					item: item
-				})
+				var val = item.value.value || item.value
+				this.params[item.prop] = val
 			},
 			complete(){
-				console.log('heheh')
 				router.push({name: 'm-cfitem-detail'})
 			}
 		},
@@ -438,7 +433,6 @@
 		ret.member.forEach((item)=> {
 			delete item.id
 		})
-		delete params.id 
 		return ret
 	}
 
@@ -511,6 +505,49 @@
 			}
 		}
 		return true
+	}
+
+	const CFRaisePlaceholder = (id) => {
+		return {
+			relation_id: id,
+			name: "",
+			summary: "",
+			money: "",
+			found_time: "",
+			province: "",
+			city: "",
+			period_id: "",
+			profit_id: "",
+			shares: "",
+			lead: "",
+			prospectus: "",
+			proposal: "",
+			index_photo: "",
+			project_photo: "",
+			mode_photo: "",
+			analysis_photo: "",
+			core_photo: "",
+			detail: "",
+			team_logo: "",
+			team_name: "",
+			team_summary: "",
+			member: [
+				{
+					member_name: "",
+					member_avartar: "",
+					member_position: "",
+					member_intro: "",
+					id: getUniqueId()
+				}
+			],
+			proof: [
+				{
+					name: "",
+					detail: "",
+					id: getUniqueId()
+				}
+			]
+		}
 	}
 </script>
 <style>

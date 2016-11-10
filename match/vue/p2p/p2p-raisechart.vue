@@ -181,14 +181,17 @@
 	import {postP2P} from '~/ajax/post.js'
 	var ls = require('localStorage')
 
+	function getRaiseLsId($vm){
+		return `${$vm.$route.query.id}.${$vm.$route.query.userid}.p2pRaise`
+	}
 	export default {
 		data(){
-			var params = ls.getItem(genLsId(this.$route.query.userid, 'p2pRaise'))
+			var params = ls.getItem(getRaiseLsId(this))
 			if (params) {
 				params = JSON.parse(params)
 			} else {
 				params = P2PRaisePlaceholder(this.$route.query.id)
-				ls.setItem(genLsId(this.$route.query.userid, 'p2pRaise'), JSON.stringify(params))
+				ls.setItem(getRaiseLsId(this), JSON.stringify(params))
 			}
 			return {
 				calrets: [],
@@ -204,7 +207,7 @@
 			params: {
 				deep: true,
 				handler: function(val, oldVal){
-					ls.setItem(genLsId(this.userid, 'p2pRaise'), JSON.stringify(val))
+					ls.setItem(getRaiseLsId(this), JSON.stringify(val))
 				}
 			}
 		},

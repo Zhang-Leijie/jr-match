@@ -20,7 +20,7 @@
 			</div>
 			<div class="button-group">
 				<router-link :to="{name: 'm-cfitem'}" class="btn white" >返回</router-link>
-				<router-link :to="{name: 'm-cfitem-raise', query: {id: info.id}}" class="btn blue">设计</router-link>
+				<router-link :to="{name: 'm-cfitem-raise', query: {id: info.id, userid: info.userid}}" class="btn blue">设计</router-link>
 			</div>
 		</div>
 	</div>
@@ -28,7 +28,6 @@
 <script>
 	import {getCrowdFundingRaiseInfo} from '~/ajax/get.js'
 	import {unescapeHTML} from '~/utils.js'
-	import store from '~/vuex'
 
 	export default {
 		data(){
@@ -36,17 +35,19 @@
 				info: {
 					background: "",
 					detail: "",
-					id: ""
+					id: "",
+					userid: ""
 				}
 			}
 		},
 		mounted(){
-			this.id = store.state.route.query.id 
+			this.id = this.$route.query.id 
 
 			getCrowdFundingRaiseInfo(this.id).then((res) => {
 				this.info.background = unescapeHTML(res.background)
 				this.info.detail = unescapeHTML(res.detail)
 				this.info.id = res.id
+				this.info.userid = res.muser_id
 			})
 		}
 	}

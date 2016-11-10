@@ -10,7 +10,7 @@
 	import {toTimestampFormat, timestampFormat} from '~/utils.js'
 
 	export default {
-		props: ['style', 'min', 'max', 'inputname'],
+		props: ['style', 'min', 'max', 'inputname', 'init'],
 		data(){
 			return {
 				model: ""
@@ -22,9 +22,6 @@
 			}
 		},
 		methods: {
-			changeModel(val){
-				this.model = val
-			},
 			popDatepicker: function(){
 				var self = this
 				var options = {
@@ -44,6 +41,11 @@
 				WdatePicker(options)
 			}
 		},
+		mounted(){
+			if (this.init) {
+				this.model = timestampFormat(parseInt(this.init) / 1000 | 0)
+			}
+		},	
 		events: {
 			'date-clear': function(){
 				this.model = ""
