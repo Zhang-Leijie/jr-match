@@ -14,9 +14,10 @@ function normalize(arr, default_){
 const objQuestion = {
 	state: {
 		inited: false,
-		judgments:[],
+		
 		time:'',
 		iftime:true,
+		judgments:[],
 		multi_choices:[],
 		short_answers:[],
 		single_choices:[]

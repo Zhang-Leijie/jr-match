@@ -8,7 +8,7 @@
 			学校名称：{{school_name}}
 		</div>
 		<div class="index-box absolute left" style="top:140px;">
-			<router-link :to="{name: 'm-obj'}">
+			<router-link :to="{name: 'm-obj',query: {userid: muser_id}}">
 				 <div class="index-col">
 				 	<div class="main-box" style="width:100%">
 				 		<div class="main-word">
@@ -26,7 +26,7 @@
 				 	<div class="main-box" style="width:120px;float:left">
 				 		<div class="main-word">
 				 			<span class="f3">项目发标</span><br>
-				 			<span style="line-height:30px;">评分:{{filterScore(score.AnalysisScore)}}</span>
+				 			<span style="line-height:30px;">评分:{{filterScore(score.PeerDesignScore)}}</span>
 				 		</div>
 				 	</div>
 			 	</router-link>
@@ -34,7 +34,7 @@
 				 	<div class="main-box" style="width:120px;float:left;margin-left:20px;">
 				 		<div class="main-word">
 				 			<span class="f3">审标操作</span><br>
-				 			<span style="line-height:30px;">评分:{{filterScore()}}</span>
+				 			<span style="line-height:30px;">评分:{{filterScore(score.PeerVerifyScore)}}</span>
 				 		</div>
 				 	</div>
 			 	</router-link>
@@ -42,7 +42,7 @@
 				 	<div class="main-box" style="width:120px;float:left;margin-left:20px;">
 				 		<div class="main-word">
 				 			<span class="f3">投标操作</span><br>
-				 			<span style="line-height:30px;">评分:{{filterScore()}}</span>
+				 			<span style="line-height:30px;">评分:{{filterScore(score.PeerInvestScore)}}</span>
 				 		</div>
 				 	</div>
 			 	</router-link>
@@ -55,7 +55,7 @@
 				 	<div class="main-box" style="width:190px;float:left;">
 				 		<div class="main-word">
 				 			<span class="f3">公益设计</span><br>
-				 			<span style="line-height:30px;">评分:{{filterScore()}}</span>
+				 			<span style="line-height:30px;">评分:{{filterScore(score.CrowdfundingcScore)}}</span>
 				 		</div>
 				 	</div>
 			 	</router-link>
@@ -63,7 +63,7 @@
 				 	<div class="main-box" style="width:190px;float:left;margin-left:20px;">
 				 		<div class="main-word">
 				 			<span class="f3">项目设计</span><br>
-				 			<span style="line-height:30px;">评分:{{filterScore()}}</span>
+				 			<span style="line-height:30px;">评分:{{filterScore(score.CrowdfundingsDesignScore)}}</span>
 				 		</div>
 				 	</div>
 			 	</router-link>
@@ -76,7 +76,7 @@
 		  		 	<div class="main-box" style="width:190px;float:left">
 		  		 		<div class="main-word">
 		  		 			<span class="f3">案例分析</span><br>
-		  		 			<span style="line-height:30px;">评分:{{filterScore()}}</span>
+		  		 			<span style="line-height:30px;">评分:{{filterScore(score.AnalysisScore)}}</span>
 		  		 		</div>
 		  		 	</div>
 		  	 	</router-link>
@@ -84,7 +84,7 @@
 		  	 		 	<div class="main-box" style="width:190px;float:left;margin-left:20px;">
 		  	 		 		<div class="main-word">
 		  	 		 			<span class="f3">创业新天地</span><br>
-		  	 		 			<span style="line-height:30px;">评分:{{filterScore()}}</span>
+		  	 		 			<span style="line-height:30px;">评分:{{filterScore(score.FieldScore)}}</span>
 		  	 		 		</div>
 		  	 		 	</div>
 		  	 	 	</router-link>
@@ -106,6 +106,7 @@
 				account:'',
 				school_name:'',
 				totalscore:'',
+				muser_id:'',
 				score:{
 
 				}
@@ -131,6 +132,7 @@
 				self.account = res.account
 				self.school_name = res.school_name
 				self.totalscore = res.totalscore
+				self.muser_id = res.muser_id
 			}),
 			Score().then((res)=>{
 				console.dir(res)

@@ -10,8 +10,8 @@ export const VerifyLists = factory('/index/VerifyLists')
 // p2p 项目发标
 //p2p设计题目列表
 export const Lists = factory('/index/Lists')
-
-
+//公益设计列表
+export const CrowdfundingcInfo = factory('/peer/CrowdfundingcInfo')
 //案例分析页
 export const AnalysisLists = factory('/index/AnalysisLists')
 //比赛团队个人得分页

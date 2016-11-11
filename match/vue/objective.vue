@@ -41,9 +41,8 @@
 									:name="'sin'+ indexOutter +'_ans'" 
 									:id="'sin'+ indexOutter +'_an' + index"
 									:value="option.value"
-									@click="answer(option.value, 'single_choices', indexOutter)"
+									@click="changeAnswer(option.value, 'single_choices', indexOutter)"
 									:checked="option.value == single_choice.answer"
-									:disabled="isfinish==2"
 								>
 								<label 
 									:for="'sin'+ indexOutter + '_an' + index">
@@ -62,9 +61,8 @@
 									:name="'mul'+ indexOutter +'_ans'" 
 									:id="'mul'+ indexOutter +'_an' + index"
 									:value="option.value"
-									@change="answer(option.value, 'multi_choices', indexOutter)"
-									:checked="multi_choice.answer.indexOf(option.value) > -1"
-									:disabled="isfinish==2"
+									@change="changeAnswer(option.value, 'multi_choices', indexOutter)"
+									:checked="multi_choice.answer==null?false:multi_choice.answer.indexOf(option.value) > -1"
 								>
 								<label 
 									:for="'mul'+ indexOutter + '_an' + index">
@@ -83,14 +81,13 @@
 									:name="'jud'+ indexOutter +'_ans'" 
 									:id="'jud'+ indexOutter +'_an' + index"
 									:value="judg_.value"
-									@click="answer(judg_.value, 'judgments', indexOutter)"
+									@click="changeAnswer(judg_.value, 'judgments', indexOutter)"
 									:checked="judg_.value==judgment.answer"
-									:disabled="isfinish==2"
 								>
 								<label 
 									:for="'jud'+ indexOutter + '_an' + index">
 									&nbsp;&nbsp;{{judg_.value}}.{{judg_.name}}
-								</label>	
+								</label>
 							</div>		
 						</div>
 					</div>
@@ -124,8 +121,9 @@
 	import {ObjectInfo} from '~/ajax/get.js'
 	import {ObjectAnswer} from '~/ajax/post.js'
 	import {filterTime} from '~/utils.js'
+	import {getUniqueId, genLsId} from '~/utils.js'
 	import store from '~/vuex'
-
+	var ls = require('localStorage')
 	export default {
 		data(){
 			return {
@@ -137,23 +135,46 @@
 				total_answer:[],
 				totalTime:1800000,
 				remainTime: '',
-				isfinish:''
+				isfinish:'',
+				judgments: [],
+				multi_choices:[],
+				single_choices:[]
 			}
 		},
-		computed: {
-			judgments(){
-				return store.state.objQuestion.judgments
+		watch: {
+			judgments: {
+				deep: true,
+				handler: function(val, oldVal){
+					ls.setItem(genLsId(this.$route.query.userid, 'judgments'), JSON.stringify(val))
+				}
 			},
-			multi_choices(){
-				return store.state.objQuestion.multi_choices
+			multi_choices: {
+				deep: true,
+				handler: function(val, oldVal){
+					ls.setItem(genLsId(this.$route.query.userid, 'multi_choices'), JSON.stringify(val))
+				}
 			},
-			short_answers(){
-				return store.state.objQuestion.short_answers
-			},
-			single_choices(){
-				return store.state.objQuestion.single_choices
+			single_choices: {
+				deep: true,
+				handler: function(val, oldVal){
+					ls.setItem(genLsId(this.$route.query.userid, 'single_choices'), JSON.stringify(val))
+				}
 			}
 		},
+		// computed: {
+		// 	judgments(){
+		// 		return store.state.objQuestion.judgments
+		// 	},
+		// 	multi_choices(){
+		// 		return store.state.objQuestion.multi_choices
+		// 	},
+		// 	short_answers(){
+		// 		return store.state.objQuestion.short_answers
+		// 	},
+		// 	single_choices(){
+		// 		return store.state.objQuestion.single_choices
+		// 	}
+		// },
 		components: {
 			'modal': Modal
 		},
@@ -178,15 +199,40 @@
 				})
 				
 			},
-			answer(value, type, index){
+			// answer(value, type, index){
+			// 	var self = this
+			// 	// if (self.isfinish==1) {
+			// 		store.commit('changeAnswer', {
+			// 			value,
+			// 			type,
+			// 			index
+			// 		})
+			// 	// };
+			// },
+			changeAnswer(value, type, index) {
 				var self = this
-				// if (self.isfinish==1) {
-					store.commit('changeAnswer', {
-						value,
-						type,
-						index
+				if (type==="multi_choices") {
+					var ans
+					if (self[type][index].answer) {
+						 ans = self[type][index].answer.split("")
+					}
+					else{
+						ans = [""]
+					}
+					var ret = {}
+					ans.forEach((item) => {
+						ret[item] = true
 					})
-				// };
+					if (ret[value]) {
+						delete ret[value]
+					} else {
+						ret[value] = true
+					}
+					value = Object.keys(ret).sort((charA, charB) => {
+						return charA > charB ? 1: -1
+					}).join("")
+				}
+				self[type][index].answer = value
 			},
 			poptest(){
 				var self = this
@@ -256,92 +302,108 @@
 		},
 		mounted:function(){
 			var self = this
-			store.dispatch('getObjectiveQuestion')
-			store.commit('timeChange')
-			setInterval(()=>{
-				self.remainTime =  self.totalTime - Date.now() + store.state.objQuestion.time
-				if (self.remainTime<0) {
-					return
-				}
-			}, 1000)
-			ObjectInfo({
+			var judgments = ls.getItem(genLsId(this.$route.query.userid, 'judgments'))
+			var multi_choices = ls.getItem(genLsId(this.$route.query.userid, 'multi_choices'))
+			var single_choices = ls.getItem(genLsId(this.$route.query.userid, 'single_choices'))
 
-			}).then((res) => {
-				self.isfinish = res.isfinished
-			})
-			// setInterval(function(){
-			// 	var hour = parseInt(self.intime/3600)
-			// 	var min = parseInt((self.intime - hour * 3600)/60)
-			// 	var sec = parseInt(self.intime - hour * 3600 - min * 60)
-			// 	self.time = min + '分' + sec + '秒'
-			// 	self.intime -=1
-			// 	if (self.time==0) {
-			// 		return
-			// 	}
-			// },1000)
+			if (judgments&&multi_choices&&single_choices) {
+				self.judgments = JSON.parse(judgments)
+				self.multi_choices = JSON.parse(multi_choices)
+				self.single_choices = JSON.parse(single_choices)
+				ObjectInfo({
+
+				}).then((res) => {
+					self.isfinish = res.isfinished
+					if (res.isfinished==2) {
+						self.judgments = res.questioninfo.judgment.children
+						self.multi_choices = res.questioninfo.multi_choice.children
+						self.single_choices = res.questioninfo.single_choice.children
+					};
+				})
+			} else {
+				ObjectInfo({
+
+				}).then((res) => {
+					self.isfinish = res.isfinished
+					if (res.isfinished==1) {
+						self.judgments = res.questioninfo.judgment.children
+						self.multi_choices = res.questioninfo.multi_choice.children
+						self.single_choices = res.questioninfo.single_choice.children
+						ls.setItem(genLsId(this.$route.query.userid, 'judgments'), JSON.stringify(self.judgments))
+						ls.setItem(genLsId(this.$route.query.userid, 'multi_choices'), JSON.stringify(self.multi_choices))
+						ls.setItem(genLsId(this.$route.query.userid, 'single_choices'), JSON.stringify(self.single_choices))
+					}
+					else{
+						self.judgments = res.questioninfo.judgment.children
+						self.multi_choices = res.questioninfo.multi_choice.children
+						self.single_choices = res.questioninfo.single_choice.children
+					}
+					
+				})	
+			}
 		},
 	}
 </script>
 <style lang="less">
-.obj{
-	width: 1200px;
-	margin: 30px auto;
-	//dding: 30px 40px;
-	.obj-table{
-		// width: 100%;
-		border-top: 1px solid #4198f9;
-		border-left: 1px solid #4198f9;
-		font-size: 0px;
-		.item{
-			font-size: 20px;
-			cursor: pointer;
-			display: inline-block;
-			width: 5%;
-			height: 40px;
-			text-align: center;
-			line-height: 40px;
-			border-right: 1px solid #4198f9;
-			border-bottom: 1px solid #4198f9;
-		}
-	}
-	.obj-box{
-		border: 1px solid #ccc;
-		border-top:none; 
-		width: 100%;
-		.title{
-			padding-left: 20px;
-			width: 100%;
-			height: 40px;
-			background-color: #f8f9fe;
-			line-height: 40px;
-		}
-		.ques{
-			min-height: 260px;
-			.begin{
-				top: 60px;
+	.obj{
+		width: 1200px;
+		margin: 30px auto;
+		//dding: 30px 40px;
+		.obj-table{
+			// width: 100%;
+			border-top: 1px solid #4198f9;
+			border-left: 1px solid #4198f9;
+			font-size: 0px;
+			.item{
+				font-size: 20px;
 				cursor: pointer;
-				margin: 0px auto;
-				background:#f3f4f5;
-				border:1px solid #ccc;
-				border-radius:6px;
-				width:240px;
-				height:100px;
-				line-height: 100px;
+				display: inline-block;
+				width: 5%;
+				height: 40px;
 				text-align: center;
+				line-height: 40px;
+				border-right: 1px solid #4198f9;
+				border-bottom: 1px solid #4198f9;
 			}
-			.content{
-				padding: 20px;
-				.answer{
-					margin-top: 30px;
-					padding-left: 20px;
-					div{
-						> * {
-							vertical-align: middle;
-						}
-					}	
+		}
+		.obj-box{
+			border: 1px solid #ccc;
+			border-top:none; 
+			width: 100%;
+			.title{
+				padding-left: 20px;
+				width: 100%;
+				height: 40px;
+				background-color: #f8f9fe;
+				line-height: 40px;
+			}
+			.ques{
+				min-height: 260px;
+				.begin{
+					top: 60px;
+					cursor: pointer;
+					margin: 0px auto;
+					background:#f3f4f5;
+					border:1px solid #ccc;
+					border-radius:6px;
+					width:240px;
+					height:100px;
+					line-height: 100px;
+					text-align: center;
+				}
+				.content{
+					padding: 20px;
+					.answer{
+						margin-top: 30px;
+						padding-left: 20px;
+						div{
+							> * {
+								vertical-align: middle;
+							}
+						}	
+					}
 				}
 			}
 		}
 	}
-}
 </style>
