@@ -54,20 +54,8 @@
 					//}
 				}, (e) => {
 					console.dir(e)
+					alert(e.message)
 				})
-				// fetch('http://jr.xiyoukeji.com/index.php/match/log/Login', {
-				// 	method: 'POST',
-		
-				// 	body: JSON.stringify({
-				// 	    account: self.cardnum,
-				// 	    password:self.password
-				// 	})
-				// }).then(function(response){
-				// 	return response.json()
-				// }).then((res)=>{
-				// 	console.log(res)
-				// 	router.push({name:'m-index'})
-				// })
 			}
 		},
 		beforeRouteEnter(to, from, next){
