@@ -26,3 +26,5 @@ export const InvestLists = factory('/index/InvestLists')
 export const InvestInfo = factory('/index/InvestInfo')
 //P2P投标项目的关联题目页
 export const InvestQuestionList = factory('/index/InvestQuestionList')
+//获得答题时间
+export const AnswerTime = factory('/index/AnswerTime')

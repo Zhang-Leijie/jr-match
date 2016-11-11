@@ -4,7 +4,7 @@
 			<ol class="breadcrumb">
 				<li class="item">客观考察</li>
 			</ol>
-			<p class="remain-time">剩余时间：<span>{{remainTime | filterTime}}</span></p>
+			<p class="remain-time">剩余时间：<span v-if="show==1">{{remainTime | filterTime}}</span><span v-else>结束</span></p>
 		</div>
 		<div class='obj relative'>
 			<a class="btn blue" style="margin-right:20px;margin-bottom:20px;" @click="ques(1,'单项选择')">单项选择</a> 
@@ -112,13 +112,20 @@
 				<a class="btn blue" @click="sure" style="margin-left:30px;">确认</a>
 			</p>
 		</modal>
+		<modal v-if="showsecModal">
+			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">确认开始答题?</p>
+			<p slot="footer" style="text-align:center;">
+				<a class="btn white" @click="returnBack">返回</a>
+				<a class="btn blue" @click="sureTime" style="margin-left:30px;">确认</a>
+			</p>
+		</modal>
 	</div>
 </template>
 <script type="text/javascript">
 
 	import Modal from '~/components/modal.vue'
 	import router from '~/router.js'
-	import {ObjectInfo} from '~/ajax/get.js'
+	import {ObjectInfo,AnswerTime} from '~/ajax/get.js'
 	import {ObjectAnswer} from '~/ajax/post.js'
 	import {filterTime} from '~/utils.js'
 	import {getUniqueId, genLsId} from '~/utils.js'
@@ -127,6 +134,9 @@
 	export default {
 		data(){
 			return {
+				show:1,
+				starttime:'',
+				showsecModal:'',
 				showModal:false,
 				begin:true,
 				type: 1,
@@ -159,26 +169,40 @@
 				handler: function(val, oldVal){
 					ls.setItem(genLsId(this.$route.query.userid, 'single_choices'), JSON.stringify(val))
 				}
-			}
+			},
 		},
-		// computed: {
-		// 	judgments(){
-		// 		return store.state.objQuestion.judgments
-		// 	},
-		// 	multi_choices(){
-		// 		return store.state.objQuestion.multi_choices
-		// 	},
-		// 	short_answers(){
-		// 		return store.state.objQuestion.short_answers
-		// 	},
-		// 	single_choices(){
-		// 		return store.state.objQuestion.single_choices
-		// 	}
-		// },
 		components: {
 			'modal': Modal
 		},
 		methods: {
+			returnBack(){
+				var self = this
+				ls.clear()
+				router.push({name:'m-index'})
+			},
+			sureTime(){
+				var self = this
+				AnswerTime({
+					type:1,
+					in_time: Date.now()
+				}).then((res)=>{
+					self.starttime = res.in_time
+					self.showsecModal = false
+					var timeid = setInterval(()=>{
+						if ((self.totalTime - Date.now() + (self.starttime-0))>0) {
+							self.remainTime =  self.totalTime - Date.now() + (self.starttime-0)
+						}
+						else{
+							show=2
+							self.remainTime = 0
+							self.poptest()
+							clearInterval(timeid)
+						}
+					}, 1000)
+				}, (e) => {
+					console.dir(e)
+				})
+			},
 			getAnswer(judgments){
 				
 				return judgments.map((judgment) => {
@@ -199,16 +223,6 @@
 				})
 				
 			},
-			// answer(value, type, index){
-			// 	var self = this
-			// 	// if (self.isfinish==1) {
-			// 		store.commit('changeAnswer', {
-			// 			value,
-			// 			type,
-			// 			index
-			// 		})
-			// 	// };
-			// },
 			changeAnswer(value, type, index) {
 				var self = this
 				if (type==="multi_choices") {
@@ -251,6 +265,7 @@
 				ObjectAnswer({
 					answer:self.total_answer
 				}).then(()=>{
+					self.total_answer =[]
 					router.push({name:'m-objpoint'})
 				}, (e) => {
 					console.dir(e)
@@ -305,6 +320,7 @@
 			var judgments = ls.getItem(genLsId(this.$route.query.userid, 'judgments'))
 			var multi_choices = ls.getItem(genLsId(this.$route.query.userid, 'multi_choices'))
 			var single_choices = ls.getItem(genLsId(this.$route.query.userid, 'single_choices'))
+			var showsecModal = ls.getItem(genLsId(this.$route.query.userid, 'showsecModal'))
 
 			if (judgments&&multi_choices&&single_choices) {
 				self.judgments = JSON.parse(judgments)
@@ -318,9 +334,13 @@
 						self.judgments = res.questioninfo.judgment.children
 						self.multi_choices = res.questioninfo.multi_choice.children
 						self.single_choices = res.questioninfo.single_choice.children
+						self.showsecModal = false
+						self.show = 2
 					};
+					self.sureTime()
 				})
 			} else {
+				self.showsecModal = true
 				ObjectInfo({
 
 				}).then((res) => {
@@ -331,14 +351,15 @@
 						self.single_choices = res.questioninfo.single_choice.children
 						ls.setItem(genLsId(this.$route.query.userid, 'judgments'), JSON.stringify(self.judgments))
 						ls.setItem(genLsId(this.$route.query.userid, 'multi_choices'), JSON.stringify(self.multi_choices))
-						ls.setItem(genLsId(this.$route.query.userid, 'single_choices'), JSON.stringify(self.single_choices))
+						ls.setItem(genLsId(this.$route.query.userid, 'single_choices'), JSON.stringify(self.single_choices))	
 					}
 					else{
+						self.sureTime()
 						self.judgments = res.questioninfo.judgment.children
 						self.multi_choices = res.questioninfo.multi_choice.children
 						self.single_choices = res.questioninfo.single_choice.children
-					}
-					
+						self.show = 2
+					}	
 				})	
 			}
 		},
