@@ -113,9 +113,10 @@
 			</p>
 		</modal>
 		<modal v-if="showsecModal">
-			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">确认开始答题?</p>
+			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">是否开始答题?</p>
+			<p slot="body" class='f6' style="text-align:center;">考试时间为30分钟, 到时不可再提交申请</p>
 			<p slot="footer" style="text-align:center;">
-				<a class="btn white" @click="returnBack">返回</a>
+				<router-link class="btn white" :to="{name: 'm-index'}">返回</router-link>
 				<a class="btn blue" @click="sureTime" style="margin-left:30px;">确认</a>
 			</p>
 		</modal>
@@ -175,9 +176,52 @@
 			'modal': Modal
 		},
 		methods: {
+			getItem(){
+				var self = this
+				var judgments = ls.getItem(genLsId(this.$route.query.userid, 'judgments'))
+				var multi_choices = ls.getItem(genLsId(this.$route.query.userid, 'multi_choices'))
+				var single_choices = ls.getItem(genLsId(this.$route.query.userid, 'single_choices'))
+				var showsecModal = ls.getItem(genLsId(this.$route.query.userid, 'showsecModal'))
+				if (judgments&&multi_choices&&single_choices) {
+					self.judgments = JSON.parse(judgments)
+					self.multi_choices = JSON.parse(multi_choices)
+					self.single_choices = JSON.parse(single_choices)
+					ObjectInfo({
+
+					}).then((res) => {
+						self.isfinish = res.isfinished
+						if (res.isfinished==2) {
+							self.judgments = res.questioninfo.judgment.children
+							self.multi_choices = res.questioninfo.multi_choice.children
+							self.single_choices = res.questioninfo.single_choice.children
+							self.show = 2
+						};
+					})
+				} else {
+					ObjectInfo({
+
+					}).then((res) => {
+						self.isfinish = res.isfinished
+						if (res.isfinished==1) {
+							self.judgments = res.questioninfo.judgment.children
+							self.multi_choices = res.questioninfo.multi_choice.children
+							self.single_choices = res.questioninfo.single_choice.children
+							ls.setItem(genLsId(this.$route.query.userid, 'judgments'), JSON.stringify(self.judgments))
+							ls.setItem(genLsId(this.$route.query.userid, 'multi_choices'), JSON.stringify(self.multi_choices))
+							ls.setItem(genLsId(this.$route.query.userid, 'single_choices'), JSON.stringify(self.single_choices))	
+						}
+						else{
+							self.sureTime()
+							self.judgments = res.questioninfo.judgment.children
+							self.multi_choices = res.questioninfo.multi_choice.children
+							self.single_choices = res.questioninfo.single_choice.children
+							self.show = 2
+						}	
+					})	
+				}
+			},
 			returnBack(){
 				var self = this
-				ls.clear()
 				router.push({name:'m-index'})
 			},
 			sureTime(){
@@ -193,7 +237,7 @@
 							self.remainTime =  self.totalTime - Date.now() + (self.starttime-0)
 						}
 						else{
-							show=2
+							self.show=2
 							self.remainTime = 0
 							self.poptest()
 							clearInterval(timeid)
@@ -317,51 +361,22 @@
 		},
 		mounted:function(){
 			var self = this
-			var judgments = ls.getItem(genLsId(this.$route.query.userid, 'judgments'))
-			var multi_choices = ls.getItem(genLsId(this.$route.query.userid, 'multi_choices'))
-			var single_choices = ls.getItem(genLsId(this.$route.query.userid, 'single_choices'))
-			var showsecModal = ls.getItem(genLsId(this.$route.query.userid, 'showsecModal'))
-
-			if (judgments&&multi_choices&&single_choices) {
-				self.judgments = JSON.parse(judgments)
-				self.multi_choices = JSON.parse(multi_choices)
-				self.single_choices = JSON.parse(single_choices)
-				ObjectInfo({
-
-				}).then((res) => {
-					self.isfinish = res.isfinished
-					if (res.isfinished==2) {
-						self.judgments = res.questioninfo.judgment.children
-						self.multi_choices = res.questioninfo.multi_choice.children
-						self.single_choices = res.questioninfo.single_choice.children
-						self.showsecModal = false
-						self.show = 2
-					};
+			AnswerTime({
+					type:1,
+			}).then((res)=>{
+				if (res.in_time=='') {
+					self.showsecModal=true
+					self.getItem()
+				}
+				else{
+					self.showsecModal=false
+					self.getItem()
 					self.sureTime()
-				})
-			} else {
-				self.showsecModal = true
-				ObjectInfo({
-
-				}).then((res) => {
-					self.isfinish = res.isfinished
-					if (res.isfinished==1) {
-						self.judgments = res.questioninfo.judgment.children
-						self.multi_choices = res.questioninfo.multi_choice.children
-						self.single_choices = res.questioninfo.single_choice.children
-						ls.setItem(genLsId(this.$route.query.userid, 'judgments'), JSON.stringify(self.judgments))
-						ls.setItem(genLsId(this.$route.query.userid, 'multi_choices'), JSON.stringify(self.multi_choices))
-						ls.setItem(genLsId(this.$route.query.userid, 'single_choices'), JSON.stringify(self.single_choices))	
-					}
-					else{
-						self.sureTime()
-						self.judgments = res.questioninfo.judgment.children
-						self.multi_choices = res.questioninfo.multi_choice.children
-						self.single_choices = res.questioninfo.single_choice.children
-						self.show = 2
-					}	
-				})	
-			}
+				}
+			}, (e) => {
+				console.dir(e)
+			})
+			
 		},
 	}
 </script>
