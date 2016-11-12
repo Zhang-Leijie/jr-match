@@ -22,7 +22,7 @@
 			 	<div class="index-title absolute f4" style="right:440px;top:40px;">
 			 		P2P
 			 	</div>
-			 	<router-link :to="{name: 'm-p2praise'}">
+			 	<router-link :to="{name: 'm-p2praise', query: {userid:10000003}}">
 				 	<div class="main-box" style="width:120px;float:left">
 				 		<div class="main-word">
 				 			<span class="f3">项目发标</span><br>

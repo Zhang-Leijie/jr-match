@@ -1,12 +1,6 @@
 <template>
 	<div>
-		<div class="header-bar">
-			<ol class="breadcrumb">
-				<li class="item">P2P</li>
-				<li class="item">发标操作</li>
-			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
-		</div>
+		<time-remain type="p2pRaise" @time-set="getData" @time-out="whenTimeout"></time-remain>
 		<div class="form-page">
 			<div>
 				<div class="form-title">
@@ -72,7 +66,7 @@
 				<div class="form-input">
 					<span class="name">借款金额：</span>
 					<input-text prop="money" :init="params.money" placeholder="20万以内" @text-result-change="changeStringProp"></input-text>
-					<span>万元</span>
+					<span>元</span>
 				</div>
 				<div class="form-input">
 					<span class="name">大写：</span>
@@ -200,7 +194,8 @@
 				isSuccess: false,
 				state: "",
 				error: "",
-				params: params
+				params: params,
+				showEnd: false
 			}
 		},
 		watch: {
@@ -240,6 +235,53 @@
 			}
 		},
 		methods: {
+			whenTimeout(){
+				alert('考试时间已到, 未完成结果不会为您提交')
+				router.push({name:'m-index'}) 
+			},
+			getData(){
+				var id = this.$route.query.id
+				var userid = this.$route.query.userid
+
+				this.id = id
+				this.userid = userid
+
+				var self = this
+				var calTable = throttle(function([rate, money, loan_time, repay_type_id]){
+					//console.log(`--- rate: ${rate},money: ${money},loan_time: ${loan_time}, repay_type_id: ${repay_type_id} ---`)
+					var rate = parseFloat(rate).toFixed(3)
+					if (Number.isNaN(rate)) return 
+					var money = parseInt(money).toFixed()
+					if (Number.isNaN(money)) return
+					var loan_time = parseInt(loan_time)
+					if (Number.isNaN(loan_time)) return 
+
+					if (repay_type_id == "") {
+						return
+					}
+
+					self.calculate(rate, money, loan_time, repay_type_id)
+				}, 2000)
+
+				this.$nextTick(() => {
+					this.$watch(() => {
+						return [
+							this.params.rate, 
+							this.params.money, 
+							this.params.loan_time, 
+							this.params.repay_type_id
+						]
+					}, function(val){
+						calTable(val)
+					})
+					calTable([
+						this.params.rate, 
+						this.params.money, 
+						this.params.loan_time, 
+						this.params.repay_type_id
+					])	
+				})
+			},	
 			openModal(){
 				this.state = ""
 				this.uploading = false
@@ -341,49 +383,6 @@
 			'input-textarea': inputTextarea,
 			'input-image': inputImage,
 			'modal': Modal
-		},
-		mounted(){
-			var id = this.$route.query.id
-			var userid = this.$route.query.userid
-
-			this.id = id
-			this.userid = userid
-
-			var self = this
-			var calTable = throttle(function([rate, money, loan_time, repay_type_id]){
-				//console.log(`--- rate: ${rate},money: ${money},loan_time: ${loan_time}, repay_type_id: ${repay_type_id} ---`)
-				var rate = parseFloat(rate).toFixed(3)
-				if (Number.isNaN(rate)) return 
-				var money = parseInt(money).toFixed()
-				if (Number.isNaN(money)) return
-				var loan_time = parseInt(loan_time)
-				if (Number.isNaN(loan_time)) return 
-
-				if (repay_type_id == "") {
-					return
-				}
-
-				self.calculate(rate, money, loan_time, repay_type_id)
-			}, 2000)
-
-			this.$nextTick(() => {
-				this.$watch(() => {
-					return [
-						this.params.rate, 
-						this.params.money, 
-						this.params.loan_time, 
-						this.params.repay_type_id
-					]
-				}, function(val){
-					calTable(val)
-				})
-				calTable([
-					this.params.rate, 
-					this.params.money, 
-					this.params.loan_time, 
-					this.params.repay_type_id
-				])	
-			})
 		},
 		filters: {
 			transferMoney(val){

@@ -1,12 +1,6 @@
 <template>
 	<div class="background-image">
-		<div class="header-bar">
-			<ol class="breadcrumb">
-				<li class="item">众筹</li>
-				<li class="item">项目设计</li>
-			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
-		</div>
+		<time-remain type="cfRaise" @time-set="getData"></time-remain>
 		<div class="white-board">
 			<div class="paragraph">
 				<h1 class="title-with-border">背景描述</h1>
@@ -40,15 +34,17 @@
 				}
 			}
 		},
-		mounted(){
-			this.id = this.$route.query.id 
+		methods: {
+			getData(){
+				this.id = this.$route.query.id 
 
-			getCrowdFundingRaiseInfo(this.id).then((res) => {
-				this.info.background = unescapeHTML(res.background)
-				this.info.detail = unescapeHTML(res.detail)
-				this.info.id = res.id
-				this.info.userid = res.muser_id
-			})
+				getCrowdFundingRaiseInfo(this.id).then((res) => {
+					this.info.background = unescapeHTML(res.background)
+					this.info.detail = unescapeHTML(res.detail)
+					this.info.id = res.id
+					this.info.userid = res.muser_id
+				})
+			}
 		}
 	}
 </script>

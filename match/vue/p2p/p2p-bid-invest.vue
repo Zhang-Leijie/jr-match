@@ -1,12 +1,7 @@
 <template>
 	<div>
-		<div class="header-bar">
-			<ol class="breadcrumb">
-				<li class="item">P2P</li>
-				<li class="item">投标操作</li>
-			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
-		</div>
+		<time-remain type="p2pBid" @time-set="getData"></time-remain>
+
 		<div class="p2p-invest-page">
 			<div class="invest-input">
 				<label for="">投资金额：</label>
@@ -60,6 +55,28 @@
 			}
 		},
 		methods:{
+			getData(){
+				var self = this
+				InvestQuestionList({
+					id:self.$route.params.id,
+				}).then((res) => {
+					var a = res.map((item)=>{
+						item.answer = ""
+						var judgment = item
+						item.options = ['a', 'b','c', 'd'].reduce((ret, item) => {
+							if (judgment[item] != "") {
+								ret.push({
+									name: judgment[item],
+									value: item.toUpperCase()
+								})
+							}
+							return ret 
+						}, [])
+						return item
+					})
+					self.lists = a
+				})
+			},
 			close(){
 				var self = this
 				if (!self.pay) {
@@ -101,28 +118,6 @@
 		},
 		components: {
 			'modal': Modal
-		},
-		mounted:function(){
-			var self = this
-			InvestQuestionList({
-				id:self.$route.params.id,
-			}).then((res) => {
-				var a = res.map((item)=>{
-					item.answer = ""
-					var judgment = item
-					item.options = ['a', 'b','c', 'd'].reduce((ret, item) => {
-						if (judgment[item] != "") {
-							ret.push({
-								name: judgment[item],
-								value: item.toUpperCase()
-							})
-						}
-						return ret 
-					}, [])
-					return item
-				})
-				self.lists = a
-			})
 		}
 	}
 </script>

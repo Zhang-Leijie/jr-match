@@ -5,7 +5,6 @@
 				<li class="item">P2P</li>
 				<li class="item">审标操作</li>
 			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
 		<div style="width:1200px;margin:0px auto 20px;">
 			<router-link  :to="{name:'m-index'}" class="btn-back" style="color:#fff">

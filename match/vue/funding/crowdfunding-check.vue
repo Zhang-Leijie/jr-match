@@ -5,7 +5,6 @@
 				<li class="item">众筹</li>
 				<li class="item">项目设计</li>
 			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
 		<div class="form-page" v-if="params.id!==''">
 			<div>

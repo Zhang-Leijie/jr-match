@@ -1,12 +1,6 @@
 <template>
 	<div>
-		<div class="header-bar">
-			<ol class="breadcrumb">
-				<li class="item">众筹</li>
-				<li class="item">项目设计</li>
-			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
-		</div>
+		<time-remain type="cfRaise"></time-remain>
 		<div class="form-page">
 			<div>
 				<div class="form-title">
@@ -407,10 +401,6 @@
 			complete(){
 				router.push({name: 'm-cfitem-detail'})
 			}
-		},
-		mounted(){
-			this.id = store.state.route.query.id
-			store.commit('makeCFPlaceholder', {id: this.id})
 		},
 		components: {
 			'input-select': inputSelect,

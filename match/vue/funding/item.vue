@@ -1,12 +1,6 @@
 <template>
 	<div>
-		<div class="header-bar">
-			<ol class="breadcrumb">
-				<li class="item">众筹</li>
-				<li class="item">项目设计</li>
-			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
-		</div>
+		<time-remain type="cfRaise" :canset="true" @time-set="getData"></time-remain>
 		<div class="crowdfunding-design">
 			<table class="high-table">
 				<thead>
@@ -45,12 +39,14 @@
 				cfList: []
 			}
 		},
-		mounted(){
-			Lists({
-				type: 2
-			}).then((res) => {
-				this.cfList = res
-			})
+		methods: {
+			getData(){
+				Lists({
+					type: 2
+				}).then((res) => {
+					this.cfList = res
+				})
+			}
 		}
 	}
 </script>

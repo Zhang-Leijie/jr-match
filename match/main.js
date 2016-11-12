@@ -6,9 +6,12 @@ import Vue from 'vue/dist/vue.js'
 import router from './router.js'
 import store from './vuex'
 
-import VueAlert from '~/plugins/alert.js'
+import timeRemain from '~/components/time-remain.vue'
+import Modal from '~/components/modal.vue'
 
-Vue.use(VueAlert)
+Vue.component('time-remain', timeRemain)
+Vue.component('modal', Modal)
+
 
 import { sync } from 'vuex-router-sync'
 sync(store, router)

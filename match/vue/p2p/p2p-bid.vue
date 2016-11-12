@@ -1,12 +1,7 @@
 <template>
 	<div>
-		<div class="header-bar">
-			<ol class="breadcrumb">
-				<li class="item">P2P</li>
-				<li class="item">投标操作</li>
-			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
-		</div>
+		<time-remain type="p2pBid" :canset="true" @time-set="getData" @time-out="timeout=true"></time-remain>
+		
 		<div class="p2p-page">
 			<router-link :to="{name: 'm-index'}" class="btn-back blue">返回</router-link>
 			<div class="filter-box">
@@ -91,7 +86,7 @@
 					</div>
 					<div class="p2p-item">
 						<div class="p2p-inline-item" v-if="investLint.investment==null">
-							<router-link class="btn blue" style="min-width:135px;" :to="{name: 'm-p2pbid-detail',params:{id:investLint.id}}">我要投资</router-link>
+							<a @click="wantToBid" class="btn blue" style="min-width:135px;">我要投资</a>
 						</div>
 						<div class="p2p-inline-item" v-if="investLint.investment!=null">
 							<router-link class="btn blue" style="min-width:135px;" :to="{name: 'm-p2pbid-detail',params:{id:investLint.id}}">投资金额：{{investLint.investment | changenum}}万</router-link>
@@ -113,7 +108,8 @@
 				investLints:[],
 				typeFilter: "1",
 				payFilter:'4',
-				monthFilter:'0'
+				monthFilter:'0',
+				timeout: false
 			}
 		},
 		computed: {
@@ -140,20 +136,29 @@
 				})
 			}
 		},
+		methods: {
+			wantToBid(){
+				if (this.timeout) {
+					alert('该模块考试已结束')
+				} else {
+					router.push({name: 'm-p2pbid-detail',params:{id:investLint.id}})
+				}
+			},
+			getData(){
+				var self = this
+				InvestLists({
+
+				}).then((res) => {
+					self.investLints = res.list
+					self.amount = res.rest_money
+				})
+			}
+		},
 		filters:{
 			changenum(num){
 				console.log(num)
 				return num = parseInt(num)/10000
 			}
-		},
-		mounted:function(){
-			var self = this
-			InvestLists({
-
-			}).then((res) => {
-				self.investLints = res.list
-				self.amount = res.rest_money
-			})
 		}
 	}
 </script>

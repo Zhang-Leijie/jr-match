@@ -1,12 +1,6 @@
 <template>
 	<div class="background-image">
-		<div class="header-bar">
-			<ol class="breadcrumb">
-				<li class="item">P2P</li>
-				<li class="item">项目发标</li>
-			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
-		</div>
+		<time-remain type="p2pRaise" @time-set="getData"></time-remain>
 		<div class="white-board">
 			<div class="paragraph">
 				<h1 class="title-with-border">背景描述</h1>
@@ -39,13 +33,15 @@
 					muser_id: ""
 				}
 			}
-		},	
-		mounted() {
-			getP2PRaiseInfo(this.$route.query.id).then((listInfo) => {
-				this.listInfo.background = listInfo.background
-				this.listInfo.detail = listInfo.detail
-				this.listInfo.muser_id = listInfo.muser_id
-			})
+		},
+		methods: {
+			getData(){
+				getP2PRaiseInfo(this.$route.query.id).then((listInfo) => {
+					this.listInfo.background = listInfo.background
+					this.listInfo.detail = listInfo.detail
+					this.listInfo.muser_id = listInfo.muser_id
+				})
+			}
 		}
 	}
 </script>

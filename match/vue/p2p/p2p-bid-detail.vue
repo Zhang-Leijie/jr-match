@@ -1,12 +1,7 @@
 <template>
 	<div>
-		<div class="header-bar">
-			<ol class="breadcrumb">
-				<li class="item">P2P</li>
-				<li class="item">投标操作</li>
-			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
-		</div>
+		<time-remain type="p2pBid" @time-set="getData"></time-remain>
+
 		<div class="p2p-detail-page">
 			<router-link :to="{name: 'm-p2pbid'}" class="btn-back blue">返回</router-link>
 			<div class="p2p-detail-panel">
@@ -159,6 +154,16 @@
 			}
 		},
 		methods:{
+			getData(){
+				var self = this
+				InvestInfo({
+					id:self.$route.params.id,
+				}).then((res) => {
+					self.baseinfo = res.baseinfo
+					self.back = res.back
+					self.proof = res.proof
+				})
+			},
 			toInvest(){
 				var self = this
 				if (self.baseinfo.isinvest==1) {
@@ -180,16 +185,6 @@
 			changetime(time){
 				return new Date(parseInt(time) * 1000).toLocaleString().substr(0,9)
 			}
-		},
-		mounted:function(){
-			var self = this
-			InvestInfo({
-				id:self.$route.params.id,
-			}).then((res) => {
-				self.baseinfo = res.baseinfo
-				self.back = res.back
-				self.proof = res.proof
-			})
 		}
 	}
 </script>

@@ -1,12 +1,6 @@
 <template>
-	<div class="background-image" >
-		<div class="header-bar">
-			<ol class="breadcrumb">
-				<li class="item">P2P</li>
-				<li class="item">项目发标</li>
-			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
-		</div>
+	<div class="background-image">
+		<time-remain type="p2pRaise" :canset="true" @time-set="getData" @time-out="timeout=true"></time-remain>
 		
 		<div style="width:1200px;margin:0px auto 20px">
 			<router-link  :to="{name:'m-index'}" class="btn-back" style="color:white">
@@ -27,7 +21,7 @@
 							<td v-if="list.score==null">未评分</td>
 							<td v-if="list.score!=null">{{list.score}}</td>
 							<td v-if="list.isfinished == 1">
-								<router-link :to="{name: 'm-p2praisedetail', query: {id: list.id}}">去完成</router-link>
+								<a @click="goNext(list)">去完成</a>
 							</td>
 							<td v-if="list.isfinished == 2">
 								<router-link :to="{name: 'm-p2praisecheck', query: {id: list.id, relation_id: list.relation_id}}">查看</router-link>
@@ -43,19 +37,30 @@
 	import router from '~/router.js'
 	import {Lists} from '~/ajax/get.js'
 	import store from '~/vuex'
+	
 
 	export default{
 		data(){
 			return {
-				lists: []
+				lists: [],
+				timeout: false
 			}
 		},
-		mounted:function(){
-			Lists({
-				type: 3
-			}).then((res) => {
-				this.lists = res
-			})
+		methods: {
+			goNext(list){
+				if (this.timeout) {
+					alert('该模块考试已结束')
+				} else {
+					router.push({name: 'm-p2praisedetail', query: {id: list.id}})
+				}
+			},
+			getData(){
+				Lists({
+					type: 3
+				}).then((res) => {
+					this.lists = res
+				})
+			}
 		}
 	}
 </script>

@@ -5,7 +5,6 @@
 				<li class="item">众筹</li>
 				<li class="item">公益设计</li>
 			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
 		<div class="crowdfunding-design">
 			<table class="high-table">
