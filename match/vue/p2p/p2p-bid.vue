@@ -86,7 +86,7 @@
 					</div>
 					<div class="p2p-item">
 						<div class="p2p-inline-item" v-if="investLint.investment==null">
-							<a @click="wantToBid" class="btn blue" style="min-width:135px;">我要投资</a>
+							<a @click="wantToBid(investLint.id)" class="btn blue" style="min-width:135px;">我要投资</a>
 						</div>
 						<div class="p2p-inline-item" v-if="investLint.investment!=null">
 							<router-link class="btn blue" style="min-width:135px;" :to="{name: 'm-p2pbid-detail',params:{id:investLint.id}}">投资金额：{{investLint.investment | changenum}}万</router-link>
@@ -137,11 +137,11 @@
 			}
 		},
 		methods: {
-			wantToBid(){
+			wantToBid(id){
 				if (this.timeout) {
 					alert('该模块考试已结束')
 				} else {
-					router.push({name: 'm-p2pbid-detail',params:{id:investLint.id}})
+					router.push({name: 'm-p2pbid-detail',params:{id:id}})
 				}
 			},
 			getData(){
