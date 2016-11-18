@@ -22,7 +22,7 @@
 			 	<div class="index-title absolute f4" style="right:440px;top:40px;">
 			 		P2P
 			 	</div>
-			 	<router-link :to="{name: 'm-p2praise', query: {userid:10000003}}">
+			 	<router-link :to="{name: 'm-p2praise', query: {userid: muser_id}}">
 				 	<div class="main-box" style="width:120px;float:left">
 				 		<div class="main-word">
 				 			<span class="f3">项目发标</span><br>
@@ -72,7 +72,7 @@
 			  	<div class="index-title absolute f4" style="right:440px;top:40px;white-space:nowrap;">
 			  		创新创业
 			  	</div>
-		  	 	<router-link :to="{name: 'm-cfcase'}">
+		  	 	<router-link :to="{name: 'm-cfcase',query: {userid: muser_id}}">
 		  		 	<div class="main-box" style="width:190px;float:left">
 		  		 		<div class="main-word">
 		  		 			<span class="f3">案例分析</span><br>

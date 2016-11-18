@@ -12,9 +12,12 @@
 			<a class="btn blue" @click="ques(3,'判断题')">判断题</a>
 			<a class="btn blue absolute" style="background-color:rgb(196,33,43);right:0px;" v-if="!begin" @click="end">退出答题</a>
 			<div class="obj-table">
-				<div class="item" v-for="n in 20" v-if="type==1" @click="choosenumber(n)">{{n}}</div>
-				<div class="item" v-for="n in 20" v-if="type==2" @click="choosenumber(n)">{{n}}</div>
-				<div class="item" v-for="n in 10" v-if="type==3" @click="choosenumber(n)" style="width:10%">{{n}}</div>
+				<div class="item" v-for="(list,index) in single_choices" v-if="type==1" @click="choosenumber(index+1)" :class="{inblue:list.answer!=''&&list.answer!=null}">{{index+1}}</div>
+				<div class="item" v-for="(list,index) in multi_choices" v-if="type==2" @click="choosenumber(index+1)" :class="{inblue:list.answer!=''&&list.answer!=null}">{{index+1}}</div>
+				<div class="item" v-for="(list,index) in judgments" v-if="type==3" @click="choosenumber(index+1)" :class="{inblue:list.answer!=''&&list.answer!=null}">{{index+1}}</div>
+				<!-- <div class="item" v-for="n in 20" v-if="type==1" @click="choosenumber(n)">{{n}}</div> -->
+				<!-- <div class="item" v-for="n in 20" v-if="type==2" @click="choosenumber(n)">{{n}}</div>
+				<div class="item" v-for="n in 10" v-if="type==3" @click="choosenumber(n)" style="width:10%">{{n}}</div> -->
 			</div>
 			<div class="obj-box">
 				<div class="title f8">{{name}}</div>
@@ -381,13 +384,16 @@
 	}
 </script>
 <style lang="less">
+	.inblue{
+		background-color: #f34541;
+	}
 	.obj{
 		width: 1200px;
 		margin: 30px auto;
 		//dding: 30px 40px;
 		.obj-table{
 			// width: 100%;
-			border-top: 1px solid #4198f9;
+			// border-top: 1px solid #4198f9;
 			border-left: 1px solid #4198f9;
 			font-size: 0px;
 			.item{
@@ -399,6 +405,7 @@
 				text-align: center;
 				line-height: 40px;
 				border-right: 1px solid #4198f9;
+				border-top: 1px solid #4198f9;
 				border-bottom: 1px solid #4198f9;
 			}
 		}
