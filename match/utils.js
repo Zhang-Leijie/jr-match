@@ -1,4 +1,7 @@
 export const transferMoney = function (money) {
+	if (!money) {
+		return ""
+	}
 	var n = Number.parseInt(money)
 	var fraction = ['角', '分']  
 	var digit = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
