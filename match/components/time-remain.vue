@@ -117,7 +117,7 @@
 			this.router0 = this.metaInfo.words[0]
 			this.router1 = this.metaInfo.words[1]
 
-			this.totalTime = this,metaInfo.exam_period / 60 / 1000
+			this.totalTime = this.metaInfo.exam_period / 60 / 1000
 
 			// 查看剩余时间信息
 			AnswerTime({

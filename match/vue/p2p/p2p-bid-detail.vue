@@ -30,6 +30,10 @@
 							<span class="progress-text">{{baseinfo.schedule}}</span>
 						</div>
 					</div>
+					<div class="line">
+						<div class="title">借款总额</div>
+						<div class="content">{{baseinfo.x}}/{{baseinfo.y}}</div>
+					</div>
 					<div class="line" v-if="baseinfo.id!==undefined">
 						<!-- <router-link class="btn blue" :to="{name:'m-p2pbid-invest',params:{id:baseinfo.id}}">我要投资</router-link> -->
 						<a class="btn blue" @click="toInvest">我要投资</a>

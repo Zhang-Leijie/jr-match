@@ -150,12 +150,22 @@
 			<router-link :to="{name: 'm-p2pinvest'}" class="btn white">返回</router-link>
 			<a class="btn blue" @click="showModal=true">提交</a>
 		</div>
-		<modal v-show="showModal">
+		<!-- <modal v-show="showModal">
 			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">选择推荐等级</p>
 			<div slot="body" style="text-align:center;">
 				<star-rating></star-rating>	
 			</div>
 
+			<p slot="footer" style="text-align:center;">
+				<a class="btn white" @click="showModal=false">返回</a>
+				<a class="btn blue" @click="confirm" style="margin-left:30px;">确认</a>
+			</p>
+		</modal> -->
+		<modal v-show="showModal" class="answerbox">
+			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">输入答案</p>
+			<div slot="body" style="text-align:center;">
+				<textarea v-model="textareaCont"></textarea>
+			</div>
 			<p slot="footer" style="text-align:center;">
 				<a class="btn white" @click="showModal=false">返回</a>
 				<a class="btn blue" @click="confirm" style="margin-left:30px;">确认</a>
@@ -196,12 +206,13 @@
 					rate: "",
 					money: "",
 					loan_time: "",
-					detail: ""
+					detail: "",
 				},
 				terms: [],
 				proof: [],
 				showModal: false,
-				requesting: false
+				requesting: false,
+				textareaCont:''
 			}
 		},
 		methods: {
@@ -210,7 +221,8 @@
 				this.requesting = true
 
 				postP2PInvest({
-					id: this.id 
+					id: this.id,
+					answer:this.textareaCont
 				}).then((res) => {
 					router.push({name: 'm-p2pinvest'})
 				}).catch((e) => {
@@ -235,6 +247,7 @@
 				}
 				this.terms = res.back.terms
 				this.proof = res.proof
+				this.textareaCont = res.baseinfo.answer
 			})
 		},
 		filters: {
@@ -248,12 +261,24 @@
 		}
 	}
 </script>
-<style>
+<style lang="less">
 	.p2p-invest-page > .button-group {
 		margin: 80px 0;
 	}
 
 	.p2p-invest-page > .button-group .btn + .btn {
 		margin-left: 20px;
+	}
+	.answerbox{
+		.modal-container{
+			width: 800px;
+			textarea{
+				width: 100%;
+				height: 300px;
+				border:1px solid #ccc;
+				outline: none;
+				padding: 10px;
+			}
+		}
 	}
 </style>

@@ -117,7 +117,7 @@
 		</modal>
 		<modal v-if="showsecModal">
 			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">是否开始答题?</p>
-			<p slot="body" class='f6' style="text-align:center;">考试时间为30分钟, 到时不可再提交申请</p>
+			<p slot="body" class='f6' style="text-align:center;">考试时间为15分钟, 到时不可再提交申请</p>
 			<p slot="footer" style="text-align:center;">
 				<router-link class="btn white" :to="{name: 'm-index'}">返回</router-link>
 				<a class="btn blue" @click="sureTime" style="margin-left:30px;">确认</a>
