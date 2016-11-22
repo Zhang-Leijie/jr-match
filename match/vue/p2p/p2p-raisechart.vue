@@ -21,7 +21,7 @@
 					<input-text prop="username" :init="params.username" placeholder="5个字以内" @text-result-change="changeStringProp"></input-text>
 				</div>
 				<div class="form-input">
-					<span class="name">姓别：</span>
+					<span class="name">性别：</span>
 					<input-select prop="gender" :init="params.gender" :getOptions="getGenderOptions" @select-result-change="changeStringProp"></input-select>
 				</div>
 				<div class="form-input">
@@ -51,7 +51,7 @@
 					<input-text prop="name" :init="params.name" placeholder="15字以内" @text-result-change="changeStringProp"></input-text>
 				</div>
 				<div class="form-input">
-					<span class="name">风险要求：</span>
+					<span class="name">风险评级：</span>
 					<input-select prop="request_id" :init="params.request_id" :getOptions="getRequestList" @select-result-change="changeStringProp"></input-select>
 				</div>
 				<div class="form-input">
@@ -83,7 +83,7 @@
 			</div>
 			<div>
 				<div class="form-title">
-					<h1>认证信息</h1>
+					<h1>认证信息（可选）</h1>
 				</div>
 				<div v-for="(proof_, index) in params.proof" :key="proof_.id">
 					<div class="form-input">
@@ -411,7 +411,7 @@
 		city: { verify: verifyLength('城市') },
 		province: { verify: verifyLength('省份') },
 		name: { verify: verifyLength('') },
-		request_id: { verify: verifyLength('风险要求') },
+		request_id: { verify: verifyLength('风险评级') },
 		money: { verify: verifyLength('借款金额') },
 		rate: { verify: verifyLength('利息偿付') },
 		loan_time: { verify: verifyLength('借款期限') },

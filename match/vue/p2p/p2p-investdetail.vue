@@ -16,7 +16,7 @@
 					<span class="value">{{params.username}}</span>
 				</div>
 				<div class="form-input">
-					<span class="name">姓别：</span>
+					<span class="name">性别：</span>
 					<span class="value">{{params.gender}}</span>
 				</div>
 				<div class="form-input">
@@ -47,7 +47,7 @@
 					<span class="value">{{params.name}}</span>
 				</div>
 				<div class="form-input">
-					<span class="name">风险要求：</span>
+					<span class="name">风险评级：</span>
 					<span class="value">{{params.repay_type}}</span>
 				</div>
 				<div class="form-input">
@@ -130,7 +130,7 @@
 		<div class="form-page">
 			<div>
 				<div class="form-title">
-					<h1>认证信息</h1>
+					<h1>认证信息（可选）</h1>
 				</div>
 				<div v-for="proof_ in proof">
 					<div class="form-input">

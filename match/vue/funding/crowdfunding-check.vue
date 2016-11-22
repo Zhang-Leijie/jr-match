@@ -24,7 +24,7 @@
 					<span class="input">{{params.block}}</span>
 				</div>
 				<div class="form-input">
-					<span class="name">是否领头：</span>
+					<span class="name">是否领投：</span>
 					<span class="input">
 						{{(params.lead === '' || params.lead === undefined) ?
 							 '' : (params.lead == 1 ? '是' : '否')}}
@@ -82,7 +82,7 @@
 					</div>
 				</div>
 				<div class="form-input">
-					<span class="name">商业计划书：</span>
+					<span class="name">商业计划书（可选）：</span>
 					<span class="input">
 						<a v-if="params.prospectus" target="_blank" style="color:#419bf9;" :href="params.prospectus">查看地址</a>
 						<a v-if="!params.prospectus" href="">未上传</a>
@@ -104,7 +104,7 @@
 					<span>%</span>
 				</div>
 				<div class="form-input">
-					<span class="name">融资计划书：</span>
+					<span class="name">融资计划书（可选）：</span>
 					<span class="input">
 						<a v-if="params.proposal" target="_blank" style="color:#419bf9;" :href="params.proposal">查看地址</a>
 						<a v-if="!params.proposal" href="">未上传</a>
@@ -157,7 +157,7 @@
 			</div>
 			<div>
 				<div class="form-title">
-					<h1>认证信息</h1>
+					<h1>认证信息（可选）</h1>
 				</div>
 				<div v-for="(proof_, index) in proof" :key="proof_.id">
 					<div class="form-input">

@@ -8,7 +8,7 @@
 
 		<modal v-if="showModal">
 			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">是否开始答题?</p>
-			<p slot="body" class='f6' style="text-align:center;">考试时间为30分钟, 到时不可再提交申请</p>
+			<p slot="body" class='f6' style="text-align:center;">考试时间为{{totalTime}}分钟, 到时不可再提交申请</p>
 			<p slot="footer" style="text-align:center;">
 				<router-link class="btn white" :to="{name: 'm-index'}">返回</router-link>
 				<a class="btn blue" @click="startExam" style="margin-left:30px;">确认</a>
@@ -70,7 +70,8 @@
 				router1: "",
 				remainTime: "",
 				showModal: false,
-				showEnd: false
+				showEnd: false,
+				totalTime: ""
 			}
 		},
 		methods: {
@@ -115,6 +116,8 @@
 			// 设置倒计时标题
 			this.router0 = this.metaInfo.words[0]
 			this.router1 = this.metaInfo.words[1]
+
+			this.totalTime = this,metaInfo.exam_period / 60 / 1000
 
 			// 查看剩余时间信息
 			AnswerTime({

@@ -21,7 +21,7 @@
 					<input-select ref="city" prop="city" :init="params.city" :getOptions="getCityList" @select-result-change="changeStringProp" @deps-change="changeGetCityList"></input-select>
 				</div>
 				<div class="form-input">
-					<span class="name">是否领头：</span>
+					<span class="name">是否领投：</span>
 					<div class="input-radio" v-for="(lead,index) in leadOptions">
 						<input type="radio" :id="'tag_'+index" name="tag_lead" @change="changeStringProp({prop: 'lead', value: lead.value})" :value="lead.value" v-model="params.lead">
 						<label :for="'tag_'+index">{{lead.name}}</label>
@@ -74,7 +74,7 @@
 					<input-image prop="core_photo" :init="params.core_photo" @image-result-change="changeStringProp"></input-image>
 				</div>
 				<div class="form-input">
-					<span class="name">商业计划书：</span>
+					<span class="name">商业计划书（可选）：</span>
 					<input-file 
 						prop="prospectus" 
 						:init="params.prospectus" 
@@ -98,7 +98,7 @@
 					<span>%</span>
 				</div>
 				<div class="form-input">
-					<span class="name">融资计划书：</span>
+					<span class="name">融资计划书（可选）：</span>
 					<input-file 
 						prop="proposal" 
 						:init="params.proposal" 
@@ -174,7 +174,7 @@
 			</div>
 			<div>
 				<div class="form-title">
-					<h1>认证信息</h1>
+					<h1>认证信息（可选）</h1>
 				</div>
 				<div v-for="(proof_, index) in params.proof" :key="proof_.id">
 					<div class="form-input">
@@ -466,7 +466,7 @@
 				return true
 			}
 		},
-		lead: { verify: verifyLength('是否领头') },
+		lead: { verify: verifyLength('是否领投') },
 		name: { verify: verifyLength('项目名称') },
 		money: { verify: verifyLength('目标金额') },
 		index_photo: { verify: verifyLength('首页图片') },
