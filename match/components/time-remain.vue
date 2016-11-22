@@ -32,17 +32,22 @@
 		'p2pRaise': {
 			words: ['P2P', '项目发标'],
 			type: 3,
-			exam_period: 30 * 60 * 1000
+			exam_period: 15 * 60 * 1000
 		},
 		'p2pBid': {
 			words: ['P2P', '项目投标'],
 			type: 6,
-			exam_period: 30 * 60 * 1000
+			exam_period: 15 * 60 * 1000
 		},
 		'cfRaise': {
 			words: ['众筹', '项目设计'],
 			type: 2,
-			exam_period: 30 * 60 * 1000
+			exam_period: 15 * 60 * 1000
+		},
+		'cfCase': {
+			words: ['创新创业', '案例分析'],
+			type: 5,
+			exam_period: 15 * 60 * 1000
 		}
 	}
 

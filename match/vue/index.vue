@@ -51,22 +51,22 @@
 			 	<div class="index-title absolute f4" style="right:440px;top:40px;">
 			 		众筹
 			 	</div>
-			 	<router-link :to="{name: 'm-cfcharity'}">
+			 	<router-link :to="{name: 'm-cfitem'}">
 				 	<div class="main-box" style="width:190px;float:left;">
 				 		<div class="main-word">
-				 			<span class="f3">公益设计</span><br>
-				 			<span style="line-height:30px;">评分:{{filterScore(score.CrowdfundingcScore)}}</span>
-				 		</div>
-				 	</div>
-			 	</router-link>
-			 	<router-link :to="{name: 'm-cfitem'}">
-				 	<div class="main-box" style="width:190px;float:left;margin-left:20px;">
-				 		<div class="main-word">
-				 			<span class="f3">项目设计</span><br>
+				 			<span class="f3">股权众筹</span><br>
 				 			<span style="line-height:30px;">评分:{{filterScore(score.CrowdfundingsDesignScore)}}</span>
 				 		</div>
 				 	</div>
 			 	</router-link>
+			 	<router-link :to="{name: 'm-cfcharity'}">
+				 	<div class="main-box" style="width:190px;float:left;margin-left:20px;">
+				 		<div class="main-word">
+				 			<span class="f3">公益众筹</span><br>
+				 			<span style="line-height:30px;">评分:{{filterScore(score.CrowdfundingcScore)}}</span>
+				 		</div>
+				 	</div>
+			 	</router-link>		 	
 			 </div>
 			  <div class="index-col clear" style="margin-top:40px;">
 			  	<div class="index-title absolute f4" style="right:440px;top:40px;white-space:nowrap;">

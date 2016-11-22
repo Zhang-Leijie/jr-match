@@ -10,7 +10,7 @@
 			<a class="btn blue" style="margin-right:20px;margin-bottom:20px;" @click="ques(1,'单项选择')">单项选择</a> 
 			<a class="btn blue" style="margin-right:20px;" @click="ques(2,'多项选择')">多项选择</a> 
 			<a class="btn blue" @click="ques(3,'判断题')">判断题</a>
-			<a class="btn blue absolute" style="background-color:rgb(196,33,43);right:0px;" v-if="!begin" @click="end">退出答题</a>
+			<!-- <a class="btn blue absolute" style="background-color:rgb(196,33,43);right:0px;" v-if="!begin" @click="end">退出答题</a> -->
 			<div class="obj-table">
 				<div class="item" v-for="(list,index) in single_choices" v-if="type==1" @click="choosenumber(index+1)" :class="{inblue:list.answer!=''&&list.answer!=null}">{{index+1}}</div>
 				<div class="item" v-for="(list,index) in multi_choices" v-if="type==2" @click="choosenumber(index+1)" :class="{inblue:list.answer!=''&&list.answer!=null}">{{index+1}}</div>
@@ -147,7 +147,7 @@
 				number:1,
 				name:"单项选择",
 				total_answer:[],
-				totalTime:1800000,
+				totalTime:900000,
 				remainTime: '',
 				isfinish:'',
 				judgments: [],
@@ -315,6 +315,7 @@
 					self.total_answer =[]
 					router.push({name:'m-objpoint'})
 				}, (e) => {
+					self.total_answer =[]
 					console.dir(e)
 				})
 			},

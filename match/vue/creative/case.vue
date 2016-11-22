@@ -1,12 +1,7 @@
 <template>
 	<div class="raise background-image">
-		<div class="header-bar">
-			<ol class="breadcrumb">
-				<li class="item">创新创业</li>
-				<li class="item">案例分析</li>
-			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
-		</div>
+		<time-remain type="cfCase" :canset="true" @time-out="timeout=true"></time-remain>
+		
 		<div style="width:1200px;margin:20px auto 0px">
 			<div class="table-box" style="padding:20px 40px">
 				<div class="word f2" v-html="text">
@@ -49,7 +44,8 @@
 
 			return{
 				text:'',
-				tinytext:intext
+				tinytext:intext,
+				timeout: false
 			}
 		},
 		methods:{
@@ -60,7 +56,14 @@
 					alert('提交成功')
 					router.push({name: 'm-index'})
 				})
-			}
+			},
+			goNext(list){
+				if (this.timeout) {
+					alert('该模块考试已结束')
+				} else {
+					router.push({name: 'm-index'})
+				}
+			},
 		},
 		mounted:function(){
 			var self = this	
