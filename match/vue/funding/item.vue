@@ -5,7 +5,7 @@
 			<table class="high-table">
 				<thead>
 					<tr>
-						<th>项目信息</th>
+						<th style="text-align:left;">项目信息</th>
 						<th style="width:20%;">得分</th>
 						<th style="width:100px;">操作</th>
 					</tr>
