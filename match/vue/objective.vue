@@ -387,6 +387,7 @@
 <style lang="less">
 	.inblue{
 		background-color: #f34541;
+		color: #fff;
 	}
 	.obj{
 		width: 1200px;

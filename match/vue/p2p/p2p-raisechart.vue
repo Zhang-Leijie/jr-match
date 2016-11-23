@@ -17,7 +17,7 @@
 					<h1>基本信息</h1>
 				</div>
 				<div class="form-input">
-					<span class="name">姓名：</span>
+					<span class="name">法人姓名：</span>
 					<input-text prop="username" :init="params.username" placeholder="5个字以内" @text-result-change="changeStringProp"></input-text>
 				</div>
 				<div class="form-input">
@@ -77,7 +77,7 @@
 					<input-select prop="loan_time" :init="params.loan_time" :getOptions="getLoanTimeOptions" @select-result-change="changeStringProp"></input-select>
 				</div>
 				<div class="form-input">
-					<span class="name">借款说明：</span>
+					<span class="name">借款用途：</span>
 					<input-textarea prop="detail" :init="params.detail" placeholder="200字以内" @text-result-change="changeStringProp"></input-textarea>
 				</div>
 			</div>

@@ -9,7 +9,7 @@
 		<div class="crowdfunding-design">
 			<table class="high-table">
 				<thead>
-					<tr>
+					<tr style="text-align:left">
 						<th>项目信息</th>
 						<th style="width:20%;">微信得票</th>
 						<th style="width:100px;">得分</th>

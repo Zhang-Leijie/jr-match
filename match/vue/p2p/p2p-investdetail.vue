@@ -12,7 +12,7 @@
 					<h1>类型选择</h1>
 				</div>
 				<div class="form-input">
-					<span class="name">姓名：</span>
+					<span class="name">法人姓名：</span>
 					<span class="value">{{params.username}}</span>
 				</div>
 				<div class="form-input">
@@ -71,7 +71,7 @@
 					<span class="value">{{params.loan_time}}</span>
 				</div>
 				<div class="form-input">
-					<span class="name">借款说明：</span>
+					<span class="name">借款用途：</span>
 					<span class="value">{{params.detail}}</span>
 				</div>
 			</div>

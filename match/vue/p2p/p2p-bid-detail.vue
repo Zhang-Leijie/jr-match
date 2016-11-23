@@ -96,7 +96,7 @@
 								<div class="pack">
 									<h3 class="title">基本信息：</h3>
 									<div class="line">
-										<span class="title">姓名</span>
+										<span class="title">法人名称</span>
 										<span class="content">{{baseinfo.username}}</span>
 									</div>
 									<div class="line">
