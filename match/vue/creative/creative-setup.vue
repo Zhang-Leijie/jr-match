@@ -61,6 +61,10 @@
 			border: 1px solid #ccc;
 			background: white;
 			margin-bottom: 20px;
+			img{
+				width: 100%;
+				height: auto;
+			}
 		}
 
 		.button-group {

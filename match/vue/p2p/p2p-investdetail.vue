@@ -48,7 +48,7 @@
 				</div>
 				<div class="form-input">
 					<span class="name">风险评级：</span>
-					<span class="value">{{params.repay_type}}</span>
+					<span class="value">{{params.request}}</span>
 				</div>
 				<div class="form-input">
 					<span class="name">还款方式：</span>
@@ -202,7 +202,7 @@
 					block: "",
 					name: "",
 					repay_type: "",
-					repay_type: "",
+					request: "",
 					rate: "",
 					money: "",
 					loan_time: "",

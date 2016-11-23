@@ -108,10 +108,10 @@
 		.image-container {
 			background: transparent;
 			width: 100%;
-			height: 400px;
+			height: 600px;
 			display: inline-block;
 			> img {
-				max-height: 400px;
+				max-height: 600px;
 				max-width: 100%;
 				width: 100%;
 				-webkit-user-select: none;
@@ -127,7 +127,7 @@
 			content: "";
 			position: absolute;
 			width: 100%;
-			min-height: 400px;
+			min-height: 600px;
 		}
 
 		> ol {
