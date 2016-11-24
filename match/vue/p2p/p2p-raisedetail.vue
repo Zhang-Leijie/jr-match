@@ -7,11 +7,11 @@
 				<div class="content" v-html="listInfo.background">
 				</div>
 			</div>
-			<div class="paragraph">
+			<!-- <div class="paragraph">
 				<h1 class="title-with-border">详细信息</h1>
 				<div class="content" v-html="listInfo.detail">
 				</div>
-			</div>
+			</div> -->
 			<div class="button-group">
 				<router-link :to="{name: 'm-p2praise'}" class="btn white" >返回</router-link>
 				<router-link :to="{name: 'm-p2praisechart', query: {id: $route.query.id, userid: listInfo.muser_id}}" class="btn blue">设计</router-link>

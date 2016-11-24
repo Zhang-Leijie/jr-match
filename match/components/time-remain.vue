@@ -37,7 +37,12 @@
 		'p2pBid': {
 			words: ['P2P', '项目投标'],
 			type: 6,
-			exam_period: 15 * 60 * 1000
+			exam_period: 10 * 60 * 1000
+		},
+		'p2pInvest': {
+			words: ['P2P', '项目审标'],
+			type: 4,
+			exam_period: 5 * 60 * 1000
 		},
 		'cfRaise': {
 			words: ['众筹', '项目设计'],

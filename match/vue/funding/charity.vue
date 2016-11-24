@@ -19,7 +19,7 @@
 					<tr>
 						<td class="crowdfunding-item">
 							<div class="image-container">
-								<img :src="'./image/shangpintupian@2x.png'" alt="">
+								<img :src="'./image/xiugai.jpeg'" alt="">
 							</div>
 							<span>{{info.name}}</span>
 						</td>

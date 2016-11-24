@@ -7,9 +7,9 @@
 			<p class="remain-time">剩余时间：<span v-if="show==1">{{remainTime | filterTime}}</span><span v-else>结束</span></p>
 		</div>
 		<div class='obj relative'>
-			<a class="btn blue" style="margin-right:20px;margin-bottom:20px;" @click="ques(1,'单项选择')">单项选择</a> 
-			<a class="btn blue" style="margin-right:20px;" @click="ques(2,'多项选择')">多项选择</a> 
-			<a class="btn blue" @click="ques(3,'判断题')">判断题</a>
+			<a class="btn blue" style="margin-right:20px;margin-bottom:20px;" @click="ques(1,'单项选择',16)">单项选择</a> 
+			<a class="btn blue" style="margin-right:20px;" @click="ques(2,'多项选择',8)">多项选择</a> 
+			<a class="btn blue" @click="ques(3,'判断题',8)">判断题</a>
 			<!-- <a class="btn blue absolute" style="background-color:rgb(196,33,43);right:0px;" v-if="!begin" @click="end">退出答题</a> -->
 			<div class="obj-table">
 				<div class="item" v-for="(list,index) in single_choices" v-if="type==1" @click="choosenumber(index+1)" :class="{inblue:list.answer!=''&&list.answer!=null}">{{index+1}}</div>
@@ -145,6 +145,7 @@
 				begin:true,
 				type: 1,
 				number:1,
+				totalNum:16,
 				name:"单项选择",
 				total_answer:[],
 				totalTime:900000,
@@ -321,7 +322,7 @@
 			},
 			add(){
 				var self = this
-				if (self.number<20) {
+				if (self.number<self.totalNum) {
 					self.number +=1
 				}			
 			},
@@ -331,11 +332,12 @@
 					self.number -=1
 				}
 			},
-			ques(num,name){
+			ques(num,name,total){
 				var self = this
 				self.type = num
 				self.name = name
 				self.number = 1
+				self.totalNum = total
 			},
 			end(){
 				var self = this

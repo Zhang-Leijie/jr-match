@@ -1,6 +1,6 @@
 <template>
 	<div class="raise background-image">
-		<time-remain type="cfCase" :canset="true" @time-out="timeout=true"></time-remain>
+		<time-remain type="cfCase" :canset="true" @time-set="getData" @time-out="timeout=true"></time-remain>
 		
 		<div style="width:1200px;margin:20px auto 0px">
 			<div class="table-box" style="padding:20px 40px">
@@ -64,6 +64,20 @@
 					router.push({name: 'm-index'})
 				}
 			},
+			getData(){
+				var self = this	
+
+				AnalysisLists().then((res) => {
+					//console.dir(res)
+					self.text = unescapeHTML(res.text)
+				})
+
+				self.clockid = setInterval(()=>{
+					var content = self.editor.getContent()
+					var userid = self.$route.query.userid
+					ls.setItem(genLsId(userid, 'tinytext'), content)
+				}, 1000)
+			}
 		},
 		mounted:function(){
 			var self = this	
@@ -81,17 +95,6 @@
 			editor.render()
 
 			this.editor = editor
-
-			AnalysisLists().then((res) => {
-				//console.dir(res)
-				self.text = unescapeHTML(res.text)
-			})
-
-			self.clockid = setInterval(()=>{
-				var content = self.editor.getContent()
-				var userid = self.$route.query.userid
-				ls.setItem(genLsId(userid, 'tinytext'), content)
-			}, 1000)
 
 		},
 		beforeDestroy(){

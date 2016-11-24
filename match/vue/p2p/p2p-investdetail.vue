@@ -1,11 +1,7 @@
 <template>
 	<div class="p2p-invest-page">
-		<div class="header-bar">
-			<ol class="breadcrumb">
-				<li class="item">P2P</li>
-				<li class="item">审标操作</li>
-			</ol>
-		</div>
+		<time-remain type="p2pInvest" @time-set="getData"></time-remain>
+
 		<div class="form-page">
 			<div>
 				<div class="form-title">
@@ -162,7 +158,7 @@
 			</p>
 		</modal> -->
 		<modal v-show="showModal" class="answerbox">
-			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">输入答案</p>
+			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">请叙述审标结果及叙述原因</p>
 			<div slot="body" style="text-align:center;">
 				<textarea v-model="textareaCont"></textarea>
 			</div>
@@ -229,26 +225,30 @@
 					alert('项目已提交')
 					this.requesting = false
 				})
+			},
+			getData(){
+				var id = store.state.route.params.id 
+
+				this.id = id 
+				getInvestDetail({
+					id: this.id
+				}).then((res) => {
+					//console.log(res)
+					for (let prop in this.params) {
+						var value = res.baseinfo[prop]
+						if (value) {
+							this.params[prop] = value
+						}
+					}
+					this.terms = res.back.terms
+					this.proof = res.proof
+					this.textareaCont = res.baseinfo.answer
+				})
+
 			}
 		},
 		mounted(){
-			var id = store.state.route.params.id 
-
-			this.id = id 
-			getInvestDetail({
-				id: this.id
-			}).then((res) => {
-				//console.log(res)
-				for (let prop in this.params) {
-					var value = res.baseinfo[prop]
-					if (value) {
-						this.params[prop] = value
-					}
-				}
-				this.terms = res.back.terms
-				this.proof = res.proof
-				this.textareaCont = res.baseinfo.answer
-			})
+			
 		},
 		filters: {
 			transferMoney(str){

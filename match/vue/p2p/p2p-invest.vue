@@ -1,11 +1,7 @@
 <template>
 	<div class="raise background-image">
-		<div class="header-bar">
-			<ol class="breadcrumb">
-				<li class="item">P2P</li>
-				<li class="item">审标操作</li>
-			</ol>
-		</div>
+		<time-remain type="p2pInvest" :canset="true" @time-set="getData" @time-out="timeout=true"></time-remain>
+		
 		<div style="width:1200px;margin:0px auto 20px;">
 			<router-link  :to="{name:'m-index'}" class="btn-back" style="color:#fff">
 				返回
@@ -45,19 +41,27 @@
 	export default{
 		data(){
 			return{
-				lists:[]
+				lists:[],
+				timeout: false
 			}
 		},
 		mounted:function(){
 			var self = this	
-			VerifyLists().then((res) => {
-				console.dir(res)
-				self.lists = res
-			})
+			// VerifyLists().then((res) => {
+			// 	console.dir(res)
+			// 	self.lists = res
+			// })
 		},
 		methods: {
 			filterScore(score){
 				return score ? score : '未评分'
+			},
+			getData(){
+				var self = this
+				VerifyLists().then((res) => {
+					console.dir(res)
+					self.lists = res
+				})
 			}
 		}
 	}
