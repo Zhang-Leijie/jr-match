@@ -89,7 +89,7 @@
 					<div class="form-input">
 						<span class="name">认证名称：</span>
 						<input-text :prop="index" :init="proof_.name" placeholder="10个字以内" @text-result-change="changeProofName"></input-text>
-						<a v-if="index > 0" class="btn-cancel" @click="removeProof(index)"></a>
+						<a class="btn-cancel" @click="removeProof(index)"></a>
 					</div>
 					<div class="form-input">
 						<span class="name">&nbsp;</span>
@@ -493,11 +493,11 @@
 			repay_type_id: "",
 			detail: "",
 			proof:	[
-				{
-					name: "",
-					detail: "",
-					id: getUniqueId()
-				}
+				// {
+				// 	name: "",
+				// 	detail: "",
+				// 	id: getUniqueId()
+				// }
 			]
 		}
 	}

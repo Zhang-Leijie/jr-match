@@ -180,7 +180,7 @@
 					<div class="form-input">
 						<span class="name">认证名称：</span>
 						<input-text :prop="index" :init="proof_.name" placeholder="10个字以内" @text-result-change="changeProofProp($event, 'name')"></input-text>
-						<a v-if="index > 0" class="btn-cancel" @click="removeProof(index)"></a>
+						<a class="btn-cancel" @click="removeProof(index)"></a>
 					</div>
 					<div class="form-input">
 						<span class="name">&nbsp;</span>
@@ -427,7 +427,7 @@
 	}
 
 	const checklist = {
-		proposal: { verify: verifyLength('融资计划书') },
+		//proposal: { verify: verifyLength('融资计划书') },
 		detail: {verify: verifyLength('项目详情', 200) },
 		core_photo: { verify: verifyLength('核心竞争力') },
 		analysis_photo: { verify: verifyLength('市场分析') },
@@ -472,7 +472,7 @@
 		index_photo: { verify: verifyLength('首页图片') },
 		project_photo: { verify: verifyLength('项目图片') },
 		period_id: { verify: verifyLength('项目阶段') },
-		prospectus: { verify: verifyLength('商业计划书') },
+		//prospectus: { verify: verifyLength('商业计划书') },
 		province: { verify: verifyLength('地区') },
 		shares: { verify: verifyLength('出让股份') },
 		summary: { verify: verifyLength('项目简介') },
@@ -531,11 +531,6 @@
 				}
 			],
 			proof: [
-				{
-					name: "",
-					detail: "",
-					id: getUniqueId()
-				}
 			]
 		}
 	}
