@@ -2,7 +2,13 @@ export const transferMoney = function (money) {
 	if (!money) {
 		return ""
 	}
+
 	var n = Number.parseInt(money)
+
+	if (Number.isNaN(n)) {
+		return "不合法输入"
+	}
+	
 	var fraction = ['角', '分']  
 	var digit = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
 	var unit = [ ['元', '万', '亿'], ['', '拾', '佰', '仟']  ]

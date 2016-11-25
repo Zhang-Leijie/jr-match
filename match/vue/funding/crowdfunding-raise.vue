@@ -448,19 +448,19 @@
 				while(++i < length) {
 					member = members[i]
 					if (member.member_name == "") {
-						return '请填写第${i+1}位团队成员名称'
+						return `请填写第${i+1}位团队成员名称`
 					} else if (member.member_name.length > 5) {
-						return '请填写第${i+1}位团队成员名称应少于5个字'
+						return `请填写第${i+1}位团队成员名称应少于5个字`
 					} else if (member.member_position == "") {
-						return '请填写第${i+1}位团队成员职务'
+						return `请填写第${i+1}位团队成员职务`
 					} else if (member.member_position > 10) {
-						return '请填写第${i+1}位团队成员职务应少于10个字'
+						return `请填写第${i+1}位团队成员职务应少于10个字`
 					} else if (member.member_intro == "") {
-						return '请填写第${i+1}位团队成员介绍'
+						return `请填写第${i+1}位团队成员介绍`
 					} else if (member.member_intro > 200) {
-						return '请填写第${i+1}位团队成员介绍应少于200个字'
+						return `请填写第${i+1}位团队成员介绍应少于200个字`
 					} else if (member.member_avartar == "") {
-						return '请填写第${i+1}位团队成员头像'
+						return `请填写第${i+1}位团队成员头像`
 					}
 				}
 				return true

@@ -81,10 +81,15 @@
 		},
 		methods: {
 			startExam(){
+				var metaInfo = lookup[this.type]
+
+				var totalTime = metaInfo.exam_period
+
 				// 点击了modal的确认并设置开始时间
 				AnswerTime({
 					type: this.metaInfo.type,
-					in_time: Date.now()
+					in_time: Date.now(),
+					end_time: Date.now() + totalTime
 				}).then((res)=>{
 					this.setTime(res.in_time)
 					this.$emit('time-set')
