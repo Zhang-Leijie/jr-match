@@ -4,7 +4,10 @@
 			<ol class="breadcrumb">
 				<li class="item">客观考察</li>
 			</ol>
-			<p class="remain-time">剩余时间：<span v-if="show==1">{{remainTime | filterTime}}</span><span v-else>结束</span></p>
+			<p class="remain-time">剩余时间：
+				<span v-if="show==1">{{remainTime | filterTime}}</span>
+				<span v-else>结束</span>
+			</p>
 		</div>
 		<div class='obj relative'>
 			<a class="btn blue" style="margin-right:20px;margin-bottom:20px;" @click="ques(1,'单项选择',16)">单项选择</a> 
@@ -138,6 +141,7 @@
 	export default {
 		data(){
 			return {
+				blank:false,
 				show:1,
 				starttime:'',
 				showsecModal:'',
@@ -230,6 +234,7 @@
 			},
 			sureTime(){
 				var self = this
+				self.getItem()
 				AnswerTime({
 					type:1,
 					in_time: Date.now()
@@ -243,7 +248,9 @@
 						else{
 							self.show=2
 							self.remainTime = 0
-							self.poptest()
+							if(self.isfinish==1){
+								self.poptest()
+							}						
 							clearInterval(timeid)
 						}
 					}, 1000)
@@ -301,24 +308,48 @@
 				var numf = self.single_choices.length
 				for (var i = 0; i < numf; i++) {
 					self.total_answer.push(self.single_choices[i].answer)
+					if (self.single_choices[i].answer==null) {
+						self.blank=true
+					}
 				}
 				var nums = self.multi_choices.length
 				for (var i = 0; i < nums; i++) {
 					self.total_answer.push(self.multi_choices[i].answer)
+					if (self.multi_choices[i].answer==null) {
+						self.blank=true
+					}
 				}
 				var numt = self.judgments.length
 				for (var i = 0; i < numt; i++) {
 					self.total_answer.push(self.judgments[i].answer)
+					if (self.judgments[i].answer==null) {
+						self.blank=true
+					}
 				}
-				ObjectAnswer({
-					answer:self.total_answer
-				}).then(()=>{
-					self.total_answer =[]
-					router.push({name:'m-objpoint'})
-				}, (e) => {
-					self.total_answer =[]
-					console.dir(e)
-				})
+				if (self.blank==true) {
+					if (confirm("有题目未完成，用户点击确认")) {
+						ObjectAnswer({
+							answer:self.total_answer
+						}).then(()=>{
+							self.total_answer =[]
+							router.push({name:'m-objpoint'})
+						}, (e) => {
+							self.total_answer =[]
+							console.dir(e)
+						})
+					}
+				}
+				else{
+					ObjectAnswer({
+						answer:self.total_answer
+					}).then(()=>{
+						self.total_answer =[]
+						router.push({name:'m-objpoint'})
+					}, (e) => {
+						self.total_answer =[]
+						console.dir(e)
+					})
+				}				
 			},
 			add(){
 				var self = this
@@ -372,7 +403,7 @@
 			}).then((res)=>{
 				if (res.in_time=='') {
 					self.showsecModal=true
-					self.getItem()
+					// self.getItem()
 				}
 				else{
 					self.showsecModal=false

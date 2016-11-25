@@ -55,6 +55,8 @@
 				}).then((res) => {
 					alert('提交成功')
 					router.push({name: 'm-index'})
+				}).catch((e) => {
+					alert(e.message)
 				})
 			},
 			goNext(list){

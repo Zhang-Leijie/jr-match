@@ -222,7 +222,7 @@
 				}).then((res) => {
 					router.push({name: 'm-p2pinvest'})
 				}).catch((e) => {
-					alert('项目已提交')
+					alert(e.message)
 					this.requesting = false
 				})
 			},

@@ -4,7 +4,6 @@
 			<ol class="breadcrumb">
 				<li class="item">客观考察</li>
 			</ol>
-			<p class="remain-time">剩余时间：<span>30分00秒</span></p>
 		</div>
 		<div class="objpoint f8">
 				<div class="point-box">
