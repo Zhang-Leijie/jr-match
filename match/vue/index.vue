@@ -103,13 +103,11 @@
 	export default{
 		data(){
 			return{
-				account:'',
-				school_name:'',
-				totalscore:'',
-				muser_id:'',
-				score:{
-
-				}
+				account: this.userinfo__.account,
+				school_name: this.userinfo__.school_name,
+				totalscore: this.userinfo__.totalscore,
+				muser_id: this.userinfo__.muser_id,
+				score: this.score__
 			}
 		},
 		methods:{
@@ -126,18 +124,18 @@
 				return score ? score : '未评分'
 			}
 		},
-		mounted:function(){
-			var self = this	
-			UserInfo().then((res) => {
-				self.account = res.account
-				self.school_name = res.school_name
-				self.totalscore = res.totalscore
-				self.muser_id = res.muser_id
-			}),
-			Score().then((res)=>{
-				console.dir(res)
-				self.score = res
-			})
+		beforeRouteEnter(to, from, next){
+			Promise.all([
+					UserInfo({}, true),
+					Score({}, true)
+				]).then(([userinfo, score])=>{
+					next(($vm)=>{
+						$vm.userinfo__ = userinfo
+						$vm.score__ = score
+					})
+				}).catch((e)=>{
+					router.push({name: 'm-login'})
+				})
 		}
 	}
 </script>

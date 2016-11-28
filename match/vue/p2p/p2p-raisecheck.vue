@@ -128,7 +128,7 @@
 			</div>
 			<div>
 				<div class="button-group">
-					<router-link class="btn white" :to="{name:'m-p2praise'}">返回</router-link>
+					<router-link v-if="!hide" class="btn white" :to="{name:'m-p2praise'}">返回</router-link>
 				</div>
 			</div>
 		</div>
@@ -144,6 +144,7 @@
 		},
 		data(){
 			return {
+				hide: !!this.$route.query.hide,
 				params: {
 					username: "",
 					age: "",

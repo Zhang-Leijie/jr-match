@@ -174,7 +174,7 @@
 			</div>
 			<div>
 				<div class="button-group">
-					<router-link class="btn white" :to="{name:'m-cfitem'}">返回</router-link>
+					<router-link v-if="!hide" class="btn white" :to="{name:'m-cfitem'}">返回</router-link>
 				</div>
 			</div>
 		</div>
@@ -186,6 +186,7 @@
 	export default {
 		data(){
 			return {
+				hide: !!this.$route.query.hide,
 				params: {
 					id: "",
 					name: "",

@@ -17,8 +17,8 @@ const LOGIN_ERROR = "LOGIN_ERROR_0"
 
 var hasNonLoginError = false
 
-export const Factory_ = (server_url) => (method) => (url) => (params) => {
-    console.dir(params)
+export const Factory_ = (server_url) => (method) => (url) => (params, loginSilent) => {
+    //console.dir(params)
     return Promise.resolve($.ajax({
         url: server_url + url,
         type:method,
@@ -38,7 +38,7 @@ export const Factory_ = (server_url) => (method) => (url) => (params) => {
             return Promise.reject(new Error(res.detail))
         }
     }).catch((e) => {
-        if (e.message == LOGIN_ERROR) {
+        if (e.message == LOGIN_ERROR && !loginSilent) {
             if (!hasNonLoginError) {
                 hasNonLoginError = true
             } else {
