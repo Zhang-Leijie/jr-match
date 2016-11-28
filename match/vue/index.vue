@@ -100,14 +100,16 @@
 	import {UserInfo,Score} from '~/ajax/get.js'
 	import router from '~/router.js'
 
+	var ajax_userinfo = {} 
+	var ajax_score = {}
 	export default{
 		data(){
 			return{
-				account: this.userinfo__.account,
-				school_name: this.userinfo__.school_name,
-				totalscore: this.userinfo__.totalscore,
-				muser_id: this.userinfo__.muser_id,
-				score: this.score__
+				account: ajax_userinfo.account,
+				school_name: ajax_userinfo.school_name,
+				totalscore: ajax_userinfo.totalscore,
+				muser_id: ajax_userinfo.muser_id,
+				score: ajax_score
 			}
 		},
 		methods:{
@@ -125,14 +127,15 @@
 			}
 		},
 		beforeRouteEnter(to, from, next){
+			ajax_userinfo = {}
+			ajax_score = {}
 			Promise.all([
 					UserInfo({}, true),
 					Score({}, true)
 				]).then(([userinfo, score])=>{
-					next(($vm)=>{
-						$vm.userinfo__ = userinfo
-						$vm.score__ = score
-					})
+					ajax_userinfo = userinfo
+					ajax_score = score
+					next()
 				}).catch((e)=>{
 					router.push({name: 'm-login'})
 				})

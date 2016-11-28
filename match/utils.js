@@ -3,6 +3,7 @@ export const transferMoney = function (money) {
 		return ""
 	}
 
+	money = money.replace(',', '')
 	var n = Number.parseInt(money)
 
 	if (Number.isNaN(n)) {
