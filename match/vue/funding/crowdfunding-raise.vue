@@ -395,7 +395,7 @@
 				this.params.proof.splice(index, 1)
 			},
 			changeStringProp(item){
-				var val = item.value.value || item.value
+				var val = (item.value && item.value.value) || item.value
 				this.params[item.prop] = val
 			},
 			complete(){
