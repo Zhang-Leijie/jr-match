@@ -34,6 +34,12 @@
 				<a class="btn blue" @click="close">确认</a>
 			</p>
 		</modal>
+		<modal v-if="endModal">
+			<p slot="body" class='f8' style="text-align:center;margin-top:30px;">投资成功,答题已结束</p>
+			<p slot="footer" style="text-align:center;">
+				<router-link class="btn  blue" :to="{name:'m-index'}">确认</router-link>
+			</p>
+		</modal>
 	</div>
 </template>
 <script>
@@ -48,6 +54,7 @@
 			return{
 				pay:false,
 				showModal:false,
+				endModal:false,
 				lists:[],
 				total_answer:[],
 				money:'',
@@ -104,10 +111,15 @@
 						id:self.$route.params.id,
 						answer:self.total_answer,
 						money:self.money*10000
-					}).then(()=>{	
-						self.detail = "投资成功"
-						self.pay = true
-						self.showModal=true
+					}).then((res)=>{
+						if(res!=0){
+							self.detail = "投资成功"
+							self.pay = true
+							self.showModal=true
+						}
+						else{
+							self.endModal=true
+						}
 					}, (e) => {
 						self.showModal=true
 						self.detail = e.message

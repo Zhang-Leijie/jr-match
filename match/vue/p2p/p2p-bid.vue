@@ -95,6 +95,12 @@
 				</div>
 			</div>
 		</div>
+		<modal v-if="endModal">
+			<p slot="body" class='f8' style="text-align:center;margin-top:30px;">答题已结束</p>
+			<p slot="footer" style="text-align:center;">
+				<router-link class="btn  blue" :to="{name:'m-index'}">确认</router-link>
+			</p>
+		</modal>
 	</div>
 </template>
 <script>
@@ -104,6 +110,7 @@
 	export default {
 		data(){
 			return{
+				endModal:false,
 				amount:'',
 				investLints:[],
 				typeFilter: "1",
@@ -151,6 +158,9 @@
 				}).then((res) => {
 					self.investLints = res.list
 					self.amount = res.rest_money
+					if (self.amount==0) {
+						self.endModal = true
+					}
 				})
 			}
 		},
