@@ -144,7 +144,7 @@
 		</div>
 		<div class="button-group">
 			<router-link :to="{name: 'm-p2pinvest'}" class="btn white">返回</router-link>
-			<a class="btn blue" @click="showModal=true">提交</a>
+			<a class="btn blue" @click="showModal=true">开始答题</a>
 		</div>
 		<!-- <modal v-show="showModal">
 			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">选择推荐等级</p>
@@ -160,7 +160,7 @@
 		<modal v-show="showModal" class="answerbox">
 			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">请叙述审标结果及叙述原因</p>
 			<div slot="body" style="text-align:center;">
-				<textarea v-model="textareaCont"></textarea>
+				<textarea v-model="textareaCont" placeholder="请以平台管理员的身份填写答案内容，其中须包括你对当前项目的审核结果（通过/不通过），并写出你的理由"></textarea>
 			</div>
 			<p slot="footer" style="text-align:center;">
 				<a class="btn white" @click="showModal=false">返回</a>
@@ -278,6 +278,7 @@
 				border:1px solid #ccc;
 				outline: none;
 				padding: 10px;
+				font-size: 14px;
 			}
 		}
 	}
