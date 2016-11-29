@@ -158,7 +158,7 @@
 				}).then((res) => {
 					self.investLints = res.list
 					self.amount = res.rest_money
-					if (self.amount==0) {
+					if (self.amount==0&&timeout == false) {
 						self.endModal = true
 					}
 				})
