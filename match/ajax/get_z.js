@@ -28,3 +28,5 @@ export const InvestInfo = factory('/index/InvestInfo')
 export const InvestQuestionList = factory('/index/InvestQuestionList')
 //获得答题时间
 export const AnswerTime = factory('/index/AnswerTime')
+//投标剩余资金
+export const restMoney = factory('/index/info')

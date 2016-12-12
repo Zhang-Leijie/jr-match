@@ -7,6 +7,7 @@
 				<label for="">投资金额：</label>
 				<input type="text" class="input-text" v-model="money">
 				<span>万元</span>
+				<span style="float:right">剩余：{{restMoney}}元</span>
 			</div>
 			<div class="question" v-for="(list , indexOutter) in lists">
 				<p>{{indexOutter+1}}.{{list.branch}}</p>
@@ -44,7 +45,7 @@
 </template>
 <script>
 	import Modal from '~/components/modal.vue'
-	import {InvestQuestionList} from '~/ajax/get.js'
+	import {InvestQuestionList,restMoney} from '~/ajax/get.js'
 	import {Invest} from '~/ajax/post.js'
 	import router from '~/router.js'
 	
@@ -58,6 +59,7 @@
 				lists:[],
 				total_answer:[],
 				money:'',
+				restMoney:"",
 				detail:''
 			}
 		},
@@ -82,6 +84,11 @@
 						return item
 					})
 					self.lists = a
+				})
+				restMoney().then((res)=>{
+					self.restMoney = res.rest_money
+				}, (e) => {
+					
 				})
 			},
 			close(){
