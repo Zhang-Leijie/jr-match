@@ -32,7 +32,7 @@
 		'p2pRaise': {
 			words: ['P2P', '项目发标'],
 			type: 3,
-			exam_period: 15 * 60 * 1000
+			exam_period: 50000 * 60 * 1000
 		},
 		'p2pBid': {
 			words: ['P2P', '项目投标'],
@@ -127,7 +127,6 @@
 			this.router1 = this.metaInfo.words[1]
 
 			this.totalTime = this.metaInfo.exam_period / 60 / 1000
-
 			// 查看剩余时间信息
 			AnswerTime({
 				type: this.metaInfo.type

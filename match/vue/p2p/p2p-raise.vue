@@ -3,9 +3,7 @@
 		<time-remain type="p2pRaise" :canset="true" @time-set="getData" @time-out="timeout=true"></time-remain>
 		
 		<div style="width:1200px;margin:0px auto 20px">
-			<router-link  :to="{name:'m-index'}" class="btn-back" style="color:white">
-				返回
-			</router-link>
+			<router-link  :to="{name:'m-index'}" class="btn-back" style="color:white">返回</router-link>
 			<div class="table-box">
 				<table class="ne-table">
 					<thead>
@@ -35,9 +33,7 @@
 </template>
 <script>
 	import router from '~/router.js'
-	import {Lists} from '~/ajax/get.js'
-	import store from '~/vuex'
-	
+	import {Lists} from '~/ajax/get.js'	
 
 	export default{
 		data(){
@@ -51,7 +47,7 @@
 				if (this.timeout) {
 					alert('该模块考试已结束')
 				} else {
-					router.push({name: 'm-p2praisedetail', query: {id: list.id}})
+					router.push({name: 'm-p2praisedetail', query: {id: list.id, relation_id: list.relation_id}})
 				}
 			},
 			getData(){

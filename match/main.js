@@ -9,8 +9,19 @@ import store from './vuex'
 import timeRemain from '~/components/time-remain.vue'
 import Modal from '~/components/modal.vue'
 
+
+import inputSelect from '~/components/inputs/input-select.vue'
+import inputText from '~/components/inputs/input-text.vue'
+import inputTextarea from '~/components/inputs/input-textarea.vue'
+import inputImage from '~/components/inputs/input-image.vue'
+
+
 Vue.component('time-remain', timeRemain)
 Vue.component('modal', Modal)
+Vue.component('input-select', inputSelect)
+Vue.component('input-textarea', inputTextarea)
+Vue.component('input-text', inputText)
+Vue.component('input-image', inputImage)
 
 
 import { sync } from 'vuex-router-sync'

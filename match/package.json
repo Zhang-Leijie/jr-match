@@ -8,6 +8,7 @@
     "es6-promise": "^4.0.5",
     "jquery": "^3.1.1",
     "localStorage": "^1.0.3",
+    "lodash.debounce": "^4.0.8",
     "vue": "^2.0.3",
     "vue-router": "^2.0.1",
     "vuex": "^2.0.0",
@@ -40,7 +41,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "webpack-dev-server --hot --content-base --inline",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "watch": "webpack --watch",
+    "watch": "NODE_ENV=production && webpack --watch",
     "dev": "webpack",
     "dev-server": "webpack-dev-server --config webpack.dev.config.js"
   },

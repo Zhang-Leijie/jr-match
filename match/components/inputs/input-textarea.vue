@@ -3,6 +3,8 @@
 	</textarea>
 </template>
 <script>
+	import {debounce, DEBOUNCE} from '~/utils.js'
+
 	export default {
 		props: {
 			prop: {
@@ -29,7 +31,16 @@
 					prop: this.prop,
 					value: value
 				})
+				this.sendResult()
 			}
+		},
+		methods: {
+			sendResult: debounce(function(){
+				this.$emit('inputend', {
+					prop: this.prop,
+					value: this.result
+				})
+			}, DEBOUNCE)
 		},
 		data(){
 			return {

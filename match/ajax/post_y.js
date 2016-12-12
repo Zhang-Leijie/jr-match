@@ -74,7 +74,7 @@ const startCheckProgress = (timestamp, progressCB, queryInterval) => {
 	function _resolve(res) {
 		var progress = parseInt(res)
 		//console.log(`${progress},${preProgress}`)
-		if (progress < preProgress) {
+		if (progress < preProgress || progress == -1) {
 			timer && clearTimeout(timer)
 			timer = null
         	progressCB(100)

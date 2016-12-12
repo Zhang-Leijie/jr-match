@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<time-remain type="p2pRaise" @time-set="getData" @time-out="whenTimeout"></time-remain>
-		<div class="form-page">
+		<div class="form-page" v-if="dataReady">
 			<div>
 				<div class="form-title">
 					<h1>类型选择</h1>
@@ -85,7 +85,7 @@
 				<div class="form-title">
 					<h1>认证信息（可选）</h1>
 				</div>
-				<div v-for="(proof_, index) in params.proof" :key="proof_.id">
+				<div v-for="(proof_, index) in proof">
 					<div class="form-input">
 						<span class="name">认证名称：</span>
 						<input-text :prop="index" :init="proof_.name" placeholder="10个字以内" @text-result-change="changeProofName"></input-text>
@@ -129,124 +129,95 @@
 			<div>
 				<div class="button-group">
 					<router-link class="btn white" :to="{name:'m-p2praisedetail', query: {id: $route.query.id}}">返回</router-link>
-					<a class="btn blue" @click="openModal">提交</a>
 				</div>
 			</div>
 		</div>
-		<modal v-if="showModal">
-			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">{{title}}</p>
-			<p slot="body" class='f6' style="text-align:center;">{{message}}</p>
-
-			<p slot="footer" style="text-align:center;" v-if="!uploading&&state==''">
-				<a class="btn white" @click="showModal=false">返回</a>
-				<a class="btn blue" @click="confirm" style="margin-left:30px;">确认</a>
-			</p>
-			<p slot="footer" style="text-align:center;" v-if="uploading">
-			</p>
-			<p slot="footer" style="text-align:center;" v-if="!uploading&&state=='成功'">
-				<router-link class="btn blue" :to="{name:'m-p2praise'}">完成</router-link>
-			</p>
-			<p slot="footer" style="text-align:center;" v-if="!uploading&&state=='失败'">
-				<a class="btn white" @click="showModal=false">返回</a>
-			</p>
-		</modal>
 	</div>
 </template>
 <script>
-	import inputSelect from '~/components/inputs/input-select.vue'
-	import inputText from '~/components/inputs/input-text.vue'
-	import inputTextarea from '~/components/inputs/input-textarea.vue'
-	import inputImage from '~/components/inputs/input-image.vue'
-	import Modal from '~/components/modal.vue'
-
-	import {transferMoney, payInOnce, payEveryMonth, payInMonth, verifyLength} from '~/utils.js'
-	import {getUniqueId, genLsId} from '~/utils.js'
+	import {
+		transferMoney, 
+		payInOnce, 
+		payEveryMonth, 
+		payInMonth, 
+		verifyLength,
+		debounce,
+		DEBOUNCE
+	} from '~/utils.js'
 
 	import {
 		getP2PTag, 
 		getProvinceList, 
 		getCityList,
 		getRequestList,
-		getRepaymentList
+		getRepaymentList,
+		getRaiseDetail
 	} from '~/ajax/get.js'
 
 	import router from '~/router.js'
 
 	import {postP2P} from '~/ajax/post.js'
-	var ls = require('localStorage')
 
-	function getRaiseLsId($vm){
-		return `${$vm.$route.query.id}.${$vm.$route.query.userid}.p2pRaise`
-	}
 	export default {
 		data(){
-			var params = ls.getItem(getRaiseLsId(this))
-			if (params) {
-				params = JSON.parse(params)
-			} else {
-				params = P2PRaisePlaceholder(this.$route.query.id)
-				ls.setItem(getRaiseLsId(this), JSON.stringify(params))
-			}
 			return {
+				dataReady: false,
 				calrets: [],
-				showModal: false,
-				uploading: false,
-				isSuccess: false,
-				state: "",
-				error: "",
-				params: params,
-				showEnd: false
-			}
-		},
-		watch: {
-			params: {
-				deep: true,
-				handler: function(val, oldVal){
-					ls.setItem(getRaiseLsId(this), JSON.stringify(val))
-				}
-			}
-		},
-		computed: {
-			title(){
-				var up = this.uploading 
-				var state = this.state
-				if (up) {
-					return '正在提交P2P项目'
-				} else if (state == "") {
-					return '确认提交P2P项目?'
-				} else if (state == "失败") {
-					return '提交失败'
-				} else {
-					return '提交成功'
-				}
-			},
-			message(){
-				var up = this.uploading 
-				var state = this.state
-				if (up) {
-					return '请耐心等待'
-				} else if (state == "") {
-					return '提交后不能再进行更改'
-				} else if (state == "失败") {
-					return this.error
-				} else {
-					return '点击完成回到审标列表页'
-				}	
+				relation_id: this.$route.query.id,
+				params: {
+					tag_id: "", // 类型
+					username: "", // 法人姓名
+					gender: "",  // 性别
+					age:"", // 年龄
+					job: "", // 职业
+					phone: "", // 手机号
+					city: "", // 省份
+					province: "", // 城市
+					name: "", // 项目名称
+					request_id: "", // 风险评级
+					repay_type_id: "", // 还款方式
+					rate: "", // 利息偿付
+					money: "", // 借款金额
+					loan_time: "", // 借款期限
+					detail: "", // 借款用途
+				},
+				proof:	[] // 认证信息
 			}
 		},
 		methods: {
 			whenTimeout(){
-				alert('考试时间已到, 未完成结果不会为您提交')
+				alert('考试时间已到, 结果已为您提交')
 				router.push({name:'m-index'}) 
 			},
 			getData(){
-				var id = this.$route.query.id
-				var userid = this.$route.query.userid
-
-				this.id = id
-				this.userid = userid
-
 				var self = this
+
+				getRaiseDetail({
+					id: this.$route.query.id,
+					relation_id: this.$route.query.relation_id || 'null'
+				}).then((res)=>{
+					console.dir(res)
+					if (res.baseinfo && res.baseinfo.age !== undefined) {
+						var i = res.baseinfo
+						var p = this.params 
+						;['tag_id', 'username', 'gender', 'age', 'job','phone', 'city', 'province', 'name', 'request_id', 'repay_type_id', 'rate', 'money', 'loan_time', 'detail'].forEach((key) => {
+							if (key == 'loan_time') {
+								p[key] = i[key] + '个月'
+								return 
+							}
+							p[key] = i[key] || ''
+						})
+						this.proof = res.match_proof.map((proof_)=>{
+							return {
+								name: proof_.proof_name,
+								detail: proof_.proof_detail
+							}
+						})
+					}
+
+					this.dataReady = true
+				})
+
 				var calTable = throttle(function([rate, money, loan_time, repay_type_id]){
 					//console.log(`--- rate: ${rate},money: ${money},loan_time: ${loan_time}, repay_type_id: ${repay_type_id} ---`)
 					var rate = parseFloat(rate).toFixed(3)
@@ -281,42 +252,15 @@
 						this.params.repay_type_id
 					])	
 				})
-			},	
-			openModal(){
-				this.state = ""
-				this.uploading = false
-				this.showModal = true
-			},
-			confirm(){
-				var params = normalizeParams(this.params)
-				var error = checkP2PParams(params)
-				if (error!==true) {
-					this.state = "失败"
-					this.error = error
-					return
-				}
-
-				this.uploading = true
-				setTimeout(() => {
-					postP2P(params).then((res) => {
-						this.state = '成功'
-						this.uploading = false
-					}).catch((e) => {
-						this.state = '失败'
-						this.error = e.message
-						this.uploading = false 
-					})
-				}, 2000)
 			},
 			addProof(){
-				this.params.proof.push({
+				this.proof.push({
 					name: "",
-					detail: "",
-					id: getUniqueId()
+					detail: ""
 				})
 			},
 			removeProof(index){
-				this.params.proof.splice(index, 1)
+				this.proof.splice(index, 1)
 			},
 			provinceChange(val){
 				this.changeStringProp(val)
@@ -329,9 +273,6 @@
 					self.$refs.city.options = res
 				})
 			},
-			getRepaymentList,
-			getRequestList,
-			getProvinceList,
 			getCityList: function(){
 				if (this.params.province) {
 					return getCityList(this.params.province)
@@ -339,34 +280,43 @@
 					return Promise.resolve([])
 				}
 			},
+			getRepaymentList,
+			getRequestList,
+			getProvinceList,
 			getP2PTag,
-			getGenderOptions(){
-				return Promise.resolve([
-					{name: '男', value: '男'},
-					{name: '女', value: '女'}
-				])
-			},
-			getLoanTimeOptions(){
-				return Promise.resolve([
-					{name: '1个月', value: '1个月'},
-					{name: '2个月', value: '2个月'},
-					{name: '3个月', value: '3个月'},
-					{name: '6个月', value: '6个月'},
-					{name: '9个月', value: '9个月'},
-					{name: '12个月', value: '12个月'},
-					{name: '24个月', value: '24个月'}
-				])
-			},
+			getGenderOptions,
+			getLoanTimeOptions,
 			changeProofName(item){ // item { prop: proof编号, value: proof 名称}
-				this.params.proof[item.prop].name = item.value
+				this.proof[item.prop].name = item.value
+				this.uploadProof()
 			},
 			changeProofDetail(item){ // item { prop: proof编号, value: proof 图片地址}
-				this.params.proof[item.prop].detail = item.value
+				this.proof[item.prop].detail = item.value
+				this.uploadProof()
 			},
-			changeStringProp(item){
+			uploadProof(){
+				this.changeStringProp({
+					prop: 'proof',
+					value: JSON.parse(JSON.stringify(this.proof))
+				})
+			},
+			changeStringProp: debounce(function(item){
+				var params = {relation_id: this.$route.query.id}
+				var value
+				if (item.value && item.value.value) {
+					value = item.value.value
+				} else {
+					value = item.value
+				}
+				params[item.prop] = value
+				postP2P(params).then(()=>{
+
+				}).catch(()=>{
+					alert('修改失败！')
+				})
 				var val = item.value.value || item.value
 				this.params[item.prop] = val
-			},
+			}, DEBOUNCE),
 			calculate(rate, money, loan_time, repay_type_id){
 				//console.log(`rate: ${rate},money: ${money},loan_time: ${loan_time}, repay_type_id: ${repay_type_id}`)
 				switch(repay_type_id) {
@@ -377,13 +327,6 @@
 				}
 			}
 		},
-		components: {
-			'input-select': inputSelect,
-			'input-text': inputText,
-			'input-textarea': inputTextarea,
-			'input-image': inputImage,
-			'modal': Modal
-		},
 		filters: {
 			transferMoney(val){
 				if (!val) 
@@ -393,54 +336,7 @@
 		}
 	}
 
-	function normalizeParams(params) {
-		var ret = JSON.parse(JSON.stringify(params))
-		ret.proof.forEach((item)=>{
-			delete item.id
-		})
-		return ret
-	}
-
-	const checklist = {
-		username: { verify: verifyLength('姓名', 5) },
-		gender: { verify: verifyLength('性别') },
-		job: { verify: verifyLength('职业') },
-		age: { verify: verifyLength('年龄') },
-		tag_id: { verify: verifyLength('项目类型') },
-		phone: { verify: verifyLength('手机号码') },
-		city: { verify: verifyLength('城市') },
-		province: { verify: verifyLength('省份') },
-		name: { verify: verifyLength('') },
-		request_id: { verify: verifyLength('风险评级') },
-		money: { verify: verifyLength('借款金额') },
-		rate: { verify: verifyLength('利息偿付') },
-		loan_time: { verify: verifyLength('借款期限') },
-		repay_type_id: { verify: verifyLength('还款方式') },
-		detail: { verify: verifyLength('借款说明') },
-		proof: { 
-			verify: function(proof){
-				return proof.every((item) => {
-					return item.name !== "" && item.detail !== ""
-				}) ? true : '请填写将认证信息完整'
-			} 
-		}
-	}
-	function checkP2PParams(params){
-		var propVerify, verify, error
-		for (let prop in params) {
-			propVerify = checklist[prop]
-			verify = propVerify && propVerify.verify
-
-			if (verify) {
-				error = verify(params[prop])
-				if (error !== true) {
-					return error
-				}
-			}
-		}
-		return true
-	}
-
+	var info__ = undefined
 	/* http://stackoverflow.com/questions/27078285/simple-throttle-in-js */
 	function throttle(func, wait, options) {
 	  var context, args, result;
@@ -474,31 +370,22 @@
 	  };
 	};
 
-	const P2PRaisePlaceholder = (id) => {
-		return {
-			relation_id: id,
-			username: "",
-			gender: "",
-			job: "",
-			age:"",
-			tag_id: "",
-			phone: "",
-			city: "",
-			province: "",
-			name: "",
-			request_id: "",
-			money: "",
-			rate: "",
-			loan_time: "",
-			repay_type_id: "",
-			detail: "",
-			proof:	[
-				// {
-				// 	name: "",
-				// 	detail: "",
-				// 	id: getUniqueId()
-				// }
-			]
-		}
+	function getLoanTimeOptions(){
+		return Promise.resolve([
+			{name: '1个月', value: '1个月'},
+			{name: '2个月', value: '2个月'},
+			{name: '3个月', value: '3个月'},
+			{name: '6个月', value: '6个月'},
+			{name: '9个月', value: '9个月'},
+			{name: '12个月', value: '12个月'},
+			{name: '24个月', value: '24个月'}
+		])
+	}
+
+	function getGenderOptions(){
+		return Promise.resolve([
+			{name: '男', value: '男'},
+			{name: '女', value: '女'}
+		])
 	}
 </script>

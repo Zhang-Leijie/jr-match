@@ -14,7 +14,7 @@
 			</div> -->
 			<div class="button-group">
 				<router-link :to="{name: 'm-p2praise'}" class="btn white" >返回</router-link>
-				<router-link :to="{name: 'm-p2praisechart', query: {id: $route.query.id, userid: listInfo.muser_id}}" class="btn blue">设计</router-link>
+				<router-link :to="{name: 'm-p2praisechart', query: {id: $route.query.id, relation_id: $route.query.relation_id}}" class="btn blue">设计</router-link>
 			</div>
 		</div>
 	</div>

@@ -3,7 +3,8 @@ export const transferMoney = function (money) {
 		return ""
 	}
 
-	money = money.replace(',', '')
+	money = money.replace(',', '').replace('，', '')
+	
 	var n = Number.parseInt(money)
 
 	if (Number.isNaN(n)) {
@@ -148,7 +149,7 @@ export const filterTime = function(time){
 	var hour = parseInt(time/1000/3600)
 	var min = parseInt((time/1000 - hour * 3600)/60)
 	var sec = parseInt(time/1000 - hour * 3600 - min * 60)
-	return time = min + '分' + sec + '秒'
+	return time = hour + '小时' + min + '分' + sec + '秒'
 }
 
 
@@ -211,3 +212,6 @@ export function unescapeHTML(str){
 export function genLsId(id, module) {
 	return id + '.' + module
 }
+
+export const debounce = require('lodash.debounce')
+export const DEBOUNCE = 1000

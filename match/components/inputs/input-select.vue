@@ -30,18 +30,18 @@
 				required: false
 			}
 		},
+		data(){
+			return {
+				result: {},
+				options: []
+			}
+		},
 		watch: {
 			result(value){
 				this.$emit('select-result-change', {
 					prop: this.prop,
 					value: value
 				})
-			}
-		},
-		data(){
-			return {
-				result: {},
-				options: []
 			}
 		},
 		mounted(){

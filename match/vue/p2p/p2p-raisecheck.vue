@@ -171,9 +171,9 @@
 		},
 		mounted(){
 			getRaiseDetail({
-				id: this.$route.query.relation_id
+				id: this.$route.query.id,
+				relation_id: this.$route.query.relation_id
 			}).then((res)=>{
-				console.dir(res)
 				Object.keys(this.params).forEach((prop) => {
 					var val = res.baseinfo[prop]
 					if (val) {
