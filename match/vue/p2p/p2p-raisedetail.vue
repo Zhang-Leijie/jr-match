@@ -14,7 +14,7 @@
 			</div> -->
 			<div class="button-group">
 				<router-link :to="{name: 'm-p2praise'}" class="btn white" >返回</router-link>
-				<router-link :to="{name: 'm-p2praisechart', query: {id: $route.query.id, relation_id: $route.query.relation_id}}" class="btn blue">设计</router-link>
+				<a @click="design" class="btn blue">设计</a>
 			</div>
 		</div>
 	</div>
@@ -23,6 +23,8 @@
 	import {getP2PRaiseInfo} from '~/ajax/get.js'
 	import router from '~/router.js'
 	import {unescapeHTML} from '~/utils.js'
+
+	import {postP2P} from '~/ajax/post.js'
 
 	export default {
 		data(){
@@ -40,6 +42,19 @@
 					this.listInfo.background = listInfo.background
 					this.listInfo.detail = listInfo.detail
 					this.listInfo.muser_id = listInfo.muser_id
+				})
+			},
+			design(){
+				postP2P({
+					relation_id: this.$route.query.id
+				}).then((res)=>{
+					router.push({
+						name: 'm-p2praisechart', 
+						query: {
+							id: this.$route.query.id, 
+							relation_id: res.relation_id
+						}
+					})
 				})
 			}
 		}

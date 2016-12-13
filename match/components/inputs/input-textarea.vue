@@ -26,19 +26,10 @@
 			}
 		},
 		watch: {
-			result(value){
+			result: debounce(function(value){
 				this.$emit('text-result-change', {
 					prop: this.prop,
 					value: value
-				})
-				this.sendResult()
-			}
-		},
-		methods: {
-			sendResult: debounce(function(){
-				this.$emit('inputend', {
-					prop: this.prop,
-					value: this.result
 				})
 			}, DEBOUNCE)
 		},

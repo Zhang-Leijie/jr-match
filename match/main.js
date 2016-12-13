@@ -14,6 +14,9 @@ import inputSelect from '~/components/inputs/input-select.vue'
 import inputText from '~/components/inputs/input-text.vue'
 import inputTextarea from '~/components/inputs/input-textarea.vue'
 import inputImage from '~/components/inputs/input-image.vue'
+import inputAvatarImage from '~/components/inputs/input-avatar-image.vue'
+import datePicker from '~/components/date-picker.vue'
+import inputFile from '~/components/inputs/input-file.vue'
 
 
 Vue.component('time-remain', timeRemain)
@@ -22,7 +25,9 @@ Vue.component('input-select', inputSelect)
 Vue.component('input-textarea', inputTextarea)
 Vue.component('input-text', inputText)
 Vue.component('input-image', inputImage)
-
+Vue.component('input-avatar', inputAvatarImage)
+Vue.component('date-picker', datePicker)
+Vue.component('input-file', inputFile)
 
 import { sync } from 'vuex-router-sync'
 sync(store, router)

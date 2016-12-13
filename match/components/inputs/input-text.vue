@@ -2,6 +2,8 @@
 	<input type="text" :style="style" :placeholder="placeholder" class="input input-text" v-model="result">
 </template>
 <script>
+	import {debounce, DEBOUNCE} from '~/utils.js'
+
 	export default {
 		props: {
 			prop: {
@@ -23,12 +25,12 @@
 			}
 		},
 		watch: {
-			result(value){
+			result: debounce(function(value){
 				this.$emit('text-result-change', {
 					prop: this.prop,
 					value: value
 				})
-			}
+			}, DEBOUNCE)
 		},
 		data(){
 			return {

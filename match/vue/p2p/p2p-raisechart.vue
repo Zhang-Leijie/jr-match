@@ -5,7 +5,11 @@
 			<div>
 				<div class="form-title">
 					<h1>类型选择</h1>
-					<router-link class="btn blue" :to="{name:'m-p2praisedetail', query: {id: $route.query.id}}">查看资料</router-link>
+					<router-link 
+						class="btn blue" 
+						:to="{name:'m-p2praisedetail', query: {id: $route.query.id, relation_id:$route.query.relation_id}}">
+						查看资料
+					</router-link>
 				</div>
 				<div class="form-input">
 					<span class="name">类型：</span>
@@ -163,7 +167,6 @@
 			return {
 				dataReady: false,
 				calrets: [],
-				relation_id: this.$route.query.id,
 				params: {
 					tag_id: "", // 类型
 					username: "", // 法人姓名
@@ -261,6 +264,7 @@
 			},
 			removeProof(index){
 				this.proof.splice(index, 1)
+				this.uploadProof()
 			},
 			provinceChange(val){
 				this.changeStringProp(val)
@@ -294,13 +298,13 @@
 				this.proof[item.prop].detail = item.value
 				this.uploadProof()
 			},
-			uploadProof(){
+			uploadProof: debounce(function(){
 				this.changeStringProp({
 					prop: 'proof',
 					value: JSON.parse(JSON.stringify(this.proof))
 				})
-			},
-			changeStringProp: debounce(function(item){
+			}, DEBOUNCE),
+			changeStringProp(item){
 				var params = {relation_id: this.$route.query.id}
 				var value
 				if (item.value && item.value.value) {
@@ -316,7 +320,7 @@
 				})
 				var val = item.value.value || item.value
 				this.params[item.prop] = val
-			}, DEBOUNCE),
+			},
 			calculate(rate, money, loan_time, repay_type_id){
 				//console.log(`rate: ${rate},money: ${money},loan_time: ${loan_time}, repay_type_id: ${repay_type_id}`)
 				switch(repay_type_id) {

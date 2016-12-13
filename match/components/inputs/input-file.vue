@@ -57,6 +57,9 @@
 		},
 		watch: {
 			result(value){
+				if (this.init === value) {
+					return 
+				}
 				this.$emit('file-result-change', {
 					prop: this.prop,
 					value: value

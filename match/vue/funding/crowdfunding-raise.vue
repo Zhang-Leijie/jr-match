@@ -1,11 +1,15 @@
 <template>
 	<div>
-		<time-remain type="cfRaise"></time-remain>
-		<div class="form-page">
+		<time-remain type="cfRaise" @time-set="getData" @time-out="whenTimeout"></time-remain>
+		<div class="form-page" v-if="dataReady">
 			<div>
 				<div class="form-title">
 					<h1>项目信息</h1>
-					<router-link class="btn blue" :to="{name:'m-cfitem-detail', query: {id: $route.query.id}}">查看资料</router-link>
+					<router-link 
+						class="btn blue" 
+						:to="{name:'m-cfitem-detail', query: {id: $route.query.id, relation_id:$route.query.relation_id}}">
+						查看资料
+					</router-link>
 				</div>
 				<div class="form-input">
 					<span class="name">项目名称：</span>
@@ -127,7 +131,7 @@
 				<div class="form-input">
 					<span class="name">团队成员：</span>
 				</div>
-				<div v-for="(member_,index) in params.member" :key="member_.id">
+				<div v-for="(member_,index) in member">
 					<div class="form-input">
 						<span class="name">
 							<input-avatar 
@@ -176,7 +180,7 @@
 				<div class="form-title">
 					<h1>认证信息（可选）</h1>
 				</div>
-				<div v-for="(proof_, index) in params.proof" :key="proof_.id">
+				<div v-for="(proof_, index) in proof">
 					<div class="form-input">
 						<span class="name">认证名称：</span>
 						<input-text :prop="index" :init="proof_.name" placeholder="10个字以内" @text-result-change="changeProofProp($event, 'name')"></input-text>
@@ -195,47 +199,20 @@
 			<div>
 				<div class="button-group">
 					<router-link class="btn white" :to="{name:'m-cfitem-detail', query: {id: $route.query.id}}">返回</router-link>
-					<a class="btn blue" @click="openModal">提交</a>
 				</div>
 			</div>
 		</div>
-		<modal v-if="showModal">
-			<p slot="header" class='f8' style="text-align:center;margin-top:30px;">{{title}}</p>
-			<p slot="body" class='f6' style="text-align:center;">{{message}}</p>
-
-			<p slot="footer" style="text-align:center;" v-if="!uploading&&state==''">
-				<a class="btn white" @click="showModal=false">返回</a>
-				<a class="btn blue" @click="confirm" style="margin-left:30px;">确认</a>
-			</p>
-			<p slot="footer" style="text-align:center;" v-if="uploading">
-			</p>
-			<p slot="footer" style="text-align:center;" v-if="!uploading&&state=='成功'">
-				<router-link class="btn blue" :to="{name:'m-cfitem'}">完成</router-link>
-			</p>
-			<p slot="footer" style="text-align:center;" v-if="!uploading&&state=='失败'">
-				<a class="btn white" @click="showModal=false">返回</a>
-			</p>
-		</modal>
 	</div>
 </template>
 <script>
 	import router from '~/router.js'
 
-	import inputSelect from '~/components/inputs/input-select.vue'
-	import inputText from '~/components/inputs/input-text.vue'
-	import inputTextarea from '~/components/inputs/input-textarea.vue'
-	import inputImage from '~/components/inputs/input-image.vue'
-	import inputAvatarImage from '~/components/inputs/input-avatar-image.vue'
-	import Modal from '~/components/modal.vue'
-	import datePicker from '~/components/date-picker.vue'
-	import inputFile from '~/components/inputs/input-file.vue'
-
-
 	import {
 		getProvinceList, 
 		getCityList,
 		getPeriodOptions,
-		getProfitOptions
+		getProfitOptions,
+		getCFDetail
 	} from '~/ajax/get.js'
 
 	import {
@@ -243,103 +220,55 @@
 	} from '~/ajax/post.js'
 
 	import {validPdfExt, verifyLength} from '~/utils.js'
-	import {getUniqueId} from '~/utils.js'
-
-	var ls = require('localStorage')
-
-	const getCFLsId = ($vm) => {
-		var query = $vm.$route.query
-		return `${query.userid}.${query.id}.CFRaise`
-	}
+	import {getUniqueId, debounce, DEBOUNCE} from '~/utils.js'
 
 	export default {
 		data(){
-			var params = ls.getItem(getCFLsId(this))
-			if (params) {
-				params = JSON.parse(params)
-			} else {
-				params = CFRaisePlaceholder(this.$route.query.id)
-				ls.setItem(getCFLsId(this), JSON.stringify(params))
-			}
-
 			return {
 				leadOptions: [{
 					name: '是',value: '2'
 				},{
 					name: '否', value: '1'
 				}],
-				showModal: false,
-				uploading: false,
-				isSuccess: false,
-				state: "",
-				error: "",
-				params: params
-			}
-		},
-		watch: {
-			params: {
-				deep: true,
-				handler: function(val, oldVal){
-					ls.setItem(getCFLsId(this), JSON.stringify(val))
-				}
-			}
-		},
-		computed: {
-			title(){
-				var up = this.uploading 
-				var state = this.state
-				if (up) {
-					return '正在提交众筹项目'
-				} else if (state == "") {
-					return '确认提交众筹项目?'
-				} else if (state == "失败") {
-					return '提交失败'
-				} else {
-					return '提交成功'
-				}
-			},
-			message(){
-				var up = this.uploading 
-				var state = this.state
-				if (up) {
-					return '请耐心等待'
-				} else if (state == "") {
-					return '提交后不能再进行更改'
-				} else if (state == "失败") {
-					return this.error
-				} else {
-					return '点击完成回到审标列表页'
-				}	
+				dataReady: false,
+				params: {
+
+				},
+				member: [],
+				proof: []
 			}
 		},
 		methods: {
-			openModal(){
-				this.state = ""
-				this.uploading = false
-				this.showModal = true
+			whenTimeout(){
+				alert('考试时间已到, 结果已为您提交')
+				router.push({name:'m-index'}) 
 			},
-			confirm(){
-				var params = normalizeParams(this.params)
-				var error = checkCFParams(params)
-				//console.log('hehe')
-				if (error!==true) {
-					//console.log('hehe')
-					this.state = "失败"
-					this.error = error
-					return
-				}
+			getData(){
+				var self = this
 
-				this.uploading = true
-				setTimeout(() => {
-					postCF(params).then((res) => {
-						this.state = '成功'
-						this.uploading = false
-					}).catch((e) => {
-						this.state = '失败'
-						this.error = e.message
-						this.uploading = false 
+				getCFDetail({
+					id: this.$route.query.id,
+					relation_id: this.$route.query.relation_id || 'null'
+				}).then((res) => {
+					console.log(res)
+
+					;['name', 'summary', "money", "province", "city", "shares", "lead", "prospectus", "proposal", "index_photo", "project_photo", "mode_photo", "analysis_photo", "core_photo", "detail", "team_logo", "team_name", "team_summary"].forEach((key)=>{
+						this.params[key] = res.baseinfo[key] || ""
 					})
-				}, 2000)
+
+					this.params['found_time'] = res.baseinfo.found_time_timestamp || 0
+					this.params['period_id'] = res.baseinfo.period || 0
+					this.params['profit_id'] = res.baseinfo.profit || 0
+
+					this.member = res.team
+					this.proof = res.proof.map((proof_)=>{
+						return {
+							name: proof_.proof_name,
+							detail: proof_.proof_detail
+						}
+					})
+					this.dataReady = true
+				})
 			},
 			openDate(){
 				WdatePicker({el: 'found_time'})
@@ -367,173 +296,71 @@
 				}
 			},
 			changeMemberProp(item, member_prop){
-				this.params.member[item.prop][member_prop] = item.value
+				this.member[item.prop][member_prop] = item.value
+				this.uploadMember()
 			},
 			addMember(){
-				this.params.member.push({
+				this.member.push({
 					member_avartar: "",
 					member_intro: "",
 					member_name: "",
-					member_position: "",
-					id: getUniqueId()
+					member_position: ""
 				})
 			},
 			removeMember(index){
-				this.params.member.splice(index, 1)
+				this.member.splice(index, 1)
+				this.uploadMember()
 			},
+			uploadMember: debounce(function(){
+				this.changeStringProp({
+					prop: 'member',
+					value: JSON.parse(JSON.stringify(this.member))
+				})
+			}, DEBOUNCE),
 			changeProofProp(item, prop){
-				this.params.proof[item.prop][prop] = item.value 
+				this.proof[item.prop][prop] = item.value 
+				this.uploadProof()
 			},
 			addProof(){
-				this.params.proof.push({
+				this.proof.push({
 					name: "",
 					detail: "",
 					id: getUniqueId()
 				})
 			},
 			removeProof(index){
-				this.params.proof.splice(index, 1)
+				this.proof.splice(index, 1)
+				this.uploadProof()
 			},
+			uploadProof: debounce(function(){
+				this.changeStringProp({
+					prop: 'proof',
+					value: JSON.parse(JSON.stringify(this.proof))
+				})
+			}, DEBOUNCE),
 			changeStringProp(item){
-				var val = (item.value && item.value.value) || item.value
+				var params = {relation_id: this.$route.query.id}
+				var value
+				if (item.value && item.value.value) {
+					value = item.value.value
+				} else {
+					value = item.value
+				}
+				params[item.prop] = value
+				postCF(params).then(()=>{
+
+				}).catch(()=>{
+					alert('修改失败！')
+				})
+				var val = item.value.value || item.value
 				this.params[item.prop] = val
 			},
 			complete(){
 				router.push({name: 'm-cfitem-detail'})
 			}
-		},
-		components: {
-			'input-select': inputSelect,
-			'input-text': inputText,
-			'input-textarea': inputTextarea,
-			'input-image': inputImage,
-			'modal': Modal,
-			'date-picker': datePicker,
-			'input-file': inputFile,
-			'input-avatar': inputAvatarImage
 		}
 	}
 
-
-	function normalizeParams(params) {
-		var ret = JSON.parse(JSON.stringify(params))
-		ret.proof.forEach((item)=>{
-			delete item.id
-		})
-		ret.member.forEach((item)=> {
-			delete item.id
-		})
-		return ret
-	}
-
-	const checklist = {
-		//proposal: { verify: verifyLength('融资计划书') },
-		detail: {verify: verifyLength('项目详情', 200) },
-		core_photo: { verify: verifyLength('核心竞争力') },
-		analysis_photo: { verify: verifyLength('市场分析') },
-		found_time: { verify: verifyLength('创立时间') },
-		city: { verify: verifyLength('地区') },
-		mode_photo: { verify: verifyLength('商业模式') },
-		proof: {
-			verify: function(proof){
-				return proof.every((item) => {
-					return item.name !== "" && item.detail !== ""
-				}) ? true : '请填写将认证信息完整'
-			} 
-		},
-		profit_id: { verify: verifyLength('盈利状况') },
-		member: {
-			verify: function(members){
-				var i = 0, length = members.length, member 
-				while(++i < length) {
-					member = members[i]
-					if (member.member_name == "") {
-						return `请填写第${i+1}位团队成员名称`
-					} else if (member.member_name.length > 5) {
-						return `请填写第${i+1}位团队成员名称应少于5个字`
-					} else if (member.member_position == "") {
-						return `请填写第${i+1}位团队成员职务`
-					} else if (member.member_position > 10) {
-						return `请填写第${i+1}位团队成员职务应少于10个字`
-					} else if (member.member_intro == "") {
-						return `请填写第${i+1}位团队成员介绍`
-					} else if (member.member_intro > 200) {
-						return `请填写第${i+1}位团队成员介绍应少于200个字`
-					} else if (member.member_avartar == "") {
-						return `请填写第${i+1}位团队成员头像`
-					}
-				}
-				return true
-			}
-		},
-		lead: { verify: verifyLength('是否领投') },
-		name: { verify: verifyLength('项目名称') },
-		money: { verify: verifyLength('目标金额') },
-		index_photo: { verify: verifyLength('首页图片') },
-		project_photo: { verify: verifyLength('项目图片') },
-		period_id: { verify: verifyLength('项目阶段') },
-		//prospectus: { verify: verifyLength('商业计划书') },
-		province: { verify: verifyLength('地区') },
-		shares: { verify: verifyLength('出让股份') },
-		summary: { verify: verifyLength('项目简介') },
-		team_logo: { verify: verifyLength('团队logo') },
-		team_name: { verify: verifyLength('团队名称') },
-		team_summary: { verify: verifyLength('商业介绍') }
-	}
-
-	function checkCFParams(params){
-		var propVerify, verify, error
-		for (let prop in params) {
-			propVerify = checklist[prop]
-			verify = propVerify && propVerify.verify
-
-			if (verify) {
-				error = verify(params[prop])
-				if (error !== true) {
-					return error
-				}
-			}
-		}
-		return true
-	}
-
-	const CFRaisePlaceholder = (id) => {
-		return {
-			relation_id: id,
-			name: "",
-			summary: "",
-			money: "",
-			found_time: "",
-			province: "",
-			city: "",
-			period_id: "",
-			profit_id: "",
-			shares: "",
-			lead: "",
-			prospectus: "",
-			proposal: "",
-			index_photo: "",
-			project_photo: "",
-			mode_photo: "",
-			analysis_photo: "",
-			core_photo: "",
-			detail: "",
-			team_logo: "",
-			team_name: "",
-			team_summary: "",
-			member: [
-				{
-					member_name: "",
-					member_avartar: "",
-					member_position: "",
-					member_intro: "",
-					id: getUniqueId()
-				}
-			],
-			proof: [
-			]
-		}
-	}
 </script>
 <style>
 	.modal-body p {

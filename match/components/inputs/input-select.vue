@@ -13,6 +13,9 @@
 	 * prop: 数据项名称
 	 * val: option格式
 	 */
+
+	import {debounce, DEBOUNCE} from '~/utils.js'
+
 	export default {
 		props: {
 			prop: {
@@ -37,12 +40,12 @@
 			}
 		},
 		watch: {
-			result(value){
+			result: debounce(function(value){
 				this.$emit('select-result-change', {
 					prop: this.prop,
 					value: value
 				})
-			}
+			}, DEBOUNCE)
 		},
 		mounted(){
 			var self = this
