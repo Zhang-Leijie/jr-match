@@ -19,7 +19,7 @@
 							<td v-if="list.score==null">未评分</td>
 							<td v-if="list.score!=null">{{list.score}}</td>
 							<td v-if="list.isfinished == 1">
-								<a @click="goNext(list)">去完成</a>
+								<a @click="goNext(list)">编辑</a>
 							</td>
 							<td v-if="list.isfinished == 2">
 								<router-link :to="{name: 'm-p2praisecheck', query: {id: list.id, relation_id: list.relation_id}}">查看</router-link>

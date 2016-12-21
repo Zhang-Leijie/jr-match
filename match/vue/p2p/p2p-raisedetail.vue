@@ -14,7 +14,7 @@
 			</div> -->
 			<div class="button-group">
 				<router-link :to="{name: 'm-p2praise'}" class="btn white" >返回</router-link>
-				<a @click="design" class="btn blue">设计</a>
+				<a @click="design" class="btn blue">开始答题</a>
 			</div>
 		</div>
 	</div>
