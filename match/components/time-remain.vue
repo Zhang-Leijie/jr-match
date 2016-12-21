@@ -47,7 +47,7 @@
 		'cfRaise': {
 			words: ['众筹', '项目设计'],
 			type: 2,
-			exam_period: 150000 * 60 * 1000
+			exam_period: 15 * 60 * 1000
 		},
 		'cfCase': {
 			words: ['创新创业', '案例分析'],
