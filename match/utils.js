@@ -92,13 +92,23 @@ export const payInMonth = (p, n, r) => {
 		_i = interest // 每月利息一样
 		_p = 0 // 应收本金为0
 		_rP = p - (_pAndI - _i) * _order // 本金 + 已还利息和 - 已还本息和
-		rets.push({
-			order: _order,
-			pAndI: toFixed(_pAndI, 2),
-			i: toFixed(_i, 2),
-			p: toFixed(_p, 2),
-			rP: toFixed(_pAndI, 2)
-		})
+		if (_order == n) {
+			rets.push({
+				order: _order,
+				pAndI: truncatedDot(p + _i),
+				i: truncatedDot(_i),
+				p: truncatedDot(p),
+				rP: 0
+			})
+		} else {
+			rets.push({
+				order: _order,
+				pAndI: truncatedDot(_pAndI),
+				i: truncatedDot(_i),
+				p: truncatedDot(_p),
+				rP: truncatedDot(_rP)
+			})
+		}
 	}
 	return rets
 }
@@ -110,14 +120,14 @@ export const payInOnce = (p, n, r) => {
 		if (_order == n) {
 			rets.push({
 				order: _order,
-				i: toFixed(totalInterest, 2),
-				p: 0,
-				pAndI: toFixed(totalInterest, 2),
-				rP: toFixed(p, 2)
+				i: truncatedDot(totalInterest),
+				p: truncatedDot(p),
+				pAndI: truncatedDot(totalInterest + p),
+				rP: 0
 			})
 		} else {
 			rets.push({
-				order: _order, i: 0, p: 0, pAndI:0, rP: p
+				order: _order, i: 0, p: 0, pAndI:0, rP: truncatedDot(p)
 			})
 		}
 	}
@@ -135,10 +145,10 @@ export const payEveryMonth = function(p, n, r){
 		//_rP = p - _pAccum
 		rets.push({
 			order: _order,
-			i: toFixed(_i, 2),
-			pAndI: toFixed(pAndI, 2),
-			rP: toFixed(_rP, 2),
-			p: toFixed(_p, 2) 
+			i: truncatedDot(_i),
+			pAndI: truncatedDot(pAndI),
+			rP: truncatedDot(_rP),
+			p: truncatedDot(_p) 
 		})
 	}
 	return rets
