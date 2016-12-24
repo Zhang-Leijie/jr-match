@@ -35,7 +35,7 @@ export const uploadFile = ({
 	formData.append('file', file)
 
 	var upload_p = Promise.resolve($.ajax({
-		url: 'http://jr.xiyoukeji.com/upload.php',
+		url: '/upload.php',
 		type: "POST",
 		cache: false,
 	    data: formData,
@@ -66,7 +66,7 @@ const startCheckProgress = (timestamp, progressCB, queryInterval) => {
 	let timer = null
 
 	function _checkProgress(timestamp, solveRes) {
-		$.get('http://jr.xiyoukeji.com/progress.php',{
+		$.get('/progress.php',{
 				'PHP_SESSION_UPLOAD_PROGRESS' : timestamp
 			}, solveRes, 'html')
 	}

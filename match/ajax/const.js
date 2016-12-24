@@ -9,9 +9,9 @@ import $ from 'jquery'
 import router from '~/router.js'
 import {routerState} from '~/router.js'
 
-export const server_match_url = 'http://jr.xiyoukeji.com/index.php/match'
+export const server_match_url = '/index.php/match'
 
-export const server_url = 'http://jr.xiyoukeji.com/home'
+export const server_url = '/home'
 
 const LOGIN_ERROR = "LOGIN_ERROR_0"
 
