@@ -78,6 +78,9 @@ export const validPdfExt = (file) => {
 export const toFixed = (str) => {
 	return parseFloat(str).toFixed(2)
 }
+
+var truncatedDot = toFixed
+
 export const payInMonth = (p, n, r) => {
 	var i = 0
 	var totalI = p * r * (n / 12)

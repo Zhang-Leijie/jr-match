@@ -147,7 +147,7 @@
 	const MODULES = {
 		'obj': {
 			route($vm){
-				router.push({name: 'm-p2praise', query: {userid: $vm.muser_id}})
+				router.push({name: 'm-obj', query: {userid: $vm.muser_id}})
 			},
 			intro: `比赛须知：
 本模块是客观题，占大赛总分权重的15%。考试时间15分钟，共32道客观题，其中单选题16题，多选题8题，判断题8题。提前做完可以点击提交，提交后不能修改、不能再进入本模块。请在本模块比赛时间截止之前主动提交答题记录。
@@ -276,6 +276,9 @@
         width: 100%;
         font-size:24px;
         color:#ffffff;
+        &.relative {
+            z-index: 10;
+        }
     }
     .index-col{
         position: relative;
